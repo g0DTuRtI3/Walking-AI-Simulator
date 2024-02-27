@@ -1,6 +1,6 @@
-package edu.vanier.template;
+package edu.vanier.walkingaisim;
 
-import edu.vanier.template.controllers.FXMLMainAppController;
+import edu.vanier.walkingaisim.controllers.FXMLMainAppController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

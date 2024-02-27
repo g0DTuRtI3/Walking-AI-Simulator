@@ -1,4 +1,4 @@
-package edu.vanier.template.controllers;
+package edu.vanier.walkingaisim.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
