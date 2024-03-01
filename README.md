@@ -1,1 +1,1 @@
-# TempName
+# Walking AI Simulator
