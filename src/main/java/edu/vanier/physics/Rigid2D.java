@@ -9,5 +9,7 @@ package edu.vanier.physics;
  * @author 2248826
  */
 public class Rigid2D {
+    Gravity grav;
+    
     
 }
