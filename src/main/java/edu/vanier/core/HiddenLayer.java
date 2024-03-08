@@ -1,4 +1,4 @@
-package edu.vanier.walkingaisim.core;
+package edu.vanier.core;
 
 
 import java.util.Arrays;

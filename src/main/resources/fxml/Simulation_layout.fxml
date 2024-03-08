@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
+         <children>
+            <Text fx:id="txt_Countdown" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Countdown: x sec" />
+         </children>
+      </Pane>
+   </center>
+   <right>
+      <HBox alignment="TOP_CENTER" prefHeight="739.0" prefWidth="250.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="780.0" prefWidth="265.0" spacing="10.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefWidth="100.0">
+                     <children>
+                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation : x" />
+                        <Text fx:id="txt_IsTraining" strokeType="OUTSIDE" strokeWidth="0.0" text="IsTraining : True" />
+                     </children>
+                  </VBox>
+                  <HBox alignment="TOP_CENTER" spacing="10.0">
+                     <children>
+                        <Button fx:id="btn_BackToEditor" mnemonicParsing="false" onAction="#backToEditorOnAction" text="Back To Editor" />
+                        <TextField fx:id="tf_Time" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
+                     </children>
+                  </HBox>
+                  <TitledPane animated="false" prefHeight="481.0" prefWidth="250.0" text="Physics Graphs">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <LineChart fx:id="chart_Physics1" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" AnchorPane.rightAnchor="0.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                              <LineChart fx:id="chart_Physics2" layoutX="4.0" layoutY="141.0" prefHeight="128.0" prefWidth="234.0">
+                                 <xAxis>
+                                    <CategoryAxis side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                 </yAxis>
+                              </LineChart>
+                              <LineChart fx:id="chart_Physics3" layoutX="7.0" layoutY="275.0" prefHeight="128.0" prefWidth="234.0">
+                                 <xAxis>
+                                    <CategoryAxis side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                 </yAxis>
+                              </LineChart>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Network Graph">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" prefHeight="128.0" prefWidth="234.0">
+                                 <xAxis>
+                                    <CategoryAxis side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                 </yAxis>
+                              </LineChart>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </TitledPane>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </HBox>
+   </right>
+</BorderPane>
