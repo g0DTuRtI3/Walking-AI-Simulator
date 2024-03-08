@@ -1,4 +1,4 @@
-package org.mandelbros.utils;
+package edu.vanier.physics;
 
 /**
  * Helper class that represents a 2d vector with an x and y coordinate along

@@ -1,4 +1,4 @@
-package org.mandelbros.utils;
+package edu.vanier.physics;
 
 /**
  * Helper class that represents a segment with a start and an end made of two 2d

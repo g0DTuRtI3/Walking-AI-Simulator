@@ -1,4 +1,4 @@
-package edu.vanier.walkingaisim;
+package edu.vanier.ui;
 
 import edu.vanier.walkingaisim.controllers.FXMLMainAppController;
 import java.io.IOException;
