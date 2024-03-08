@@ -1,4 +1,4 @@
-package org.mandelbros.utils;
+package edu.vanier.physics;
 
 /**
  * Helper class that represents a 2d vector with an x and y coordinate along
@@ -11,11 +11,11 @@ public class Vector2D {
     /**
      * is the horizontal coordinate of the vector
      */
-    private double x;
+    private double x = 0;
     /**
      * is the vertical coordinate of the vector
      */
-    private double y;
+    private double y = 0;
 
     public Vector2D(double x, double y) {
         this.x = x;
