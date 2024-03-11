@@ -9,30 +9,11 @@ package edu.vanier.physics;
  * @author 2248826
  */
 public class Gravity {
-
     private double acceleration = 9.80;
-    private Vector2D vector = new Vector2D(0, acceleration);
-
-    public Gravity() {
-
+    public double getAcceleration(){
+    return this.acceleration;
     }
-
-    public Gravity(double acceleration) {
-        this.acceleration = acceleration;
-        this.vector.setY(acceleration);
+    public void setAcceleration(double acceleration){
+    this.acceleration = acceleration;
     }
-
-    public Vector2D getVector() {
-        return this.vector;
-    }
-
-    public double getAcceleration() {
-        return this.acceleration;
-    }
-
-    public void setAcceleration(double acceleration) {
-        this.acceleration = acceleration;
-        this.vector.setY(acceleration);
-    }
-
 }
