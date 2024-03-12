@@ -5,6 +5,7 @@
 package edu.vanier.physics;
 
 import java.util.ArrayList;
+import edu.vanier.physics.Vector2D;
 
 /**
  *
@@ -30,5 +31,6 @@ public class Rigid2D {
         return new Vector2D(0, 0);
 
     }
-
+    Gravity grav;
+    
 }
