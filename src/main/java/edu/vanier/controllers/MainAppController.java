@@ -10,16 +10,16 @@ import org.slf4j.LoggerFactory;
  *
  * @author frostybee
  */
-public class FXMLMainAppController {
+public class MainAppController {
 
-    private final static Logger logger = LoggerFactory.getLogger(FXMLMainAppController.class);
+    private final static Logger logger = LoggerFactory.getLogger(MainAppController.class);
     @FXML
-    Button btnClickMe;
+    Button btn_Simulation;
 
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
-        btnClickMe.setOnAction((event) -> {
+        btn_Simulation.setOnAction((event) -> {
             handleClickMe();
         });
     }
