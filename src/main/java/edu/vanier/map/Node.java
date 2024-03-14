@@ -4,10 +4,20 @@
  */
 package edu.vanier.map;
 
+import javafx.scene.paint.Color;
+
 /**
  *
  * @author YOUSSEF
  */
-public class Node {
-    
+public class Node extends javafx.scene.shape.Circle{
+
+    private static double radius = 10;
+    private Color color;
+
+    public Node(double centerX, double centerY) {
+        super(centerX, centerY, radius, color);
+
+    }
+
 }
