@@ -21,7 +21,7 @@ public class Rigid2D {
 
     public Vector2D finalForce() {
         if (forces.size() > 1) {
-            Vector2D finalForce = new Vector2D(0,0);
+            Vector2D finalForce = new Vector2D(0, 0);
             for (int i = 1; i < forces.size(); i++) {
                 forces.get(i - 1).add(forces.get(i));
             }
@@ -31,6 +31,5 @@ public class Rigid2D {
         return new Vector2D(0, 0);
 
     }
-    Gravity grav;
-    
+
 }
