@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EditorController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="menuItem_Save" mnemonicParsing="false" text="Save" />
+                  <MenuItem fx:id="menuItem_Load" mnemonicParsing="false" text="Load" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem fx:id="menuItem_About" mnemonicParsing="false" text="About" />
+                  <MenuItem fx:id="menuItem_HowToUse" mnemonicParsing="false" text="How To Use" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:" />
+                  <TextField fx:id="tf_nbModel" promptText="Integer &lt;= 40" />
+               </children>
+            </VBox>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interval Between Generation:" />
+                  <TextField fx:id="tf_interval" promptText="10 - 60 s" />
+               </children>
+            </VBox>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Learning Rate:" />
+                  <TextField fx:id="tf_learningRate" promptText="0 &lt; x &lt; 1" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </left>
+   <right>
+      <VBox prefHeight="706.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <TitledPane animated="false" text="Model Editor">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="268.0" prefWidth="158.0">
+                     <children>
+                        <Circle fill="DODGERBLUE" layoutX="79.0" layoutY="85.0" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="24.0" layoutY="203.0" stroke="BLACK" strokeType="INSIDE" width="110.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </TitledPane>
+            <ColorPicker fx:id="colorPicker" promptText="Color Picker">
+               <value>
+                  <Color green="1.0" blue="0.16862745583057404" />
+               </value>
+            </ColorPicker>
+         </children>
+         <padding>
+            <Insets left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </right>
+   <center>
+      <Pane fx:id="editorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <Button fx:id="btn_Start" mnemonicParsing="false" prefHeight="52.0" prefWidth="89.0" text="Start" BorderPane.alignment="CENTER" />
+   </bottom>
+   <padding>
+      <Insets bottom="20.0" />
+   </padding>
+</BorderPane>
