@@ -48,6 +48,7 @@ public class Simulator extends Application{
        node2.setStroke(Color.BLACK);
        link = new Line(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
        Line line = new Line(0, 400, 500, 400);
+       line.setStroke(Color.RED);
        
        setTimer();
        
@@ -67,11 +68,7 @@ public class Simulator extends Application{
                             angleRight = angleLeft - 180;
                             leftNodeMoved = false;
                         }
-                        
-                        
-                        
-                        
-                        
+          
                         angleRight += 10;
                         
                         System.out.println("angleRight: " + angleRight);
@@ -82,10 +79,9 @@ public class Simulator extends Application{
                         
                         node1.setCenterY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
                         node1.setCenterX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-                        link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)) );
+                        link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
                         link.setStartX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-                        
-                        
+
                         
                         
                         /*
@@ -151,7 +147,7 @@ public class Simulator extends Application{
                         
                         node2.setCenterY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
                         node2.setCenterX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
-                        link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)) );
+                        link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
                         link.setEndX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
                     }
                     break;
@@ -221,14 +217,40 @@ public class Simulator extends Application{
     }
     
     public void update() {
-        if (elapsedTime >= 0.15) {
-            if (node1.getCenterY() < 400 || node2.getCenterY() < 400) {
-                node1.setCenterY(node1.getCenterY() + 5);
-                node2.setCenterY(node2.getCenterY() + 5);
-                link.setStartY(link.getStartY() + 5);
-                link.setEndY(link.getEndY() + 5);
-            }
+        if (elapsedTime >= 2) {
+            
             elapsedTime = 0;
+            
+            //Linear gravity
+            
+//            if (node1.getCenterY() < 400) {
+//                node1.setCenterY(node1.getCenterY() + 5);
+//                link.setStartY(link.getStartY() + 5);
+//                
+//            }
+//            
+//            if (node2.getCenterY() < 400) {
+//                node2.setCenterY(node2.getCenterY() + 5);
+//                link.setEndY(link.getEndY() + 5);
+//            }
+            
+            //Angular gravity
+            
+
+            if (angleRight > 0) {
+                angleRight -= 10;
+                node1.setCenterY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
+                node1.setCenterX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+                link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)) );
+                link.setStartX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+            }
+            if (angleLeft < 180) {
+                angleLeft += 10;
+                node2.setCenterY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
+                node2.setCenterX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
+                link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)) );
+                link.setEndX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
+            }
         }
         elapsedTime += 0.016;
     }
