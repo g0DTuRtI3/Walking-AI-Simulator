@@ -163,4 +163,8 @@ public class Vector2D {
     public String toString() {
         return "Vector2D{" + "x = " + x + ", y = " + y + '}';
     }
+
+    Vector2D opposite() {
+        return new Vector2D(-this.x,-this.y);
+    }
 }

@@ -5,7 +5,6 @@
 package edu.vanier.physics;
 
 import java.util.ArrayList;
-import edu.vanier.physics.Vector2D;
 
 /**
  *
@@ -14,9 +13,11 @@ import edu.vanier.physics.Vector2D;
 public class Rigid2D {
 
     private ArrayList<Vector2D> forces = new ArrayList<>();
+    private Gravity gravity;
 
     public Rigid2D(ArrayList<Vector2D> forces) {
         this.forces = forces;
+       
     }
 
     public Vector2D finalForce() {

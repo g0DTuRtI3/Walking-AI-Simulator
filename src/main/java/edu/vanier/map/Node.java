@@ -11,13 +11,13 @@ import javafx.scene.paint.Color;
  *
  * @author YOUSSEF
  */
-public class Node extends javafx.scene.shape.Circle {
+public class Node extends javafx.scene.shape.Circle{
 
     private static double radius = 10;
     private static double mass = 5; //Might become non-static in the future
     private Rigid2D body;
-    private double speedX;
-    private double speedY;
+    private double speedX = 0;
+    private double speedY = 0;
 
     public Node(double centerX, double centerY, Color color, Rigid2D body) {
         super(centerX, centerY, radius, color);
@@ -36,6 +36,7 @@ public class Node extends javafx.scene.shape.Circle {
 
         this.speedX = +accelerationOnX * deltaTime;
         this.speedY = +accelerationOnY * deltaTime;
+        
 
     }
 
