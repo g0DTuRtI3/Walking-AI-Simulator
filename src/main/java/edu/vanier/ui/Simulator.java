@@ -1,7 +1,7 @@
 package edu.vanier.ui;
 
-import edu.vanier.map.Link;
-import edu.vanier.map.Node;
+import edu.vanier.map.ModelLink;
+import edu.vanier.map.NodeModel;
 import edu.vanier.physics.Rigid2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -26,9 +26,9 @@ public class Simulator extends Application {
     private final float gravity = 9.8f;
     private AnimationTimer timer;
     private double elapsedTime;
-    private Node node1;
-    private Node node2;
-    private Link link;
+    private NodeModel node1;
+    private NodeModel node2;
+    private ModelLink link;
     private double angleBetween = 0;
     double angleRight = 0;
     double angleLeft = 180;
@@ -44,20 +44,21 @@ public class Simulator extends Application {
         Pane root = new Pane();
         Scene scene = new Scene(root, 500, 500);
 
-        node1 = new Node(250.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
+        node1 = new NodeModel(250.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
         //node1.setFill(Color.TRANSPARENT);
         //node1.setStroke(Color.BLACK);
-        node2 = new Node(50.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
+        node2 = new NodeModel(50.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
         //node2.setFill(Color.TRANSPARENT);
         //node2.setStroke(Color.BLACK);
         //link = new Line(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
         Line line = new Line(0, 400, 500, 400);
         //line.setStroke(Color.RED);
-        Link link = new Link(node1,node2,Color.BLACK);
-        System.out.println(link.getRadAngle());
+        ModelLink link = new ModelLink(node1,node2,Color.BLACK);
+        
+        
 
         setTimer();
-
+scene.setOnKeyPressed((KeyEvent event) -> {System.out.println(link.getRadAngle());});
         /*scene.setOnKeyPressed((KeyEvent event) -> {
             switch (event.getCode()) {
                 case A:
@@ -210,7 +211,7 @@ public class Simulator extends Application {
             @Override
             public void handle(long now) {
                 elapsedTime = (now - prevTime) / 1000000000;
-                System.out.println(link.getRadAngle());
+               
                 //update 
 //update();
                 prevTime = now;

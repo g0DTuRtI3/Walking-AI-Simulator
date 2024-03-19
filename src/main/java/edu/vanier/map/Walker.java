@@ -12,17 +12,17 @@ import java.util.ArrayList;
  */
 public class Walker {
 
-    private ArrayList<Link> linksOfWalker = new ArrayList<>();
+    private ArrayList<ModelLink> linksOfWalker = new ArrayList<>();
 
     public Walker() {
 
     }
 
-    public Walker(ArrayList<Link> linksOfWalker) {
+    public Walker(ArrayList<ModelLink> linksOfWalker) {
         this.linksOfWalker.addAll(linksOfWalker);
     }
 
-    public void addLink(Link link) {
+    public void addLink(ModelLink link) {
         linksOfWalker.add(link);
     }
 }
