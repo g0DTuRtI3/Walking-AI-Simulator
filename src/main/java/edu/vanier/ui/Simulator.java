@@ -1,5 +1,8 @@
 package edu.vanier.ui;
 
+import edu.vanier.map.Link;
+import edu.vanier.map.Node;
+import edu.vanier.physics.Rigid2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -9,81 +12,79 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import edu.vanier.physics.Vector2D;
+import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 
 /**
- * 
+ *
  * @author 2242462
  */
-public class Simulator extends Application{
-    
+public class Simulator extends Application {
+
     private final int speed = 15;
     private boolean moveRightNode = true;
     private final float gravity = 9.8f;
     private AnimationTimer timer;
     private double elapsedTime;
-    private Circle node1;
-    private Circle node2;
-    private Line link;
+    private Node node1;
+    private Node node2;
+    private Link link;
     private double angleBetween = 0;
     double angleRight = 0;
     double angleLeft = 180;
     boolean rightNodeMoved = false;
     boolean leftNodeMoved = false;
-    
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-       Pane root = new Pane();
-       Scene scene = new Scene(root, 500, 500);
-       
-       node1 = new Circle(250.0, 400.0, 25.0);
-       node1.setFill(Color.TRANSPARENT);
-       node1.setStroke(Color.BLACK);
-       node2 = new Circle(50.0, 400.0, 25.0);
-       node2.setFill(Color.TRANSPARENT);
-       node2.setStroke(Color.BLACK);
-       link = new Line(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
-       Line line = new Line(0, 400, 500, 400);
-       line.setStroke(Color.RED);
-       
-       setTimer();
-       
-        scene.setOnKeyPressed((KeyEvent event) -> {
-            switch(event.getCode()) {
+        Pane root = new Pane();
+        Scene scene = new Scene(root, 500, 500);
+
+        node1 = new Node(250.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
+        //node1.setFill(Color.TRANSPARENT);
+        //node1.setStroke(Color.BLACK);
+        node2 = new Node(50.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
+        //node2.setFill(Color.TRANSPARENT);
+        //node2.setStroke(Color.BLACK);
+        //link = new Line(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
+        Line line = new Line(0, 400, 500, 400);
+        //line.setStroke(Color.RED);
+        Link link = new Link(node1,node2,Color.BLACK);
+        System.out.println(link.getRadAngle());
+
+        setTimer();
+
+        /*scene.setOnKeyPressed((KeyEvent event) -> {
+            switch (event.getCode()) {
                 case A:
                     if (moveRightNode) {
-                        
+
                         rightNodeMoved = true;
-                        
+
                         //node1.setCenterY(node1.getCenterY() - Math.sin(Math.toRadians(angleRight)));
                         //node1.setCenterX(node1.getCenterX() - Math.cos(Math.toRadians(angleRight)));
-                        
-                        
-                        
                         if (leftNodeMoved) {
                             angleRight = angleLeft - 180;
                             leftNodeMoved = false;
                         }
-          
+
                         angleRight += 10;
-                        
+
                         System.out.println("angleRight: " + angleRight);
-                        
+
                         if (angleRight == 360) {
                             angleRight = 0;
                         }
-                        
+
                         node1.setCenterY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
                         node1.setCenterX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
                         link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
                         link.setStartX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
 
-                        
-                        
                         /*
                         
                         if (angleBetween >= 0 && angleBetween < 90) {
@@ -126,25 +127,22 @@ public class Simulator extends Application{
                             System.out.println("Angle between: " + angleBetween);
                         }
 
-                        */
-                        
-                    }else {
-                        leftNodeMoved = true;                  
-                        
-                        
+                         /
+                    } else {
+                        leftNodeMoved = true;
+
                         if (rightNodeMoved) {
                             angleLeft = angleRight + 180;
                             rightNodeMoved = false;
                         }
-                        
+
                         angleLeft += 10;
                         System.out.println("angleLeft: " + angleLeft);
-                        
-                        
+
                         if (angleLeft == 360) {
                             angleLeft = 0;
                         }
-                        
+
                         node2.setCenterY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
                         node2.setCenterX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
                         link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
@@ -154,69 +152,86 @@ public class Simulator extends Application{
                 case D:
                     if (moveRightNode) {
                         rightNodeMoved = true;
-                        
+
                         if (leftNodeMoved) {
                             angleRight = angleLeft - 180;
                             leftNodeMoved = false;
                         }
-                        
+
                         angleRight -= 10;
-                        
+
                         if (angleRight == 360) {
                             angleRight = 0;
                         }
-                        
+
                         node1.setCenterY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
                         node1.setCenterX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-                        link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)) );
+                        link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
                         link.setStartX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-                    }else {
+                    } else {
                         leftNodeMoved = true;
-                        
+
                         if (rightNodeMoved) {
                             angleLeft = angleRight + 180;
                             rightNodeMoved = false;
                         }
-                        
+
                         angleLeft -= 10;
-                        
-                        
+
                         if (angleLeft == 360) {
                             angleLeft = 0;
                         }
-                        
+
                         node2.setCenterY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
                         node2.setCenterX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
-                        link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)) );
+                        link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
                         link.setEndX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
                     }
                     break;
                 case LEFT:
-                   moveRightNode = false;
-                   break;
+                    moveRightNode = false;
+                    break;
                 case RIGHT:
-                   moveRightNode = true;
-                   break;
+                    moveRightNode = true;
+                    break;
             }
-        });
-
-       root.getChildren().addAll(link, node1, node2, line);
-       primaryStage.setScene(scene);
-       primaryStage.sizeToScene();
-       primaryStage.show();
+        });*/
+        root.getChildren().addAll(link, node1, node2, line);
+        
+        primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
+        primaryStage.show();
     }
-    
+
     public void setTimer() {
         timer = new AnimationTimer() {
+            static double prevTime = System.nanoTime();
+
             @Override
             public void handle(long now) {
-                update();
+                elapsedTime = (now - prevTime) / 1000000000;
+                System.out.println(link.getRadAngle());
+                //update 
+//update();
+                prevTime = now;
+            }
+
+            @Override
+            public void start() {
+                prevTime = System.nanoTime();
+                super.start();
+            }
+
+            @Override
+            public void stop() {
+                prevTime = -1;
+                super.stop();
             }
         };
-        //timer.start();
+        timer.start();
     }
-    
-    public void update() {
+
+    /*public void update() {
         if (elapsedTime >= 2) {
             
             elapsedTime = 0;
@@ -253,6 +268,5 @@ public class Simulator extends Application{
             }
         }
         elapsedTime += 0.016;
-    }
-    
+    }*/
 }
