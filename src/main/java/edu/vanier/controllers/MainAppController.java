@@ -1,8 +1,11 @@
 package edu.vanier.controllers;
 
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
 
 public class MainAppController {
 
@@ -25,8 +28,11 @@ public class MainAppController {
 
     }
 
+    // Loads the Editor scene
     @FXML
-    void simulationOnAction(ActionEvent event) {
-        btn_Simulation.setVisible(false);
+    void simulationOnAction(ActionEvent event) throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
+        mainAppLoader.setController(new EditorController());
+        Pane root = mainAppLoader.load();
     }
 }

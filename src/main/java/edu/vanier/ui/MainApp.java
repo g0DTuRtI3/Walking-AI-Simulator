@@ -1,5 +1,6 @@
 package edu.vanier.ui;
 
+import edu.vanier.controllers.EditorController;
 import edu.vanier.controllers.MainAppController;
 import edu.vanier.controllers.SimulationController;
 import java.io.IOException;
@@ -29,18 +30,21 @@ public class MainApp extends Application {
             logger.info("Bootstrapping the application...");
             //-- 1) Load the scene graph from the specified FXML file and 
             // associate it with its FXML controller.
-            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
-            mainAppLoader.setController(new MainAppController());
+//            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
+//            mainAppLoader.setController(new MainAppController());
+//            Pane root = mainAppLoader.load();
+            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
+            mainAppLoader.setController(new EditorController());
             Pane root = mainAppLoader.load();
-            
+
             FXMLLoader simulationLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
             simulationLoader.setController(new SimulationController());
             //-- 2) Create and set the scene to the stage.
             Scene scene = new Scene(root, 500, 300);
             primaryStage.setScene(scene);
-            primaryStage.sizeToScene();
+            primaryStage.setMaximized(true);
             // We just need to bring the main window to front.
-            primaryStage.setAlwaysOnTop(true);            
+            primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
         } catch (IOException ex) {

@@ -17,8 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EditorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -71,8 +70,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="268.0" prefWidth="158.0">
                      <children>
-                        <Circle fill="DODGERBLUE" layoutX="79.0" layoutY="85.0" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="24.0" layoutY="203.0" stroke="BLACK" strokeType="INSIDE" width="110.0" />
+                        <Circle fx:id="circle" fill="DODGERBLUE" layoutX="79.0" layoutY="85.0" onMouseDragged="#circleOnMouseDragged" onMousePressed="#circleOnMousePressed" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Rectangle fx:id="link" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="24.0" layoutY="203.0" onMouseDragged="#linkOnMouseDragged" onMousePressed="#linkOnMousePressed" stroke="BLACK" strokeType="INSIDE" width="110.0" />
                      </children>
                   </AnchorPane>
               </content>
