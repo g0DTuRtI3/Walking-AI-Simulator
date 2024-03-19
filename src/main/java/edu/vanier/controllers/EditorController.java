@@ -1,7 +1,11 @@
 package edu.vanier.controllers;
 
 import edu.vanier.map.Node;
+import java.io.IOException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.MenuItem;
@@ -10,15 +14,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 public class EditorController {
 
+    Stage primaryStage;
     double mouseX;
     double mouseY;
 
     @FXML
     private Button btn_Start;
-    
+
     @FXML
     private Circle circle;
 
@@ -27,7 +33,7 @@ public class EditorController {
 
     @FXML
     private Pane editorPane;
-    
+
     @FXML
     private Rectangle link;
 
@@ -51,6 +57,11 @@ public class EditorController {
 
     @FXML
     private TextField tf_nbModel;
+    
+    // Gets the Stage when called
+    public EditorController(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 
     @FXML
     void circleOnMouseDragged(MouseEvent event) {
@@ -77,7 +88,7 @@ public class EditorController {
             node.setLayoutY(e.getSceneY() - mouseY);
         });
     }
-    
+
     @FXML
     void linkOnMouseDragged(MouseEvent event) {
 
@@ -86,5 +97,21 @@ public class EditorController {
     @FXML
     void linkOnMousePressed(MouseEvent event) {
 
+    }
+
+    // Switches to the simulation scene
+    @FXML
+    void startOnAction(ActionEvent event) throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
+        mainAppLoader.setController(new SimulationController(primaryStage));
+        Pane root = mainAppLoader.load();
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.show();
     }
 }
