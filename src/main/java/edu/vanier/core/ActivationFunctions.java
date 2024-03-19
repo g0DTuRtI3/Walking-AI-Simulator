@@ -1,4 +1,4 @@
-package edu.vanier.walkingaisim.core;
+package edu.vanier.core;
 /**
  *
  * CLASS of method used to activate the artificial intelligence model
