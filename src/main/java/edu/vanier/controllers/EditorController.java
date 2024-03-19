@@ -26,6 +26,7 @@ public class EditorController {
     ArrayList circle_list = new ArrayList<Circle>();
     double mouseX;
     double mouseY;
+    Color color;
 
     @FXML
     private Button btn_Start;
@@ -70,7 +71,7 @@ public class EditorController {
     
     @FXML
     void initialize() {
-        
+        color = colorPicker.getValue();
     }
     
     @FXML
@@ -99,6 +100,11 @@ public class EditorController {
     }
     
     @FXML
+    void colorPickerOnAction(ActionEvent event) {
+        color = colorPicker.getValue();
+    }
+    
+    @FXML
     void linkOnMouseClicked(MouseEvent event) {
         if (!isLinkMode){
             isLinkMode = true;
@@ -123,10 +129,9 @@ public class EditorController {
     @FXML
     void paneOnMouseClicked(MouseEvent event) {
         if (isCircleMode) {
-            Circle circle = new Circle(event.getX(), event.getY(), 25);
+            Circle circle = new Circle(event.getX(), event.getY(), 25, color);
             circle_list.add(circle);
             editorPane.getChildren().add(circle);
-            System.out.println("ues");
         }
     }
     

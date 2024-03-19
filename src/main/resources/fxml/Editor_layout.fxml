@@ -76,7 +76,7 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-            <ColorPicker fx:id="colorPicker" promptText="Color Picker">
+            <ColorPicker fx:id="colorPicker" onAction="#colorPickerOnAction" promptText="Color Picker">
                <value>
                   <Color green="1.0" blue="0.16862745583057404" />
                </value>
