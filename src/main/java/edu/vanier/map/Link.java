@@ -30,4 +30,7 @@ public class Link extends javafx.scene.shape.Line {
         super.setEndX(nextNode.getCenterX());
         super.setEndY(nextNode.getCenterY());
     }
+    public double getRadAngle(){
+        return 0;
+    }
 }
