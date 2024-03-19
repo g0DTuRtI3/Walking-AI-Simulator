@@ -66,7 +66,7 @@
    <right>
       <VBox prefHeight="706.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <TitledPane animated="false" text="Model Editor">
+            <TitledPane animated="false" focusTraversable="false" text="Model Editor">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="268.0" prefWidth="158.0">
                      <children>
@@ -76,7 +76,7 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-            <ColorPicker fx:id="colorPicker" onAction="#colorPickerOnAction" promptText="Color Picker">
+            <ColorPicker fx:id="colorPicker" focusTraversable="false" onAction="#colorPickerOnAction" promptText="Color Picker">
                <value>
                   <Color green="1.0" blue="0.16862745583057404" />
                </value>
@@ -91,7 +91,7 @@
       <Pane fx:id="editorPane" onMouseClicked="#paneOnMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
-      <Button fx:id="btn_Start" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="89.0" text="Start" BorderPane.alignment="CENTER" />
+      <Button fx:id="btn_Start" focusTraversable="false" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="89.0" text="Start" BorderPane.alignment="CENTER" />
    </bottom>
    <padding>
       <Insets bottom="20.0" />

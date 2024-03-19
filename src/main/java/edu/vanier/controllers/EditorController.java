@@ -71,6 +71,9 @@ public class EditorController {
     
     @FXML
     void initialize() {
+        tf_interval.setFocusTraversable(false);
+        tf_learningRate.setFocusTraversable(false);
+        tf_nbModel.setFocusTraversable(false);
         color = colorPicker.getValue();
     }
     
