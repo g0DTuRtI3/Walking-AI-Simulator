@@ -25,6 +25,11 @@ public class MainAppController {
     public MainAppController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+    
+    @FXML
+    void initialize() {
+        
+    }
 
     @FXML
     void aboutUsOnAction(ActionEvent event) {

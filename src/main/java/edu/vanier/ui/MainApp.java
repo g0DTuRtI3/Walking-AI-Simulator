@@ -30,14 +30,14 @@ public class MainApp extends Application {
             logger.info("Bootstrapping the application...");
             //-- 1) Load the scene graph from the specified FXML file and 
             // associate it with its FXML controller.
-            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
-            mainAppLoader.setController(new MainAppController(primaryStage));
+            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
+            mainAppLoader.setController(new EditorController(primaryStage));
             Pane root = mainAppLoader.load();
 
             //-- 2) Create and set the scene to the stage.
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-            primaryStage.setMaximized(true);
+            primaryStage.setMaximized(false);
             // We just need to bring the main window to front.
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();

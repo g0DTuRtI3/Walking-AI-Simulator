@@ -49,6 +49,11 @@ public class SimulationController {
     public SimulationController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+    
+    @FXML
+    void initialize() {
+        
+    }
 
     @FXML
     void backToEditorOnAction(ActionEvent event) throws IOException {

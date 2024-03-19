@@ -70,8 +70,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="268.0" prefWidth="158.0">
                      <children>
-                        <Rectangle fx:id="link" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="24.0" layoutY="203.0" onMouseDragged="#linkOnMouseDragged" onMousePressed="#linkOnMousePressed" stroke="BLACK" strokeType="INSIDE" width="110.0" />
-                        <Circle fx:id="circle" fill="DODGERBLUE" layoutX="79.0" layoutY="85.0" onMouseDragged="#circleOnMouseDragged" onMousePressed="#circleOnMousePressed" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Rectangle fx:id="link" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="24.0" layoutY="203.0" onMouseClicked="#linkOnMouseClicked" onMouseDragged="#linkOnMouseDragged" onMousePressed="#linkOnMousePressed" stroke="BLACK" strokeType="INSIDE" width="110.0" />
+                        <Circle fx:id="circle" fill="DODGERBLUE" layoutX="79.0" layoutY="85.0" onMouseClicked="#circleOnMouseClicked" onMouseDragged="#circleOnMouseDragged" onMousePressed="#circleOnMousePressed" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
                      </children>
                   </AnchorPane>
               </content>
@@ -88,7 +88,7 @@
       </VBox>
    </right>
    <center>
-      <Pane fx:id="editorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" BorderPane.alignment="CENTER" />
+      <Pane fx:id="editorPane" onMouseClicked="#paneOnMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
       <Button fx:id="btn_Start" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="89.0" text="Start" BorderPane.alignment="CENTER" />
