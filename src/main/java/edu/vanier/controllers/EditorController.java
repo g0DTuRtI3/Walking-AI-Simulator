@@ -2,6 +2,7 @@ package edu.vanier.controllers;
 
 import edu.vanier.map.Node;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,8 +22,8 @@ import javafx.stage.Stage;
 public class EditorController {
 
     Stage primaryStage;
-    boolean isCircleMode; 
-    boolean isLinkMode; 
+    boolean isCircleMode;
+    boolean isLinkMode;
     ArrayList circle_list = new ArrayList<Circle>();
     double mouseX;
     double mouseY;
@@ -63,12 +64,12 @@ public class EditorController {
 
     @FXML
     private TextField tf_nbModel;
-    
+
     // Gets the Stage when called
     public EditorController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
-    
+
     @FXML
     void initialize() {
         tf_interval.setFocusTraversable(false);
@@ -76,10 +77,10 @@ public class EditorController {
         tf_nbModel.setFocusTraversable(false);
         color = colorPicker.getValue();
     }
-    
+
     @FXML
     void circleOnMouseClicked(MouseEvent event) {
-        if (!isCircleMode){
+        if (!isCircleMode) {
             isCircleMode = true;
             isLinkMode = false;
             selected();
@@ -101,15 +102,15 @@ public class EditorController {
 //        mouseX = event.getX();
 //        mouseY = event.getY();
     }
-    
+
     @FXML
     void colorPickerOnAction(ActionEvent event) {
         color = colorPicker.getValue();
     }
-    
+
     @FXML
     void linkOnMouseClicked(MouseEvent event) {
-        if (!isLinkMode){
+        if (!isLinkMode) {
             isLinkMode = true;
             isCircleMode = false;
             selected();
@@ -131,13 +132,19 @@ public class EditorController {
 
     @FXML
     void paneOnMouseClicked(MouseEvent event) {
+        // in circle mode: adds circle to the editor pane
         if (isCircleMode) {
-            Circle circle = new Circle(event.getX(), event.getY(), 25, color);
-            circle_list.add(circle);
-            editorPane.getChildren().add(circle);
+            addCircle(event);
+
+            // in link mode: add links between circles
+        } else if (isLinkMode) {
+            addLink(event);
+            // if not specified move the circle
+        } else {
+            System.out.println(event.getTarget());
         }
     }
-    
+
     // Switches to the simulation scene
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
@@ -153,21 +160,44 @@ public class EditorController {
         primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
     }
-    
+
     private void selected() {
         if (isCircleMode) {
             circle.setFill(Color.PURPLE);
             link.setFill(Color.DODGERBLUE);
-        } else if (isLinkMode){
+        } else if (isLinkMode) {
             link.setFill(Color.PURPLE);
             circle.setFill(Color.DODGERBLUE);
         } else {
             circle.setFill(Color.DODGERBLUE);
             link.setFill(Color.DODGERBLUE);
         }
-        
+
     }
-    
+
+    // Adds circle to the editor pane
+    private void addCircle(MouseEvent event) {
+        Circle circle = new Circle(event.getX(), event.getY(), 25, color);
+        circle_list.add(circle);
+        editorPane.getChildren().add(circle);
+    }
+
+    private Circle addLink(MouseEvent event) {
+        Circle circle;
+        double circle1PosX;
+        double circle1PosY;
+        double circle2PosX;
+        double circle2PosY;
+
+        try {
+            circle = (Circle) event.getTarget();
+            circle.setFill(Color.DODGERBLUE);
+        } catch (Exception e) {
+            circle = null;
+        }
+        return circle;
+    }
+
 //    // A method that makes the shapes draggable
 //    private void dragObject(Node node) {
 //
