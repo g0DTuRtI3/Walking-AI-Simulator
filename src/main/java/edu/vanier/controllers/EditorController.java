@@ -1,6 +1,5 @@
 package edu.vanier.controllers;
 
-import edu.vanier.map.Node;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
