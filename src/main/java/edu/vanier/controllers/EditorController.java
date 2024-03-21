@@ -1,5 +1,6 @@
 package edu.vanier.controllers;
 
+import java.awt.geom.RectangularShape;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class EditorController {
     Stage primaryStage;
     boolean isCircleMode;
     boolean isLinkMode;
+    Circle circle1;
+    Circle circle2;
     ArrayList circle_list = new ArrayList<Circle>();
     double mouseX;
     double mouseY;
@@ -137,7 +140,14 @@ public class EditorController {
 
             // in link mode: add links between circles
         } else if (isLinkMode) {
-            addLink(event);
+            if (circle1 == null) {
+                System.out.println("no");
+                circle1 = addLink(event, circle1, circle2);
+            } else {
+                System.out.println("elo");
+                System.out.println("circle: " + circle2 == null);
+                addLink(event, circle1, circle2);
+            }
             // if not specified move the circle
         } else {
             System.out.println(event.getTarget());
@@ -157,6 +167,7 @@ public class EditorController {
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Simulation");
         primaryStage.show();
     }
 
@@ -181,20 +192,40 @@ public class EditorController {
         editorPane.getChildren().add(circle);
     }
 
-    private Circle addLink(MouseEvent event) {
-        Circle circle;
-        double circle1PosX;
-        double circle1PosY;
-        double circle2PosX;
-        double circle2PosY;
+    private Circle addLink(MouseEvent event, Circle circle, Circle circle2) {
+        Color color = null;
 
-        try {
-            circle = (Circle) event.getTarget();
-            circle.setFill(Color.DODGERBLUE);
-        } catch (Exception e) {
-            circle = null;
+        if (circle == null) {
+            try {
+                circle = (Circle) event.getTarget();
+                color = (Color) circle.getFill();
+                circle.setFill(Color.DODGERBLUE);
+            } catch (Exception e) {
+                circle = null;
+            }
+            return circle;
+        } else {
+            System.out.println("Create rect");
+//            Rectangle rect = new Rectangle();
+//            rectFrame.setFrameFromDiagonal(circle.getCenterX(), circle.getCenterY(), circle2.getCenterX(), circle2.getCenterY());
+
+            // Calculate the width and height of the rectangle
+            double width = Math.abs(circle2.getCenterX() - circle.getCenterX());
+            double height = Math.abs(circle2.getCenterY() - circle.getCenterY());
+
+            // Determine the starting point of the rectangle
+            double startX = Math.min(circle2.getCenterX(), circle.getCenterX());
+            double startY = Math.min(circle2.getCenterY(), circle.getCenterY());
+
+            // Create the rectangle
+            Rectangle rectangle = new Rectangle(startX, startY, width, height);
+            rectangle.setFill(Color.GREEN);
+            rectangle.setStroke(Color.BLACK);
         }
-        return circle;
+
+        circle.setFill(color);
+        circle2.setFill(color);
+        return null;
     }
 
 //    // A method that makes the shapes draggable

@@ -54,6 +54,7 @@ public class MainAppController {
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Model Editor");
         primaryStage.show();
     }
 }
