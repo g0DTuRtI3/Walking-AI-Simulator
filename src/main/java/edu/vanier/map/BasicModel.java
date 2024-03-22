@@ -13,7 +13,7 @@ public class BasicModel {
 
     private NodeModel prevNode;
     private NodeModel nextNode;
-    private Line link;
+    private Line link = new Line();
 
     public BasicModel(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
         this.link.setStartX(prevNode.getCenterX());
@@ -39,11 +39,15 @@ public class BasicModel {
         return nextNode;
     }
 
-    public void updateLink() {
-        super.setStartX(prevNode.getCenterX());
-        super.setStartY(prevNode.getCenterY());
-        super.setEndX(nextNode.getCenterX());
-        super.setEndY(nextNode.getCenterY());
+    public Line getLink() {
+        return link;
+    }
+
+    public void updateModel() {
+        this.link.setStartX(prevNode.getCenterX());
+        this.link.setStartY(prevNode.getCenterY());
+        this.link.setEndX(nextNode.getCenterX());
+        this.link.setEndY(nextNode.getCenterY());
     }
     
 

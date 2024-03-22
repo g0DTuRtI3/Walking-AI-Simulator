@@ -57,8 +57,8 @@ public class Walker {
         }
     }
 
-    public ArrayList<ModelLink> getModel() {
-        return this.linksOfWalker;
+    public ArrayList<BasicModel> getModel() {
+        return this.basicModels;
     }
 ;
 }
