@@ -1,6 +1,7 @@
 package edu.vanier.map;
-
+import edu.vanier.map.NodeModel;
 import java.util.ArrayList;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /**
@@ -9,18 +10,18 @@ import javafx.scene.shape.Circle;
  */
 public class Walker {
 
-    private ArrayList<ModelLink> linksOfWalker = new ArrayList<>();
+    private ArrayList<BasicModel> basicModels = new ArrayList<>();
 
     public Walker() {
 
     }
 
-    public Walker(ArrayList<ModelLink> linksOfWalker) {
-        this.linksOfWalker.addAll(linksOfWalker);
+    public Walker(ArrayList<BasicModel> linksOfWalker) {
+        this.basicModels.addAll(linksOfWalker);
     }
 
-    public void addLink(ModelLink link) {
-        linksOfWalker.add(link);
+    public void addLink(BasicModel link) {
+        basicModels.add(link);
     }
     
     public void movePreviousLeft(Circle previousNode, Circle nextNode, Circle link) {
@@ -40,5 +41,12 @@ public class Walker {
     
     public void moveNextRight(Circle previousNode, Circle nextNode, Circle link) {
         
+    }
+    
+    public void updateWalker() {
+        
+        for (BasicModel basicModel : basicModels) {
+            basicModel.updateModel();
+        }
     }
 }
