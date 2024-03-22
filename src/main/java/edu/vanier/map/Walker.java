@@ -25,4 +25,9 @@ public class Walker {
     public void addLink(ModelLink link) {
         linksOfWalker.add(link);
     }
+
+    public ArrayList<ModelLink> getModel() {
+        return this.linksOfWalker;
+    }
+;
 }

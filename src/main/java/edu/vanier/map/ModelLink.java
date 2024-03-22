@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
  */
 public class ModelLink extends javafx.scene.shape.Line {
 
-    private static double strokeWidth = 5;
+    private static double strokeWidth = 10;
 
     private NodeModel prevNode;
     private NodeModel nextNode;
@@ -24,8 +24,18 @@ public class ModelLink extends javafx.scene.shape.Line {
         this.prevNode = prevNode;
         this.nextNode = nextNode;
         
-        System.out.println(prevNode.getCenterX());
+        
 
+    }
+
+  
+
+    public NodeModel getPrevNode() {
+        return prevNode;
+    }
+
+    public NodeModel getNextNode() {
+        return nextNode;
     }
 
     public void updateLink() {
