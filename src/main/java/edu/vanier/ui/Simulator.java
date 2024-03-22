@@ -197,7 +197,7 @@ scene.setOnKeyPressed((KeyEvent event) -> {System.out.println(link.getRadAngle()
                     break;
             }
         });*/
-        root.getChildren().addAll(link, node1, node2, line);
+//        root.getChildren().addAll(link, node1, node2, line);
         
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
