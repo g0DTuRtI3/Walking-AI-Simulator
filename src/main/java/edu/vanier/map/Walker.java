@@ -49,4 +49,9 @@ public class Walker {
             basicModel.updateModel();
         }
     }
+
+    public ArrayList<ModelLink> getModel() {
+        return this.linksOfWalker;
+    }
+;
 }

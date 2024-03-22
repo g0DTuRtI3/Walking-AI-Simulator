@@ -9,7 +9,7 @@ import javafx.scene.shape.Line;
  */
 public class BasicModel {
 
-    private static double strokeWidth = 5;
+    private static double strokeWidth = 10;
 
     private NodeModel prevNode;
     private NodeModel nextNode;
@@ -24,13 +24,26 @@ public class BasicModel {
         this.link.setStroke(colorOfLine);
         this.prevNode = prevNode;
         this.nextNode = nextNode;
+        
+        
+
     }
 
-    public void updateModel() {
-        this.link.setStartX(prevNode.getCenterX());
-        this.link.setStartY(prevNode.getCenterY());
-        this.link.setEndX(nextNode.getCenterX());
-        this.link.setEndY(nextNode.getCenterY());
+  
+
+    public NodeModel getPrevNode() {
+        return prevNode;
+    }
+
+    public NodeModel getNextNode() {
+        return nextNode;
+    }
+
+    public void updateLink() {
+        super.setStartX(prevNode.getCenterX());
+        super.setStartY(prevNode.getCenterY());
+        super.setEndX(nextNode.getCenterX());
+        super.setEndY(nextNode.getCenterY());
     }
     
 

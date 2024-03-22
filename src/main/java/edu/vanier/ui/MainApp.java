@@ -40,6 +40,7 @@ public class MainApp extends Application {
             primaryStage.setMaximized(false);
             // We just need to bring the main window to front.
             primaryStage.setAlwaysOnTop(true);
+            primaryStage.setTitle("Model Editor");
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
         } catch (IOException ex) {
