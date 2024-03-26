@@ -263,6 +263,8 @@ public class EditorController {
 
     private void clearPane() {
         editorPane.getChildren().clear();
+        walker.getModel().clear();
+        System.out.println(walker.getModel());
     }
 
     private void removeCircle(MouseEvent event) {
@@ -282,4 +284,36 @@ public class EditorController {
 //            node.setLayoutY(e.getSceneY() - mouseY);
 //        });
 //    }
+    
+    public Walker getWalker() {
+        return walker;
+    }
+
+    public TextField getTf_interval() {
+        return tf_interval;
+    }
+
+    public TextField getTf_learningRate() {
+        return tf_learningRate;
+    }
+
+    public TextField getTf_nbModel() {
+        return tf_nbModel;
+    }
+
+    public void setWalker(Walker walker) {
+        this.walker = walker;
+    }
+
+    public void setTf_interval(TextField tf_interval) {
+        this.tf_interval = tf_interval;
+    }
+
+    public void setTf_learningRate(TextField tf_learningRate) {
+        this.tf_learningRate = tf_learningRate;
+    }
+
+    public void setTf_nbModel(TextField tf_nbModel) {
+        this.tf_nbModel = tf_nbModel;
+    }
 }
