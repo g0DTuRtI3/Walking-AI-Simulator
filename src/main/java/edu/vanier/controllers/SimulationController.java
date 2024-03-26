@@ -16,8 +16,10 @@ import javafx.stage.Stage;
 public class SimulationController {
 
     Stage primaryStage;
+
     
     public Walker[] walkers;
+
 
     @FXML
     private Pane SimulationPane;
@@ -49,8 +51,10 @@ public class SimulationController {
     @FXML
     private Text txt_IsTraining;
 
-    public SimulationController(Stage primaryStage) {
+    public SimulationController(Stage primaryStage, Walker walker, int nbModel) {
         this.primaryStage = primaryStage;
+        this.walker = walker;
+        this.nbModel = nbModel;
     }
     
     @FXML
