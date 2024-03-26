@@ -44,10 +44,10 @@ public class Simulator extends Application {
         Pane root = new Pane();
         Scene scene = new Scene(root, 500, 500);
 
-        node1 = new NodeModel(250.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
+        //node1 = new NodeModel(250.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
         //node1.setFill(Color.TRANSPARENT);
         //node1.setStroke(Color.BLACK);
-        node2 = new NodeModel(50.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
+        //node2 = new NodeModel(50.0, 400.0, Color.BLUE, new Rigid2D(new ArrayList<>()));
         //node2.setFill(Color.TRANSPARENT);
         //node2.setStroke(Color.BLACK);
         //link = new Line(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());

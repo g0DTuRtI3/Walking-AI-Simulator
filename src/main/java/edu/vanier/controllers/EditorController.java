@@ -1,5 +1,7 @@
 package edu.vanier.controllers;
 
+import edu.vanier.map.*;
+import java.awt.geom.RectangularShape;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -20,13 +22,21 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
+    Color ogColor;
     Stage primaryStage;
     boolean isCircleMode;
     boolean isLinkMode;
+    Circle circle1 = null;
+    Circle circle2 = null;
     ArrayList circle_list = new ArrayList<Circle>();
     double mouseX;
     double mouseY;
-    Color color;
+    Color circleColor;
+    Color linkColor;
+    private NodeModel prevNode;
+    private NodeModel nextNode;
+    private boolean isSelected;
+    private Walker walker = new Walker();
 
     @FXML
     private Button btn_Start;
@@ -35,13 +45,16 @@ public class EditorController {
     private Circle circle;
 
     @FXML
-    private ColorPicker colorPicker;
+    private ColorPicker circleColorPicker;
 
     @FXML
     private Pane editorPane;
 
     @FXML
     private Rectangle link;
+
+    @FXML
+    private ColorPicker linkColorPicker;
 
     @FXML
     private MenuItem menuItem_About;
@@ -74,7 +87,9 @@ public class EditorController {
         tf_interval.setFocusTraversable(false);
         tf_learningRate.setFocusTraversable(false);
         tf_nbModel.setFocusTraversable(false);
-        color = colorPicker.getValue();
+        circleColor = circleColorPicker.getValue();
+        linkColor = linkColorPicker.getValue();
+
     }
 
     @FXML
@@ -103,8 +118,8 @@ public class EditorController {
     }
 
     @FXML
-    void colorPickerOnAction(ActionEvent event) {
-        color = colorPicker.getValue();
+    void circleColorPickerOnAction(ActionEvent event) {
+        circleColor = circleColorPicker.getValue();
     }
 
     @FXML
@@ -130,6 +145,11 @@ public class EditorController {
     }
 
     @FXML
+    void linkColorPickerOnAction(ActionEvent event) {
+        linkColor = linkColorPicker.getValue();
+    }
+
+    @FXML
     void paneOnMouseClicked(MouseEvent event) {
         // in circle mode: adds circle to the editor pane
         if (isCircleMode) {
@@ -138,9 +158,8 @@ public class EditorController {
             // in link mode: add links between circles
         } else if (isLinkMode) {
             addLink(event);
-            // if not specified move the circle
         } else {
-            System.out.println(event.getTarget());
+            System.out.println("pane on mouse clicked error");
         }
     }
 
@@ -157,6 +176,7 @@ public class EditorController {
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Simulation");
         primaryStage.show();
     }
 
@@ -176,25 +196,39 @@ public class EditorController {
 
     // Adds circle to the editor pane
     private void addCircle(MouseEvent event) {
-        Circle circle = new Circle(event.getX(), event.getY(), 25, color);
+        Circle circle = new Circle(event.getX(), event.getY(), 25, circleColor);
         circle_list.add(circle);
         editorPane.getChildren().add(circle);
     }
 
-    private Circle addLink(MouseEvent event) {
-        Circle circle;
-        double circle1PosX;
-        double circle1PosY;
-        double circle2PosX;
-        double circle2PosY;
+    private void addLink(MouseEvent event) {
 
-        try {
-            circle = (Circle) event.getTarget();
-            circle.setFill(Color.DODGERBLUE);
-        } catch (Exception e) {
-            circle = null;
+        if (circle1 == null) {
+            try {
+                circle1 = (Circle) event.getTarget();
+                ogColor = (Color) circle1.getFill();
+                circle1.setFill(Color.DODGERBLUE);
+                return;
+            } catch (Exception e) {
+                circle1 = null;
+                return;
+            }
+        } else {
+            try {
+                circle2 = (Circle) event.getTarget();
+            } catch (Exception e) {
+                System.out.println("clicked on other things");
+                return;
+            }
+            nextNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
+            prevNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
+
+            BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
+            walker.addLink(basicModel);
+            editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
+            circle1 = null;
+            circle2 = null;
         }
-        return circle;
     }
 
 //    // A method that makes the shapes draggable
