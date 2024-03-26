@@ -3,14 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
@@ -38,7 +40,7 @@
       </MenuBar>
    </top>
    <left>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="703.0" spacing="20.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
@@ -46,19 +48,34 @@
             <VBox prefWidth="100.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:" />
-                  <TextField fx:id="tf_nbModel" promptText="Integer &lt;= 40" />
+                  <HBox alignment="TOP_CENTER">
+                     <children>
+                        <Slider fx:id="slider_NbModel" majorTickUnit="10.0" max="40.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Label fx:id="label_NbModel" text="Label" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <VBox prefWidth="100.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interval Between Generation:" />
-                  <TextField fx:id="tf_interval" promptText="10 - 60 s" />
+                  <HBox alignment="TOP_CENTER">
+                     <children>
+                        <Slider fx:id="slider_Interval" max="60.0" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Label fx:id="label_Interval" text="Label" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <VBox prefWidth="100.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Learning Rate:" />
-                  <TextField fx:id="tf_learningRate" promptText="0 &lt; x &lt; 1" />
+                  <HBox alignment="TOP_CENTER">
+                     <children>
+                        <Slider fx:id="slider_LearningRate" majorTickUnit="0.25" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Label fx:id="label_LearningRate" prefWidth="29.0" text="Label" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>
