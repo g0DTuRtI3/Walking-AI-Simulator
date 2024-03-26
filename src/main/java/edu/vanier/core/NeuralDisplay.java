@@ -42,6 +42,7 @@ public class NeuralDisplay extends Pane {
 
     private ArrayList<Line> lineWeights = new ArrayList();
     private ArrayList<ArrayList<Circle>> neuronList = new ArrayList();
+    private static double neuronRadius = 20;
     
    
     
@@ -85,7 +86,7 @@ public class NeuralDisplay extends Pane {
 
                 value.textProperty().bind(prop.asString("%.2f"));
 
-                Circle neuron = new Circle(20);
+                Circle neuron = new Circle(neuronRadius);
                 neuron.setUserData(prop);
 
                 neuron.setCenterX(layerGap * (i + 0.5) - (this.getWidth()));
