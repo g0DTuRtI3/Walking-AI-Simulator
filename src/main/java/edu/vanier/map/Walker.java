@@ -14,6 +14,8 @@ public class Walker {
 
     private ArrayList<BasicModel> basicModels = new ArrayList<>();
     private NeuralNetwork brain;
+    private static float learningRate = 0.3f;
+    private int fitnessScore;
 
     public Walker() {
 
@@ -55,5 +57,46 @@ public class Walker {
         for (BasicModel basicModel : basicModels) {
             basicModel.updateModel();
         }
+    }
+
+    public static double multiplyVectors(double[] a, double[] b) {
+
+        if (a.length != b.length) {
+            throw new IllegalArgumentException("Input vectors must have the same length");
+        }
+
+        double result = 0;
+        for (int i = 0; i < a.length; i++) {
+            result += a[i] * b[i];
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param velocity
+     */
+    /**
+     *
+     * @param learningRate
+     */
+    public static void setLearningRate(float learningRate) {
+        Walker.learningRate = learningRate;
+    }
+
+    public int getFitnessScore() {
+
+        return this.fitnessScore;
+    }
+
+    /**
+     *
+     * @param score
+     */
+    public void setFitnessScore(int score) {
+
+        this.fitnessScore = score;
+
     }
 }
