@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -37,12 +38,16 @@ public class EditorController {
     private NodeModel nextNode;
     private boolean isSelected;
     private Walker walker = new Walker();
+    private boolean delMode = false;
+
+    @FXML
+    private Button btn_Clear;
 
     @FXML
     private Button btn_Start;
 
     @FXML
-    private Circle circle;
+    private Circle editorCircle;
 
     @FXML
     private ColorPicker circleColorPicker;
@@ -67,6 +72,9 @@ public class EditorController {
 
     @FXML
     private MenuItem menuItem_Save;
+
+    @FXML
+    private RadioButton rb_DelMode;
 
     @FXML
     private TextField tf_interval;
@@ -121,10 +129,22 @@ public class EditorController {
     void circleColorPickerOnAction(ActionEvent event) {
         circleColor = circleColorPicker.getValue();
     }
+    
+    @FXML
+    void clearOnAction(ActionEvent event) {
+        clearPane();
+    }
+    
+    @FXML
+    void delModeOnAction(ActionEvent event) {
+        delMode = rb_DelMode.isSelected();
+    }
 
     @FXML
     void linkOnMouseClicked(MouseEvent event) {
-        if (!isLinkMode) {
+        if (delMode) {
+            selected();
+        } else if (!isLinkMode) {
             isLinkMode = true;
             isCircleMode = false;
             selected();
@@ -151,8 +171,11 @@ public class EditorController {
 
     @FXML
     void paneOnMouseClicked(MouseEvent event) {
+        if (delMode) {
+            removeCircle(event);
+            
         // in circle mode: adds circle to the editor pane
-        if (isCircleMode) {
+        } else if (isCircleMode) {
             addCircle(event);
 
             // in link mode: add links between circles
@@ -180,15 +203,22 @@ public class EditorController {
         primaryStage.show();
     }
 
+    // changes the color of the editor display
     private void selected() {
+        if (delMode) {
+            editorCircle.setFill(Color.GREY);
+            link.setFill(Color.GREY);
+            return;
+        }
+        
         if (isCircleMode) {
-            circle.setFill(Color.PURPLE);
+            editorCircle.setFill(Color.PURPLE);
             link.setFill(Color.DODGERBLUE);
         } else if (isLinkMode) {
             link.setFill(Color.PURPLE);
-            circle.setFill(Color.DODGERBLUE);
+            editorCircle.setFill(Color.DODGERBLUE);
         } else {
-            circle.setFill(Color.DODGERBLUE);
+            editorCircle.setFill(Color.DODGERBLUE);
             link.setFill(Color.DODGERBLUE);
         }
 
@@ -231,6 +261,14 @@ public class EditorController {
         }
     }
 
+    private void clearPane() {
+        editorPane.getChildren().clear();
+    }
+
+    private void removeCircle(MouseEvent event) {
+        System.out.println("felete circle");
+    }
+    
 //    // A method that makes the shapes draggable
 //    private void dragObject(Node node) {
 //
