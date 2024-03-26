@@ -72,7 +72,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="158.0">
                      <children>
                         <Rectangle fx:id="link" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="26.0" layoutY="191.0" onMouseClicked="#linkOnMouseClicked" onMouseDragged="#linkOnMouseDragged" onMousePressed="#linkOnMousePressed" stroke="BLACK" strokeType="INSIDE" width="110.0" />
-                        <Circle fx:id="circle" fill="DODGERBLUE" layoutX="80.0" layoutY="63.0" onMouseClicked="#circleOnMouseClicked" onMouseDragged="#circleOnMouseDragged" onMousePressed="#circleOnMousePressed" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Circle fx:id="editorCircle" fill="DODGERBLUE" layoutX="80.0" layoutY="63.0" onMouseClicked="#circleOnMouseClicked" onMouseDragged="#circleOnMouseDragged" onMousePressed="#circleOnMousePressed" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
                         <VBox alignment="TOP_CENTER" layoutX="18.0" layoutY="121.0" spacing="5.0">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Circle Color Picker" />
@@ -97,8 +97,8 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-            <RadioButton mnemonicParsing="false" text="Delete Mode" />
-            <Button mnemonicParsing="false" text="Clear Editor" />
+            <RadioButton fx:id="rb_DelMode" mnemonicParsing="false" onAction="#delModeOnAction" text="Delete Mode" />
+            <Button fx:id="btn_Clear" mnemonicParsing="false" onAction="#clearOnAction" text="Clear Editor" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" top="20.0" />
