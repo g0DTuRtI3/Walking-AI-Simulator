@@ -263,8 +263,8 @@ public class EditorController {
 
     private void clearPane() {
         editorPane.getChildren().clear();
-        walker.getModel().clear();
-        System.out.println(walker.getModel());
+        walker.getBasicModels().clear();
+        System.out.println(walker.getBasicModels());
     }
 
     private void removeCircle(MouseEvent event) {
