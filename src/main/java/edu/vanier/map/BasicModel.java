@@ -24,9 +24,6 @@ public class BasicModel {
         this.link.setStroke(colorOfLine);
         this.prevNode = prevNode;
         this.nextNode = nextNode;
-        
-        
-
     }
 
   

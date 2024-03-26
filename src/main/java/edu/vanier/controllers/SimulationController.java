@@ -1,5 +1,6 @@
 package edu.vanier.controllers;
 
+import edu.vanier.map.Walker;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +16,8 @@ import javafx.stage.Stage;
 public class SimulationController {
 
     Stage primaryStage;
+    Walker walker;
+    int nbModel;
 
     @FXML
     private Pane SimulationPane;
@@ -46,8 +49,10 @@ public class SimulationController {
     @FXML
     private Text txt_IsTraining;
 
-    public SimulationController(Stage primaryStage) {
+    public SimulationController(Stage primaryStage, Walker walker, int nbModel) {
         this.primaryStage = primaryStage;
+        this.walker = walker;
+        this.nbModel = nbModel;
     }
     
     @FXML
