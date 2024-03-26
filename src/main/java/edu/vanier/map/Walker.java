@@ -95,8 +95,14 @@ public class Walker {
      * @param score
      */
     public void setFitnessScore(int score) {
-
         this.fitnessScore = score;
+    }
 
+    public ArrayList<BasicModel> getBasicModels() {
+        return basicModels;
+    }
+
+    public static float getLearningRate() {
+        return learningRate;
     }
 }
