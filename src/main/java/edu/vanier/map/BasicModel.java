@@ -1,26 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.map;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 /**
  *
  * @author YOUSSEF
  */
-public class ModelLink extends javafx.scene.shape.Line {
+public class BasicModel {
 
     private static double strokeWidth = 10;
 
     private NodeModel prevNode;
     private NodeModel nextNode;
+    private Line link = new Line();
 
-    public ModelLink(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
-        super(prevNode.getCenterX(), prevNode.getCenterY(), nextNode.getCenterX(), nextNode.getCenterY());
-        super.setStrokeWidth(strokeWidth);
-        super.setStroke(colorOfLine);
+    public BasicModel(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
+        this.link.setStartX(prevNode.getCenterX());
+        this.link.setStartY(prevNode.getCenterY());
+        this.link.setEndX(nextNode.getCenterX());
+        this.link.setEndY(nextNode.getCenterY());
+        this.link.setStrokeWidth(strokeWidth);
+        this.link.setStroke(colorOfLine);
         this.prevNode = prevNode;
         this.nextNode = nextNode;
         
@@ -38,11 +39,15 @@ public class ModelLink extends javafx.scene.shape.Line {
         return nextNode;
     }
 
-    public void updateLink() {
-        super.setStartX(prevNode.getCenterX());
-        super.setStartY(prevNode.getCenterY());
-        super.setEndX(nextNode.getCenterX());
-        super.setEndY(nextNode.getCenterY());
+    public Line getLink() {
+        return link;
+    }
+
+    public void updateModel() {
+        this.link.setStartX(prevNode.getCenterX());
+        this.link.setStartY(prevNode.getCenterY());
+        this.link.setEndX(nextNode.getCenterX());
+        this.link.setEndY(nextNode.getCenterY());
     }
     
 
@@ -51,7 +56,7 @@ public class ModelLink extends javafx.scene.shape.Line {
         System.out.println(nextNode.getCenterX());
         double adjacent = nextNode.getCenterX()- prevNode.getCenterX();
         double opposite = nextNode.getCenterY() - nextNode.getCenterY();
-        double angleRad = 0;
+        double angleRad;
         try {
             angleRad = Math.atan(Math.abs(opposite / adjacent));
         } catch (Exception e) {
@@ -68,4 +73,5 @@ public class ModelLink extends javafx.scene.shape.Line {
         
         return angleRad;
     }
+    
 }

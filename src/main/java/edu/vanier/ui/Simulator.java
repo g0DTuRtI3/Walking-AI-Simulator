@@ -1,6 +1,6 @@
 package edu.vanier.ui;
 
-import edu.vanier.map.ModelLink;
+import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
 import edu.vanier.physics.Rigid2D;
 import javafx.application.Application;
@@ -28,7 +28,7 @@ public class Simulator extends Application {
     private double elapsedTime;
     private NodeModel node1;
     private NodeModel node2;
-    private ModelLink link;
+    private BasicModel link;
     private double angleBetween = 0;
     double angleRight = 0;
     double angleLeft = 180;
@@ -53,7 +53,7 @@ public class Simulator extends Application {
         //link = new Line(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
         Line line = new Line(0, 400, 500, 400);
         //line.setStroke(Color.RED);
-        ModelLink link = new ModelLink(node1,node2,Color.BLACK);
+        BasicModel link = new BasicModel(node1,node2,Color.BLACK);
         
         
 
@@ -197,7 +197,7 @@ scene.setOnKeyPressed((KeyEvent event) -> {System.out.println(link.getRadAngle()
                     break;
             }
         });*/
-        root.getChildren().addAll(link, node1, node2, line);
+//        root.getChildren().addAll(link, node1, node2, line);
         
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();

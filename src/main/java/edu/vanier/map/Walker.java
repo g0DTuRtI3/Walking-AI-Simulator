@@ -1,10 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.map;
 
+import edu.vanier.core.NeuralNetwork;
+import edu.vanier.map.NodeModel;
 import java.util.ArrayList;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 /**
  *
@@ -12,22 +12,53 @@ import java.util.ArrayList;
  */
 public class Walker {
 
-    private ArrayList<ModelLink> linksOfWalker = new ArrayList<>();
+    private ArrayList<BasicModel> basicModels = new ArrayList<>();
+    private NeuralNetwork brain;
 
     public Walker() {
 
     }
 
-    public Walker(ArrayList<ModelLink> linksOfWalker) {
-        this.linksOfWalker.addAll(linksOfWalker);
+    public NeuralNetwork getBrain() {
+        return this.brain;
     }
 
-    public void addLink(ModelLink link) {
-        linksOfWalker.add(link);
+    public Walker(ArrayList<BasicModel> linksOfWalker) {
+        this.basicModels.addAll(linksOfWalker);
     }
 
-    public ArrayList<ModelLink> getModel() {
-        return this.linksOfWalker;
+    public void addLink(BasicModel link) {
+        basicModels.add(link);
+    }
+
+    public void movePreviousLeft(Circle previousNode, Circle nextNode, Circle link) {
+//        previousNode.setCenterY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
+//        previousNode.setCenterX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+//        link.setStartY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
+//        link.setStartX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+    }
+
+    public void movePreviousRight(Circle previousNode, Circle nextNode, Circle link) {
+
+    }
+
+    public void moveNextLeft(Circle previousNode, Circle nextNode, Circle link) {
+
+    }
+
+    public void moveNextRight(Circle previousNode, Circle nextNode, Circle link) {
+
+    }
+
+    public void updateWalker() {
+
+        for (BasicModel basicModel : basicModels) {
+            basicModel.updateModel();
+        }
+    }
+
+    public ArrayList<BasicModel> getModel() {
+        return this.basicModels;
     }
 ;
 }
