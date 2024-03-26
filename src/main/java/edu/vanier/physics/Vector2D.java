@@ -11,31 +11,52 @@ public class Vector2D {
     /**
      * is the horizontal coordinate of the vector
      */
-    private double x;
+    private double x1;
     /**
      * is the vertical coordinate of the vector
      */
-    private double y;
+    private double y1;
+    
+    private double x2;
+    
+    private double y2;
+    
+    private double angle;
+    
+    private double magnitude;
 
-    public Vector2D(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public Vector2D() {
     }
 
-    public double getX() {
-        return x;
+    public Vector2D(double x1, double y1, double x2, double y2) {
+        this.x1 = x1;
+        this.y2 = y2;
+        this.x2 = x2;
+        this.y2 = y2;
     }
 
-    public double getY() {
-        return y;
+    public double[] getX() {
+        double[] array = new double[2];
+        array[0] = x1;
+        array[1] = x2;
+        return array;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public double[] getY() {
+        double[] array = new double[2];
+        array[0] = y1;
+        array[1] = y2;
+        return array;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setX(double x1, double x2) {
+        this.x1 = x1;
+        this.x2 = x2;
+    }
+
+    public void setY(double y1, double y2) {
+        this.y1 = y1;
+        this.y2 = y2;
     }
 
     /**
@@ -44,7 +65,7 @@ public class Vector2D {
      * @return the magnitude of a vector
      */
     public double getMagnitude() {
-        return Math.sqrt(x * x + y * y);
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
     /**
@@ -55,9 +76,9 @@ public class Vector2D {
     public Vector2D normalize() {
         double magnitude = getMagnitude();
         if (magnitude == 0) {
-            return new Vector2D(0, 0);
+            return new Vector2D(0, 0,0,0);
         }
-        return new Vector2D(x / magnitude, y / magnitude);
+        return new Vector2D(x1 / magnitude, y1 / magnitude, x2 / magnitude, y2 / magnitude);
     }
 
     /**
@@ -67,7 +88,7 @@ public class Vector2D {
      * @return the result of the dot product
      */
     public double dot(Vector2D other) {
-        return x * other.x + y * other.y;
+        return x1 * other.x1 + y1 * other.y1;
     }
 
     /**

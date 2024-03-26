@@ -224,7 +224,7 @@ public class EditorController {
             prevNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
 
             BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
-            walker.addLink(basicModel);
+            walker.addBasicModel(basicModel);
             editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             circle1 = null;
             circle2 = null;

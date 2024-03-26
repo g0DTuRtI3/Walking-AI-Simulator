@@ -19,16 +19,20 @@ public class Walker {
 
     }
 
+    public Walker(ArrayList<BasicModel> basicModels) {
+        this.basicModels.addAll(basicModels);
+    }
+    
+    public Walker(BasicModel basicModel) {
+        addBasicModel(basicModel);
+    }
+    
     public NeuralNetwork getBrain() {
         return this.brain;
     }
 
-    public Walker(ArrayList<BasicModel> linksOfWalker) {
-        this.basicModels.addAll(linksOfWalker);
-    }
-
-    public void addLink(BasicModel link) {
-        basicModels.add(link);
+    public void addBasicModel(BasicModel basicModel) {
+        basicModels.add(basicModel);
     }
 
     public void movePreviousLeft(Circle previousNode, Circle nextNode, Circle link) {
@@ -57,7 +61,7 @@ public class Walker {
         }
     }
 
-    public ArrayList<BasicModel> getModel() {
+    public ArrayList<BasicModel> getBasicModel() {
         return this.basicModels;
     }
 ;

@@ -15,12 +15,15 @@ public class Rigid2D {
     private ArrayList<Vector2D> forces = new ArrayList<>();
     private Gravity gravity;
 
+    public Rigid2D() {
+    }
+
     public Rigid2D(ArrayList<Vector2D> forces) {
         this.forces = forces;
 
     }
 
-    public Vector2D finalForce() {
+    public Vector2D getFinalForce() {
         Vector2D finalForce = new Vector2D(0, 0);
 
         for (int i = 0; i < forces.size(); i++) {
@@ -33,9 +36,9 @@ public class Rigid2D {
 
     public void updateForce() {
         {
-            forces.add(finalForce().opposite());
+            forces.add(getFinalForce().opposite());
         }
-        
+
     }
 
 }
