@@ -189,8 +189,10 @@ public class EditorController {
     // Switches to the simulation scene
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
+        int nb = Integer.parseInt(tf_nbModel.getText());
+        
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
-        mainAppLoader.setController(new SimulationController(primaryStage));
+        mainAppLoader.setController(new SimulationController(primaryStage, walker, nb));
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);
@@ -263,12 +265,13 @@ public class EditorController {
 
     private void clearPane() {
         editorPane.getChildren().clear();
-        walker.getModel().clear();
-        System.out.println(walker.getModel());
+        walker.getBasicModels().clear();
+        System.out.println(walker.getBasicModels());
     }
 
     private void removeCircle(MouseEvent event) {
-        System.out.println("felete circle");
+        System.out.println(event.getTarget());
+        Circle cirlce = (Circle)event.getTarget();
     }
     
 //    // A method that makes the shapes draggable
