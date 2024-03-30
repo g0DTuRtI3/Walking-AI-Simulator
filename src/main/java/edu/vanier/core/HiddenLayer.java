@@ -1,6 +1,7 @@
 package edu.vanier.core;
 
 
+import edu.vanier.map.Walker;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -75,7 +76,7 @@ public class HiddenLayer {
     public double[] activate(double[] input) {
         double[] output = new double[weights.length];
         for (int i = 0; i < weights.length; i++) {
-            
+           output[i] = ActivationFunctions.tanh(Walker.multiplyVectors(input, weights[i])); 
         }
 
         return output;
@@ -85,6 +86,7 @@ public class HiddenLayer {
      *
      * @return
      */
+    @Override
     public String toString() {
         String ret = "[";
 

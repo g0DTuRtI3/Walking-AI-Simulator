@@ -40,7 +40,7 @@ public class Vector2D {
 
     /**
      * Gets the magnitude of a vector
-     * 
+     *
      * @return the magnitude of a vector
      */
     public double getMagnitude() {
@@ -49,7 +49,7 @@ public class Vector2D {
 
     /**
      * Transforms a vector in a unit vector
-     * 
+     *
      * @return the normalized vector
      */
     public Vector2D normalize() {
@@ -62,7 +62,7 @@ public class Vector2D {
 
     /**
      * Performs the dot product operation on two vectors
-     * 
+     *
      * @param other the other vector for the operation
      * @return the result of the dot product
      */
@@ -72,7 +72,7 @@ public class Vector2D {
 
     /**
      * Adds 2 vectors together
-     * 
+     *
      * @param other the other vector for the operation
      * @return a new vector that is the result of the addition
      */
@@ -82,7 +82,7 @@ public class Vector2D {
 
     /**
      * Subtracts 2 vectors together
-     * 
+     *
      * @param other the other vector for the operation
      * @return a new vector that is the result of the subtraction
      */
@@ -92,7 +92,7 @@ public class Vector2D {
 
     /**
      * Divides a vector by a scalar
-     * 
+     *
      * @param value the value of the scalar
      * @return a new vector that is the result of the division
      */
@@ -103,7 +103,7 @@ public class Vector2D {
     /**
      * Rotates a vector to an angle based on a straight horizontal line that
      * represents the angle 0
-     * 
+     *
      * @param theta angle of the desired rotation
      * @return a new vector that is the result of the rotation
      */
@@ -114,7 +114,7 @@ public class Vector2D {
     /**
      * Gets the rotation angle based on a straight line that represents the
      * angle 0 (using trigonometry)
-     * 
+     *
      * @return the angle of rotation
      */
     public double getRotation() {
@@ -132,7 +132,7 @@ public class Vector2D {
 
     /**
      * Rotates a vector to angle based on the current angle of that vector
-     * 
+     *
      * @param theta angle of the desired rotation
      * @return a new vector that is the result of the rotation
      */
@@ -142,7 +142,7 @@ public class Vector2D {
 
     /**
      * Copies the attributes (x and y) of a vector
-     * 
+     *
      * @return a news vector that was copied off another vector
      */
     public Vector2D copy() {
@@ -151,7 +151,7 @@ public class Vector2D {
 
     /**
      * Gets the angle between two vectors (using vector properties)
-     * 
+     *
      * @param other the other vector
      * @return the angle between the two vectors
      */
@@ -162,5 +162,9 @@ public class Vector2D {
     @Override
     public String toString() {
         return "Vector2D{" + "x = " + x + ", y = " + y + '}';
+    }
+
+    Vector2D opposite() {
+        return new Vector2D(- this.x, - this.y);
     }
 }
