@@ -26,7 +26,7 @@ public class EditorController {
     private double mouseY;
     private int nbModel;
     private int interval;
-    private int learningRate;
+    private float learningRate;
     private boolean isCircleMode;
     private boolean isLinkMode;
     private boolean isSelected;
@@ -105,20 +105,26 @@ public class EditorController {
     void initialize() {
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
+        
+        // Setting default value
         slider_NbModel.setValue(10);
         slider_LearningRate.setValue(0.3);
         label_NbModel.setText("10");
         label_Interval.setText(Integer.toString((int)slider_Interval.getValue()));
         label_LearningRate.setText("0.3");
         
+        //Add listener for when uses make slider slide
         slider_NbModel.valueProperty().addListener((observable, oldValue, newValue) -> {
         label_NbModel.setText(Integer.toString(newValue.intValue()));
+        nbModel = newValue.intValue();
         });
         slider_Interval.valueProperty().addListener((observable, oldValue, newValue) -> {
         label_Interval.setText(Integer.toString(newValue.intValue()));
+        interval = newValue.intValue();
         });
         slider_LearningRate.valueProperty().addListener((observable, oldValue, newValue) -> {
         label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
+        learningRate = newValue.floatValue();
         });
     }
 
@@ -213,10 +219,9 @@ public class EditorController {
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
         //////////////////// Error handeling for this
-        int nb = 0;
         
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
-        mainAppLoader.setController(new SimulationController(primaryStage, walker, nb));
+        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate));
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);
