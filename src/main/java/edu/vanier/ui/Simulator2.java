@@ -7,6 +7,7 @@ package edu.vanier.ui;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
 import edu.vanier.map.Walker;
+import edu.vanier.physics.Vector2D;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -30,6 +31,9 @@ public class Simulator2 extends Application{
     
     Rectangle ground = new Rectangle(0, 400, 500, 400);
     private boolean moveRightNode = true;
+    
+    Vector2D rightForce = new Vector2D(0,10);
+    Vector2D leftForce = new Vector2D(0,5);
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -51,16 +55,16 @@ public class Simulator2 extends Application{
             switch (event.getCode()) {
                 case A:
                     if (moveRightNode) {
-                        
+                        walker.moveNext(basicModel, rightForce.inverse());
                     }else {
-                        
+                        walker.movePrevious(basicModel, rightForce.inverse());
                     }
                     break;
                 case D:
                     if (moveRightNode) {
-                        
+                        walker.moveNext(basicModel, rightForce);
                     }else {
-                        
+                        walker.movePrevious(basicModel, rightForce);
                     }
                     break;
                 case LEFT:

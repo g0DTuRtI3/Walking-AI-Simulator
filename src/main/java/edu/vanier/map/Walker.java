@@ -2,6 +2,7 @@ package edu.vanier.map;
 
 import edu.vanier.core.NeuralNetwork;
 import edu.vanier.map.NodeModel;
+import edu.vanier.physics.Vector2D;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -35,23 +36,12 @@ public class Walker {
         basicModels.add(basicModel);
     }
 
-    public void movePreviousLeft(Circle previousNode, Circle nextNode, Circle link) {
-//        previousNode.setCenterY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
-//        previousNode.setCenterX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-//        link.setStartY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
-//        link.setStartX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+    public void movePrevious(BasicModel basicModel, Vector2D force) {
+        basicModel.getPrevNode().setForce(force);
     }
 
-    public void movePreviousRight(Circle previousNode, Circle nextNode, Circle link) {
-
-    }
-
-    public void moveNextLeft(Circle previousNode, Circle nextNode, Circle link) {
-
-    }
-
-    public void moveNextRight(Circle previousNode, Circle nextNode, Circle link) {
-
+    public void moveNext(BasicModel basicModel, Vector2D force) {
+        basicModel.getPrevNode().setForce(force);
     }
 
     public void updateWalker() {

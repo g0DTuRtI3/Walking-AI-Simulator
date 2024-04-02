@@ -11,61 +11,46 @@ public class Vector2D {
     /**
      * is the horizontal coordinate of the vector
      */
-    private double x1;
+    private double x;
     /**
      * is the vertical coordinate of the vector
      */
-    private double y1;
-    
-    private double x2;
-    
-    private double y2;
-    
-    private double angle;
+    private double y;
     
     private double magnitude;
+    
+    private double angle;
 
-    public Vector2D() {
+    public Vector2D(double x, double y) {
+        this.x = x;
+        this.y = y;
+        this.magnitude = calculateMagnitude();
+        this.angle = getRotation();
     }
 
-    public Vector2D(double x1, double y1, double x2, double y2) {
-        this.x1 = x1;
-        this.y2 = y2;
-        this.x2 = x2;
-        this.y2 = y2;
+    public double getX() {
+        return x;
     }
 
-    public double[] getX() {
-        double[] array = new double[2];
-        array[0] = x1;
-        array[1] = x2;
-        return array;
+    public double getY() {
+        return y;
     }
 
-    public double[] getY() {
-        double[] array = new double[2];
-        array[0] = y1;
-        array[1] = y2;
-        return array;
+    public void setX(double x) {
+        this.x = x;
     }
 
-    public void setX(double x1, double x2) {
-        this.x1 = x1;
-        this.x2 = x2;
-    }
-
-    public void setY(double y1, double y2) {
-        this.y1 = y1;
-        this.y2 = y2;
+    public void setY(double y) {
+        this.y = y;
     }
 
     /**
-     * Gets the magnitude of a vector
+     * Calculates the magnitude of a vector
      *
      * @return the magnitude of a vector
      */
-    public double getMagnitude() {
-        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    public double calculateMagnitude() {
+        return Math.sqrt(x * x + y * y);
     }
 
     /**
@@ -74,11 +59,10 @@ public class Vector2D {
      * @return the normalized vector
      */
     public Vector2D normalize() {
-        double magnitude = getMagnitude();
         if (magnitude == 0) {
-            return new Vector2D(0, 0,0,0);
+            return new Vector2D(0, 0);
         }
-        return new Vector2D(x1 / magnitude, y1 / magnitude, x2 / magnitude, y2 / magnitude);
+        return new Vector2D(x / magnitude, y / magnitude);
     }
 
     /**
@@ -88,7 +72,7 @@ public class Vector2D {
      * @return the result of the dot product
      */
     public double dot(Vector2D other) {
-        return x1 * other.x1 + y1 * other.y1;
+        return x * other.x + y * other.y;
     }
 
     /**
@@ -120,6 +104,10 @@ public class Vector2D {
     public Vector2D div(double value) {
         return new Vector2D(x / value, y / value);
     }
+    
+    public Vector2D inverse() {
+        return new Vector2D(-x, -y);
+    }
 
     /**
      * Rotates a vector to an angle based on a straight horizontal line that
@@ -129,7 +117,7 @@ public class Vector2D {
      * @return a new vector that is the result of the rotation
      */
     public Vector2D setRotation(double theta) {
-        return new Vector2D(getMagnitude() * Math.cos(theta), getMagnitude() * Math.sin(theta));
+        return new Vector2D(magnitude * Math.cos(theta), magnitude * Math.sin(theta));
     }
 
     /**
@@ -177,7 +165,7 @@ public class Vector2D {
      * @return the angle between the two vectors
      */
     public double getAngleBetween(Vector2D other) {
-        return Math.acos(this.dot(other) / (getMagnitude() * other.getMagnitude()));
+        return Math.acos(this.dot(other) / (magnitude * other.magnitude));
     }
 
     @Override
