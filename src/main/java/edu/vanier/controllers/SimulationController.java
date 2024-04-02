@@ -55,7 +55,7 @@ public class SimulationController {
 
     private int[] layers = {2,4,6};
     
-    public SimulationController(Stage primaryStage, Walker walker, int nbModel) {
+    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, double learningRate) {
         this.primaryStage = primaryStage;
         walkers = new Walker[nbModel];
         for (int i = 0; i < nbModel; i++) {
