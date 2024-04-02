@@ -142,19 +142,6 @@ public class EditorController {
     }
 
     @FXML
-    void circleOnMouseDragged(MouseEvent event) {
-//        circle.setLayoutX(event.getSceneX() - mouseX);
-//        circle.setLayoutY(event.getSceneY() - mouseY);
-//        System.out.println(mouseX + " " + mouseY + " " + circle.getLayoutX() + " " + circle.getLayoutY());
-    }
-
-    @FXML
-    void circleOnMousePressed(MouseEvent event) {
-//        mouseX = event.getX();
-//        mouseY = event.getY();
-    }
-
-    @FXML
     void circleColorPickerOnAction(ActionEvent event) {
         circleColor = circleColorPicker.getValue();
     }
@@ -184,16 +171,6 @@ public class EditorController {
     }
 
     @FXML
-    void linkOnMouseDragged(MouseEvent event) {
-
-    }
-
-    @FXML
-    void linkOnMousePressed(MouseEvent event) {
-
-    }
-
-    @FXML
     void linkColorPickerOnAction(ActionEvent event) {
         linkColor = linkColorPicker.getValue();
     }
@@ -206,7 +183,6 @@ public class EditorController {
         // in circle mode: adds circle to the editor pane
         } else if (isCircleMode) {
             addCircle(event);
-
             // in link mode: add links between circles
         } else if (isLinkMode) {
             addLink(event);
@@ -252,14 +228,16 @@ public class EditorController {
             editorCircle.setFill(Color.DODGERBLUE);
             link.setFill(Color.DODGERBLUE);
         }
-
     }
 
     // Adds circle to the editor pane
     private void addCircle(MouseEvent event) {
+        if (event.getX() > 20 && event.getY() > 20 && event.getX() < 827 && event.getY() < 643){
         Circle circle = new Circle(event.getX(), event.getY(), 25, circleColor);
         circle_list.add(circle);
         editorPane.getChildren().add(circle);
+        System.out.println(event.getX() + " " + event.getY());
+        }
     }
 
     private void addLink(MouseEvent event) {
