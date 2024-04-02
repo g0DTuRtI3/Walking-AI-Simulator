@@ -2,7 +2,9 @@ package edu.vanier.map;
 
 import edu.vanier.core.NeuralNetwork;
 import edu.vanier.map.NodeModel;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -25,8 +27,20 @@ public class Walker {
         return this.brain;
     }
 
-    public Walker(ArrayList<BasicModel> linksOfWalker) {
+    public Walker(ArrayList<BasicModel> linksOfWalker, int[] layers) {
         this.basicModels.addAll(linksOfWalker);
+        Deque<Integer> allLayersList = new ArrayDeque<Integer>();
+
+        for (int nbNeurons : layers) {
+            allLayersList.add(nbNeurons);
+        }
+
+        allLayersList.addFirst(linksOfWalker.size());
+        allLayersList.addLast(2);
+
+        int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
+
+        this.brain = new NeuralNetwork(learningRate, allLayersList.stream().mapToInt(Integer::intValue).toArray());
     }
 
     public void addLink(BasicModel link) {

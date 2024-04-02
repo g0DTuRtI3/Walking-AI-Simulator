@@ -53,12 +53,14 @@ public class SimulationController {
     @FXML
     private Text txt_IsTraining;
 
+    private int[] layers = {2,4,6};
+    
     public SimulationController(Stage primaryStage, Walker walker, int nbModel) {
         this.primaryStage = primaryStage;
         walkers = new Walker[nbModel];
         for (int i = 0; i < nbModel; i++) {
-            Walker walkerI = new Walker(walker.getBasicModels());
-            System.out.println(i);
+            Walker walkerI = new Walker(walker.getBasicModels(),layers);
+            
             walkers[i] = walkerI;
 
             for (BasicModel b : walkers[i].getBasicModels()) {
@@ -78,13 +80,14 @@ public class SimulationController {
     }
 
     private void showNeuralDisplay(Walker walker) {
-
+        
         if (simulationPane.getChildren().contains(neuralDisplay)) {
-
             simulationPane.getChildren().remove(neuralDisplay);
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
+            System.out.println("new show");
         } else {
+            System.out.println("new");
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
         }
