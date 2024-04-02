@@ -1,9 +1,7 @@
 package edu.vanier.controllers;
 
 import edu.vanier.map.*;
-import java.awt.geom.RectangularShape;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -25,27 +22,25 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-    double mouseX;
-    double mouseY;
-    int nbModel;
-    int interval;
-    int learningRate;
-    boolean isCircleMode;
-    boolean isLinkMode;
-    
-    ArrayList circle_list = new ArrayList<Circle>();
-    Circle circle1 = null;
-    Circle circle2 = null;
-    Color circleColor;
-    Color linkColor;
-    Color ogColor;
-    Stage primaryStage;
-    
+    private double mouseX;
+    private double mouseY;
+    private int nbModel;
+    private int interval;
+    private int learningRate;
+    private boolean isCircleMode;
+    private boolean isLinkMode;
+    private boolean isSelected;
+    private boolean isDelMode = false;
+    private ArrayList circle_list = new ArrayList<Circle>();
+    private Circle circle1 = null;
+    private Circle circle2 = null;
+    private Color circleColor;
+    private Color linkColor;
+    private Color ogColor;
     private NodeModel prevNode;
     private NodeModel nextNode;
-    private boolean isSelected;
+    private Stage primaryStage;
     private Walker walker = new Walker();
-    private boolean isDelMode = false;
 
     @FXML
     private Button btn_Clear;
@@ -292,7 +287,7 @@ public class EditorController {
 
     private void clearPane() {
         editorPane.getChildren().clear();
-        walker.getModel().clear();
+        walker.getBasicModels().clear();
     }
 
     private void removeCircle(MouseEvent event) {
