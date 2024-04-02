@@ -25,17 +25,22 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-    Color ogColor;
-    Stage primaryStage;
-    boolean isCircleMode;
-    boolean isLinkMode;
-    Circle circle1 = null;
-    Circle circle2 = null;
-    ArrayList circle_list = new ArrayList<Circle>();
     double mouseX;
     double mouseY;
+    int nbModel;
+    int interval;
+    int learningRate;
+    boolean isCircleMode;
+    boolean isLinkMode;
+    
+    ArrayList circle_list = new ArrayList<Circle>();
+    Circle circle1 = null;
+    Circle circle2 = null;
     Color circleColor;
     Color linkColor;
+    Color ogColor;
+    Stage primaryStage;
+    
     private NodeModel prevNode;
     private NodeModel nextNode;
     private boolean isSelected;
@@ -105,6 +110,21 @@ public class EditorController {
     void initialize() {
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
+        slider_NbModel.setValue(10);
+        slider_LearningRate.setValue(0.3);
+        label_NbModel.setText("10");
+        label_Interval.setText(Integer.toString((int)slider_Interval.getValue()));
+        label_LearningRate.setText("0.3");
+        
+        slider_NbModel.valueProperty().addListener((observable, oldValue, newValue) -> {
+        label_NbModel.setText(Integer.toString(newValue.intValue()));
+        });
+        slider_Interval.valueProperty().addListener((observable, oldValue, newValue) -> {
+        label_Interval.setText(Integer.toString(newValue.intValue()));
+        });
+        slider_LearningRate.valueProperty().addListener((observable, oldValue, newValue) -> {
+        label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
+        });
     }
 
     @FXML
@@ -249,10 +269,8 @@ public class EditorController {
                 circle1 = (Circle) event.getTarget();
                 ogColor = (Color) circle1.getFill();
                 circle1.setFill(Color.DODGERBLUE);
-                return;
             } catch (Exception e) {
                 circle1 = null;
-                return;
             }
         } else {
             try {
@@ -275,11 +293,9 @@ public class EditorController {
     private void clearPane() {
         editorPane.getChildren().clear();
         walker.getModel().clear();
-        System.out.println(walker.getModel());
     }
 
     private void removeCircle(MouseEvent event) {
-        System.out.println(event.getTarget());
         Circle circle = (Circle)event.getTarget();
         editorPane.getChildren().remove(circle);
     }

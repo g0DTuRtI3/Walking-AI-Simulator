@@ -51,7 +51,7 @@
                   <HBox alignment="TOP_CENTER">
                      <children>
                         <Slider fx:id="slider_NbModel" majorTickUnit="10.0" max="40.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="label_NbModel" text="Label" />
+                        <Label fx:id="label_NbModel" prefHeight="17.0" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
                </children>
@@ -62,7 +62,7 @@
                   <HBox alignment="TOP_CENTER">
                      <children>
                         <Slider fx:id="slider_Interval" max="60.0" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="label_Interval" text="Label" />
+                        <Label fx:id="label_Interval" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
                </children>
@@ -73,7 +73,7 @@
                   <HBox alignment="TOP_CENTER">
                      <children>
                         <Slider fx:id="slider_LearningRate" majorTickUnit="0.25" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="label_LearningRate" prefWidth="29.0" text="Label" />
+                        <Label fx:id="label_LearningRate" prefHeight="17.0" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
                </children>
@@ -114,7 +114,7 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-            <RadioButton fx:id="rb_DelMode" mnemonicParsing="false" onAction="#delModeOnAction" text="Delete Mode" />
+            <RadioButton fx:id="rb_DelMode" disable="true" mnemonicParsing="false" onAction="#delModeOnAction" text="Delete Mode" />
             <Button fx:id="btn_Clear" mnemonicParsing="false" onAction="#clearOnAction" text="Clear Editor" />
          </children>
          <padding>
