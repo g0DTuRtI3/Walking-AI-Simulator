@@ -4,6 +4,7 @@ import edu.vanier.core.NeuralDisplay;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.Walker;
 import java.io.IOException;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,11 +54,61 @@ public class SimulationController {
     @FXML
     private Text txt_IsTraining;
 
+    private int[] layers = {4, 8, 3};
+    private long previousTime = -1;
+
+    AnimationTimer timer = new AnimationTimer() {
+        float startedTime = -1;
+
+        @Override
+        public void start() {
+            previousTime = System.nanoTime();
+            startedTime = previousTime;
+            super.start();
+        }
+
+        @Override
+        public void handle(long now) {
+            double elapsedTime = (now - previousTime) / 1000000000.0;
+            if (now - startedTime >= Double.parseDouble(tf_Time.getText())) {
+                System.out.println("finished");
+                this.stop();
+            }
+            Walker bestWalker = null;
+            double bestDistance = 0;
+            for (Walker walk : walkers) {
+                for (BasicModel model : walk.getBasicModels()) {
+                    if (model.getPrevNode().getCenterX() >= model.getPrevNode().getCenterX()) {
+                        if (model.getPrevNode().getCenterX() >= bestDistance) {
+                            bestWalker = walk;
+                            bestDistance = model.getPrevNode().getCenterX();
+                        }
+                    } else {
+                        if (model.getNextNode().getCenterX() >= bestDistance) {
+                            bestWalker = walk;
+                            bestDistance = model.getPrevNode().getCenterX();
+                        }
+                    }
+                }
+            }
+            if(bestWalker != null){
+                
+            }
+            previousTime = now;
+        }
+
+        @Override
+        public void stop() {
+            previousTime = -1;
+            super.stop();
+        }
+    };
+
     public SimulationController(Stage primaryStage, Walker walker, int nbModel) {
         this.primaryStage = primaryStage;
         walkers = new Walker[nbModel];
         for (int i = 0; i < nbModel; i++) {
-            Walker walkerI = new Walker(walker.getBasicModels());
+            Walker walkerI = new Walker(walker.getBasicModels(), layers);
             System.out.println(i);
             walkers[i] = walkerI;
 
@@ -95,14 +146,14 @@ public class SimulationController {
     void initialize() {
         for (Walker w : walkers) {
             for (BasicModel b : w.getBasicModels()) {
-                
+
                 if (!simulationPane.getChildren().contains(b.getNextNode())) {
                     simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
-                } else if(!simulationPane.getChildren().contains(b.getPrevNode())){
+                } else if (!simulationPane.getChildren().contains(b.getPrevNode())) {
                     simulationPane.getChildren().addAll(b.getLink(), b.getPrevNode());
-                }
-                else if(!simulationPane.getChildren().contains(b.getLink()))
+                } else if (!simulationPane.getChildren().contains(b.getLink())) {
                     simulationPane.getChildren().addAll(b.getLink());
+                }
             }
         }
 

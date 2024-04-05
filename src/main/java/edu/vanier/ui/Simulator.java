@@ -34,7 +34,7 @@ public class Simulator extends Application {
     double angleLeft = 180;
     boolean rightNodeMoved = false;
     boolean leftNodeMoved = false;
-
+    
     public static void main(String[] args) {
         launch(args);
     }
