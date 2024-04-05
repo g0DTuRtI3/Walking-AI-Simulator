@@ -33,12 +33,36 @@ public class Simulator2 extends Application{
     Rectangle ground = new Rectangle(0, 400, 500, 400);
     private boolean moveRightNode = true;
     
-    Vector2D rightForce = new Vector2D(0,10);
-    Vector2D leftForce = new Vector2D(0,5);
+    double rightForce = 30;
+    double leftForce = 10;
     
     private AnimationTimer timer;
-    private double elapsedTime;
-    private double totalTime;
+    private long previousTime = -1;
+    double elapsedTime = 0;
+    
+    public Simulator2() {
+        timer = new AnimationTimer() {
+            
+            public void handle(long currentTime) {
+                elapsedTime = (currentTime - previousTime)/1000000000.0;
+                update(elapsedTime);
+                previousTime = currentTime;
+            }
+            
+            public void start() {
+                previousTime = System.nanoTime();
+                super.start();
+            }
+            
+            public void stop() {
+                previousTime = -1;
+                super.stop();
+            }
+        };
+        
+        timer.start();
+    }
+    
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -49,88 +73,98 @@ public class Simulator2 extends Application{
         Pane root = new Pane();
         Scene scene = new Scene(root, 500, 500);
         
-        root.getChildren().addAll(basicModel.getPrevNode(), basicModel.getNextNode(), basicModel.getLink(), ground);
+        root.getChildren().addAll(basicModel.getPrevNode(), basicModel.getNextNode(), basicModel.getLink());
         
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();
         
-        setTimer();
-        
-//        scene.setOnKeyPressed((KeyEvent event) -> {
-//            switch (event.getCode()) {
-//                case A:
-//                    if (moveRightNode) {
-//                        walker.moveNext(basicModel, rightForce.inverse());
-//                    }else {
-//                        walker.movePrevious(basicModel, rightForce.inverse());
-//                    }
-//                    break;
-//                case D:
-//                    if (moveRightNode) {
-//                        walker.moveNext(basicModel, rightForce);
-//                    }else {
-//                        walker.movePrevious(basicModel, rightForce);
-//                    }
-//                    break;
-//                case LEFT:
-//                    moveRightNode = false;
-//                    break;
-//                case RIGHT:
-//                    moveRightNode = true;
-//                    break;
-//            }
-//        });
+        scene.setOnKeyPressed((KeyEvent event) -> {
+            switch (event.getCode()) {
+                case A:
+                    if (moveRightNode) {
+                        walker.moveNext(basicModel, -rightForce, elapsedTime);
+                    }else {
+                        walker.movePrevious(basicModel, -rightForce, elapsedTime);
+                    }
+                    break;
+                case D:
+                    if (moveRightNode) {
+                        walker.moveNext(basicModel, leftForce, elapsedTime);
+                    }else {
+                        walker.movePrevious(basicModel, leftForce, elapsedTime);
+                    }
+                    break;
+                case LEFT:
+                    moveRightNode = false;
+                    break;
+                case RIGHT:
+                    moveRightNode = true;
+                    break;
+            }
+        });
     }
     
     public void setTimer() {
         timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
+            
+            public void handle(long currentTime) {
+                elapsedTime = (currentTime - previousTime)/1000000000.0;
+                update(elapsedTime);
+                previousTime = currentTime;
+            }
+            
+            public void start() {
+                previousTime = System.nanoTime();
+                super.start();
+            }
+            
+            public void stop() {
+                previousTime = -1;
+                super.stop();
             }
         };
-        timer.start();
     }
     
-    public void update() {
-        totalTime += 0.001;
-        System.out.println(totalTime);
-        if (elapsedTime >= 2) {
-            
-            elapsedTime = 0;
-            
-            //Linear gravity
-            
-//            if (node1.getCenterY() < 400) {
-//                node1.setCenterY(node1.getCenterY() + 5);
-//                link.setStartY(link.getStartY() + 5);
-//                
-//            }
+    public void update(double elapsedTime) {
+        
+        //System.out.println(elapsedTime);
+        
+//        if (elapsedTime >= 2) {
 //            
-//            if (node2.getCenterY() < 400) {
-//                node2.setCenterY(node2.getCenterY() + 5);
-//                link.setEndY(link.getEndY() + 5);
-//            }
-            
-            //Angular gravity
-            
-
-//            if (angleRight > 0) {
-//                angleRight -= 10;
-//                node1.setCenterY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
-//                node1.setCenterX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-//                link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)) );
-//                link.setStartX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-//            }
-//            if (angleLeft < 180) {
-//                angleLeft += 10;
-//                node2.setCenterY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
-//                node2.setCenterX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
-//                link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)) );
-//                link.setEndX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
-//            }
-        }
-        elapsedTime += 0.016;
+//            elapsedTime = 0;
+//            
+//            //Linear gravity
+//            
+////            if (node1.getCenterY() < 400) {
+////                node1.setCenterY(node1.getCenterY() + 5);
+////                link.setStartY(link.getStartY() + 5);
+////                
+////            }
+////            
+////            if (node2.getCenterY() < 400) {
+////                node2.setCenterY(node2.getCenterY() + 5);
+////                link.setEndY(link.getEndY() + 5);
+////            }
+//            
+//            //Angular gravity
+//            
+//
+////            if (angleRight > 0) {
+////                angleRight -= 10;
+////                node1.setCenterY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
+////                node1.setCenterX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+////                link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)) );
+////                link.setStartX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+////            }
+////            if (angleLeft < 180) {
+////                angleLeft += 10;
+////                node2.setCenterY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
+////                node2.setCenterX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
+////                link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)) );
+////                link.setEndX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
+////            }
+//        }
+//        elapsedTime += 0.016;
     }
 }

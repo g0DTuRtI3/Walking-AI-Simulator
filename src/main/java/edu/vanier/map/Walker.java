@@ -36,12 +36,12 @@ public class Walker {
         basicModels.add(basicModel);
     }
 
-    public void movePrevious(BasicModel basicModel, double force, double angle, double time) {
-        basicModel.getPrevNode().setForce(force, angle, time);
+    public void movePrevious(BasicModel basicModel, double force, double time) {
+        basicModel.getPrevNode().setForce(force, time);
     }
 
-    public void moveNext(BasicModel basicModel, double force, double angle, double time) {
-        basicModel.getPrevNode().setForce(force, angle, time);
+    public void moveNext(BasicModel basicModel, double force, double time) {
+        basicModel.getNextNode().setForce(force, time);
     }
 
     public void updateWalker() {
