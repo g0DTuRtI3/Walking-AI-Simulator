@@ -38,6 +38,8 @@ public class Walker {
         allLayersList.addFirst(linksOfWalker.size() + 1);
         allLayersList.addLast(linksOfWalker.size() + 1);
 
+
+
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
         this.brain = new NeuralNetwork(learningRate, allLayersList.stream().mapToInt(Integer::intValue).toArray());
@@ -119,5 +121,9 @@ public class Walker {
 
     public static float getLearningRate() {
         return learningRate;
+    }
+
+    public void learningRate(float learningRate) {
+        Walker.learningRate = learningRate;
     }
 }

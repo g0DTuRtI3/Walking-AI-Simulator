@@ -1,9 +1,7 @@
 package edu.vanier.controllers;
 
 import edu.vanier.map.*;
-import java.awt.geom.RectangularShape;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,9 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -23,22 +22,25 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-    Color ogColor;
-    Stage primaryStage;
-    boolean isCircleMode;
-    boolean isLinkMode;
-    Circle circle1 = null;
-    Circle circle2 = null;
-    ArrayList circle_list = new ArrayList<Circle>();
-    double mouseX;
-    double mouseY;
-    Color circleColor;
-    Color linkColor;
+    private double mouseX;
+    private double mouseY;
+    private int nbModel;
+    private int interval;
+    private float learningRate;
+    private boolean isCircleMode;
+    private boolean isLinkMode;
+    private boolean isSelected;
+    private boolean isDelMode = false;
+    private ArrayList circle_list = new ArrayList<Circle>();
+    private Circle circle1 = null;
+    private Circle circle2 = null;
+    private Color circleColor;
+    private Color linkColor;
+    private Color ogColor;
     private NodeModel prevNode;
     private NodeModel nextNode;
-    private boolean isSelected;
+    private Stage primaryStage;
     private Walker walker = new Walker();
-    private boolean delMode = false;
 
     @FXML
     private Button btn_Clear;
@@ -47,13 +49,22 @@ public class EditorController {
     private Button btn_Start;
 
     @FXML
-    private Circle editorCircle;
-
-    @FXML
     private ColorPicker circleColorPicker;
 
     @FXML
+    private Circle editorCircle;
+
+    @FXML
     private Pane editorPane;
+
+    @FXML
+    private Label label_Interval;
+
+    @FXML
+    private Label label_LearningRate;
+
+    @FXML
+    private Label label_NbModel;
 
     @FXML
     private Rectangle link;
@@ -77,13 +88,13 @@ public class EditorController {
     private RadioButton rb_DelMode;
 
     @FXML
-    private TextField tf_interval;
+    private Slider slider_Interval;
 
     @FXML
-    private TextField tf_learningRate;
+    private Slider slider_LearningRate;
 
     @FXML
-    private TextField tf_nbModel;
+    private Slider slider_NbModel;
 
     // Gets the Stage when called
     public EditorController(Stage primaryStage) {
@@ -92,12 +103,29 @@ public class EditorController {
 
     @FXML
     void initialize() {
-        tf_interval.setFocusTraversable(false);
-        tf_learningRate.setFocusTraversable(false);
-        tf_nbModel.setFocusTraversable(false);
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
-
+        
+        // Setting default value
+        slider_NbModel.setValue(10);
+        slider_LearningRate.setValue(0.3);
+        label_NbModel.setText("10");
+        label_Interval.setText(Integer.toString((int)slider_Interval.getValue()));
+        label_LearningRate.setText("0.3");
+        
+        //Add listener for when uses make slider slide
+        slider_NbModel.valueProperty().addListener((observable, oldValue, newValue) -> {
+        label_NbModel.setText(Integer.toString(newValue.intValue()));
+        nbModel = newValue.intValue();
+        });
+        slider_Interval.valueProperty().addListener((observable, oldValue, newValue) -> {
+        label_Interval.setText(Integer.toString(newValue.intValue()));
+        interval = newValue.intValue();
+        });
+        slider_LearningRate.valueProperty().addListener((observable, oldValue, newValue) -> {
+        label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
+        learningRate = newValue.floatValue();
+        });
     }
 
     @FXML
@@ -105,6 +133,7 @@ public class EditorController {
         if (!isCircleMode) {
             isCircleMode = true;
             isLinkMode = false;
+            isDelMode = false;
             selected();
         } else {
             isCircleMode = false;
@@ -137,16 +166,16 @@ public class EditorController {
     
     @FXML
     void delModeOnAction(ActionEvent event) {
-        delMode = rb_DelMode.isSelected();
+        isDelMode = rb_DelMode.isSelected();
+        selected();
     }
 
     @FXML
     void linkOnMouseClicked(MouseEvent event) {
-        if (delMode) {
-            selected();
-        } else if (!isLinkMode) {
+        if (!isLinkMode) {
             isLinkMode = true;
             isCircleMode = false;
+            isDelMode = false;
             selected();
         } else {
             isLinkMode = false;
@@ -171,7 +200,7 @@ public class EditorController {
 
     @FXML
     void paneOnMouseClicked(MouseEvent event) {
-        if (delMode) {
+        if (isDelMode) {
             removeCircle(event);
             
         // in circle mode: adds circle to the editor pane
@@ -189,10 +218,10 @@ public class EditorController {
     // Switches to the simulation scene
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
-        int nb = Integer.parseInt(tf_nbModel.getText());
+        //////////////////// Error handeling for this
         
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
-        mainAppLoader.setController(new SimulationController(primaryStage, walker, nb));
+        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate));
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);
@@ -207,7 +236,7 @@ public class EditorController {
 
     // changes the color of the editor display
     private void selected() {
-        if (delMode) {
+        if (isDelMode) {
             editorCircle.setFill(Color.GREY);
             link.setFill(Color.GREY);
             return;
@@ -240,10 +269,8 @@ public class EditorController {
                 circle1 = (Circle) event.getTarget();
                 ogColor = (Color) circle1.getFill();
                 circle1.setFill(Color.DODGERBLUE);
-                return;
             } catch (Exception e) {
                 circle1 = null;
-                return;
             }
         } else {
             try {
@@ -266,12 +293,11 @@ public class EditorController {
     private void clearPane() {
         editorPane.getChildren().clear();
         walker.getBasicModels().clear();
-        System.out.println(walker.getBasicModels());
     }
 
     private void removeCircle(MouseEvent event) {
-        System.out.println(event.getTarget());
-        Circle cirlce = (Circle)event.getTarget();
+        Circle circle = (Circle)event.getTarget();
+        editorPane.getChildren().remove(circle);
     }
     
 //    // A method that makes the shapes draggable
@@ -287,36 +313,4 @@ public class EditorController {
 //            node.setLayoutY(e.getSceneY() - mouseY);
 //        });
 //    }
-    
-    public Walker getWalker() {
-        return walker;
-    }
-
-    public TextField getTf_interval() {
-        return tf_interval;
-    }
-
-    public TextField getTf_learningRate() {
-        return tf_learningRate;
-    }
-
-    public TextField getTf_nbModel() {
-        return tf_nbModel;
-    }
-
-    public void setWalker(Walker walker) {
-        this.walker = walker;
-    }
-
-    public void setTf_interval(TextField tf_interval) {
-        this.tf_interval = tf_interval;
-    }
-
-    public void setTf_learningRate(TextField tf_learningRate) {
-        this.tf_learningRate = tf_learningRate;
-    }
-
-    public void setTf_nbModel(TextField tf_nbModel) {
-        this.tf_nbModel = tf_nbModel;
-    }
 }

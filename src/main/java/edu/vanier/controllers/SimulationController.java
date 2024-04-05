@@ -24,6 +24,20 @@ public class SimulationController {
 
     public NeuralDisplay neuralDisplay;
 
+    public AnimationTimer time = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            
+        }
+        @Override
+        public void start(){
+        super.start();
+        }
+        @Override
+        public void stop(){
+        super.stop();
+        }
+    };
     @FXML
     private Pane simulationPane;
 
@@ -53,6 +67,7 @@ public class SimulationController {
 
     @FXML
     private Text txt_IsTraining;
+
 
     private int[] layers = {4, 8, 3};
     private long previousTime = -1;
@@ -110,6 +125,14 @@ public class SimulationController {
         for (int i = 0; i < nbModel; i++) {
             Walker walkerI = new Walker(walker.getBasicModels(), layers);
             System.out.println(i);
+
+    
+    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate) {
+        this.primaryStage = primaryStage;
+        walkers = new Walker[nbModel];
+        for (int i = 0; i < nbModel; i++) {
+            Walker walkerI = new Walker(walker.getBasicModels(),layers);
+            walkerI.learningRate(learningRate);
             walkers[i] = walkerI;
 
             for (BasicModel b : walkers[i].getBasicModels()) {
@@ -129,13 +152,14 @@ public class SimulationController {
     }
 
     private void showNeuralDisplay(Walker walker) {
-
+        
         if (simulationPane.getChildren().contains(neuralDisplay)) {
-
             simulationPane.getChildren().remove(neuralDisplay);
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
+            System.out.println("new show");
         } else {
+            System.out.println("new");
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
         }
@@ -156,7 +180,7 @@ public class SimulationController {
                 }
             }
         }
-
+        time.start();
     }
 
     @FXML
