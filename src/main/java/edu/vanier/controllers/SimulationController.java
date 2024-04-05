@@ -1,9 +1,10 @@
 package edu.vanier.controllers;
-
+import java.net.ca
 import edu.vanier.core.NeuralDisplay;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.Walker;
 import java.io.IOException;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,20 @@ public class SimulationController {
 
     public NeuralDisplay neuralDisplay;
 
+    public AnimationTimer time = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            
+        }
+        @Override
+        public void start(){
+        super.start();
+        }
+        @Override
+        public void stop(){
+        super.stop();
+        }
+    };
     @FXML
     private Pane simulationPane;
 
@@ -55,12 +70,12 @@ public class SimulationController {
 
     private int[] layers = {2,4,6};
     
-    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, double learningRate) {
+    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate) {
         this.primaryStage = primaryStage;
         walkers = new Walker[nbModel];
         for (int i = 0; i < nbModel; i++) {
             Walker walkerI = new Walker(walker.getBasicModels(),layers);
-            
+            walkerI.learningRate(learningRate);
             walkers[i] = walkerI;
 
             for (BasicModel b : walkers[i].getBasicModels()) {
@@ -108,7 +123,7 @@ public class SimulationController {
                     simulationPane.getChildren().addAll(b.getLink());
             }
         }
-
+        time.start();
     }
 
     @FXML

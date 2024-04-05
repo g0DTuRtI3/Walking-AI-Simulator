@@ -119,4 +119,8 @@ public class Walker {
     public static float getLearningRate() {
         return learningRate;
     }
+
+    public void learningRate(float learningRate) {
+        Walker.learningRate = learningRate;
+    }
 }
