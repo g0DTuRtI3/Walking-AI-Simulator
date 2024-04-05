@@ -51,7 +51,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:" />
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_NbModel" majorTickUnit="10.0" max="40.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Slider fx:id="slider_NbModel" focusTraversable="false" majorTickUnit="10.0" max="40.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
                         <Label fx:id="label_NbModel" prefHeight="17.0" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
@@ -62,7 +62,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interval Between Generation:" />
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_Interval" max="60.0" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Slider fx:id="slider_Interval" focusTraversable="false" max="60.0" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
                         <Label fx:id="label_Interval" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
@@ -73,7 +73,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Learning Rate:" />
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_LearningRate" majorTickUnit="0.25" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Slider fx:id="slider_LearningRate" focusTraversable="false" majorTickUnit="0.25" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
                         <Label fx:id="label_LearningRate" prefHeight="17.0" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
@@ -116,7 +116,7 @@
               </content>
             </TitledPane>
             <RadioButton fx:id="rb_DelMode" disable="true" mnemonicParsing="false" onAction="#delModeOnAction" text="Delete Mode" />
-            <Button fx:id="btn_Clear" mnemonicParsing="false" onAction="#clearOnAction" text="Clear Editor" />
+            <Button fx:id="btn_Clear" focusTraversable="false" mnemonicParsing="false" onAction="#clearOnAction" text="Clear Editor" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" top="20.0" />

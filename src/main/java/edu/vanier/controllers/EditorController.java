@@ -196,8 +196,6 @@ public class EditorController {
     // Switches to the simulation scene
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
-        //////////////////// Error handeling for this
-
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
         mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate));
         Pane root = mainAppLoader.load();

@@ -1,5 +1,4 @@
 package edu.vanier.controllers;
-import java.net.ca
 import edu.vanier.core.NeuralDisplay;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.Walker;
