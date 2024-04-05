@@ -9,6 +9,7 @@ import edu.vanier.map.NodeModel;
 import edu.vanier.map.Walker;
 import edu.vanier.physics.Vector2D;
 import java.util.ArrayList;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -34,6 +35,10 @@ public class Simulator2 extends Application{
     
     Vector2D rightForce = new Vector2D(0,10);
     Vector2D leftForce = new Vector2D(0,5);
+    
+    private AnimationTimer timer;
+    private double elapsedTime;
+    private double totalTime;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -50,30 +55,82 @@ public class Simulator2 extends Application{
         primaryStage.sizeToScene();
         primaryStage.show();
         
+        setTimer();
         
-        scene.setOnKeyPressed((KeyEvent event) -> {
-            switch (event.getCode()) {
-                case A:
-                    if (moveRightNode) {
-                        walker.moveNext(basicModel, rightForce.inverse());
-                    }else {
-                        walker.movePrevious(basicModel, rightForce.inverse());
-                    }
-                    break;
-                case D:
-                    if (moveRightNode) {
-                        walker.moveNext(basicModel, rightForce);
-                    }else {
-                        walker.movePrevious(basicModel, rightForce);
-                    }
-                    break;
-                case LEFT:
-                    moveRightNode = false;
-                    break;
-                case RIGHT:
-                    moveRightNode = true;
-                    break;
+//        scene.setOnKeyPressed((KeyEvent event) -> {
+//            switch (event.getCode()) {
+//                case A:
+//                    if (moveRightNode) {
+//                        walker.moveNext(basicModel, rightForce.inverse());
+//                    }else {
+//                        walker.movePrevious(basicModel, rightForce.inverse());
+//                    }
+//                    break;
+//                case D:
+//                    if (moveRightNode) {
+//                        walker.moveNext(basicModel, rightForce);
+//                    }else {
+//                        walker.movePrevious(basicModel, rightForce);
+//                    }
+//                    break;
+//                case LEFT:
+//                    moveRightNode = false;
+//                    break;
+//                case RIGHT:
+//                    moveRightNode = true;
+//                    break;
+//            }
+//        });
+    }
+    
+    public void setTimer() {
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
             }
-        });
+        };
+        timer.start();
+    }
+    
+    public void update() {
+        totalTime += 0.001;
+        System.out.println(totalTime);
+        if (elapsedTime >= 2) {
+            
+            elapsedTime = 0;
+            
+            //Linear gravity
+            
+//            if (node1.getCenterY() < 400) {
+//                node1.setCenterY(node1.getCenterY() + 5);
+//                link.setStartY(link.getStartY() + 5);
+//                
+//            }
+//            
+//            if (node2.getCenterY() < 400) {
+//                node2.setCenterY(node2.getCenterY() + 5);
+//                link.setEndY(link.getEndY() + 5);
+//            }
+            
+            //Angular gravity
+            
+
+//            if (angleRight > 0) {
+//                angleRight -= 10;
+//                node1.setCenterY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
+//                node1.setCenterX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+//                link.setStartY(node2.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)) );
+//                link.setStartX(node2.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+//            }
+//            if (angleLeft < 180) {
+//                angleLeft += 10;
+//                node2.setCenterY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)));
+//                node2.setCenterX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
+//                link.setEndY(node1.getCenterY() - 200 * Math.sin(Math.toRadians(angleLeft)) );
+//                link.setEndX(node1.getCenterX() + 200 * Math.cos(Math.toRadians(angleLeft)));
+//            }
+        }
+        elapsedTime += 0.016;
     }
 }
