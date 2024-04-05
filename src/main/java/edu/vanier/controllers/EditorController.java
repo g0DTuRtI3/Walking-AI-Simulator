@@ -22,16 +22,18 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-    private double mouseX;
-    private double mouseY;
+    private final int circleRadius = 20;
+    private final int circleSocialDistancing = 10;
     private int nbModel;
     private int interval;
     private float learningRate;
+    private double mouseX;
+    private double mouseY;
     private boolean isCircleMode;
     private boolean isLinkMode;
     private boolean isSelected;
     private boolean isDelMode = false;
-    private ArrayList circle_list = new ArrayList<Circle>();
+    private ArrayList<Circle> circle_list = new ArrayList<Circle>();
     private Circle circle1 = null;
     private Circle circle2 = null;
     private Color circleColor;
@@ -105,26 +107,26 @@ public class EditorController {
     void initialize() {
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
-        
+
         // Setting default value
         slider_NbModel.setValue(10);
         slider_LearningRate.setValue(0.3);
         label_NbModel.setText("10");
-        label_Interval.setText(Integer.toString((int)slider_Interval.getValue()));
+        label_Interval.setText(Integer.toString((int) slider_Interval.getValue()));
         label_LearningRate.setText("0.3");
-        
+
         //Add listener for when uses make slider slide
         slider_NbModel.valueProperty().addListener((observable, oldValue, newValue) -> {
-        label_NbModel.setText(Integer.toString(newValue.intValue()));
-        nbModel = newValue.intValue();
+            label_NbModel.setText(Integer.toString(newValue.intValue()));
+            nbModel = newValue.intValue();
         });
         slider_Interval.valueProperty().addListener((observable, oldValue, newValue) -> {
-        label_Interval.setText(Integer.toString(newValue.intValue()));
-        interval = newValue.intValue();
+            label_Interval.setText(Integer.toString(newValue.intValue()));
+            interval = newValue.intValue();
         });
         slider_LearningRate.valueProperty().addListener((observable, oldValue, newValue) -> {
-        label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
-        learningRate = newValue.floatValue();
+            label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
+            learningRate = newValue.floatValue();
         });
     }
 
@@ -145,12 +147,12 @@ public class EditorController {
     void circleColorPickerOnAction(ActionEvent event) {
         circleColor = circleColorPicker.getValue();
     }
-    
+
     @FXML
     void clearOnAction(ActionEvent event) {
         clearPane();
     }
-    
+
     @FXML
     void delModeOnAction(ActionEvent event) {
         isDelMode = rb_DelMode.isSelected();
@@ -179,8 +181,8 @@ public class EditorController {
     void paneOnMouseClicked(MouseEvent event) {
         if (isDelMode) {
             removeCircle(event);
-            
-        // in circle mode: adds circle to the editor pane
+
+            // in circle mode: adds circle to the editor pane
         } else if (isCircleMode) {
             addCircle(event);
             // in link mode: add links between circles
@@ -195,7 +197,7 @@ public class EditorController {
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
         //////////////////// Error handeling for this
-        
+
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
         mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate));
         Pane root = mainAppLoader.load();
@@ -217,7 +219,7 @@ public class EditorController {
             link.setFill(Color.GREY);
             return;
         }
-        
+
         if (isCircleMode) {
             editorCircle.setFill(Color.PURPLE);
             link.setFill(Color.DODGERBLUE);
@@ -232,12 +234,42 @@ public class EditorController {
 
     // Adds circle to the editor pane
     private void addCircle(MouseEvent event) {
-        if (event.getX() > 20 && event.getY() > 20 && event.getX() < 827 && event.getY() < 643){
-        Circle circle = new Circle(event.getX(), event.getY(), 25, circleColor);
-        circle_list.add(circle);
-        editorPane.getChildren().add(circle);
-        System.out.println(event.getX() + " " + event.getY());
+        if (event.getX() > circleRadius && event.getY() > circleRadius && event.getX() < (editorPane.getWidth() - circleRadius) && event.getY() < (editorPane.getHeight() - circleRadius)) {
+            Circle circle = new Circle(event.getX(), event.getY(), circleRadius, circleColor);
+
+            boolean isTouching = false;
+
+            if (circle_list.isEmpty()) {
+                circle_list.add(circle);
+                editorPane.getChildren().add(circle);
+            } else {
+                for (Circle editor_Circle : circle_list) {
+                    isTouching = isCircleTouching(editor_Circle, circle);
+                    if (isTouching) {
+                        break;
+                    }
+                }
+
+                if (!isTouching) {
+                    circle_list.add(circle);
+                    editorPane.getChildren().add(circle);
+                }
+            }
         }
+    }
+
+    private boolean isCircleTouching(Circle oldCircle, Circle newCircle) {
+        boolean xTouching = false;
+        int distance = circleRadius * 2 + circleSocialDistancing;
+        if ((oldCircle.getCenterX() + distance) > newCircle.getCenterX() && (oldCircle.getCenterX() - distance) < newCircle.getCenterX()) {
+            xTouching = true;
+        }
+        if ((oldCircle.getCenterY() + distance) > newCircle.getCenterY() && (oldCircle.getCenterY() - distance) < newCircle.getCenterY()) {
+            if (xTouching) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addLink(MouseEvent event) {
@@ -270,14 +302,15 @@ public class EditorController {
 
     private void clearPane() {
         editorPane.getChildren().clear();
+        circle_list.clear();
         walker.getBasicModels().clear();
     }
 
     private void removeCircle(MouseEvent event) {
-        Circle circle = (Circle)event.getTarget();
+        Circle circle = (Circle) event.getTarget();
         editorPane.getChildren().remove(circle);
     }
-    
+
 //    // A method that makes the shapes draggable
 //    private void dragObject(Node node) {
 //
