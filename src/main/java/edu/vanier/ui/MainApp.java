@@ -26,35 +26,12 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        try {
-//            logger.info("Bootstrapping the application...");
-//            //-- 1) Load the scene graph from the specified FXML file and 
-//            // associate it with its FXML controller.
-//            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
-//            mainAppLoader.setController(new EditorController(primaryStage));
-//            Pane root = mainAppLoader.load();
-//
-//            //-- 2) Create and set the scene to the stage.
-//            Scene scene = new Scene(root);
-//            primaryStage.setScene(scene);
-//            primaryStage.setMaximized(false);
-//            primaryStage.setResizable(false);
-//            // We just need to bring the main window to front.
-//            primaryStage.setAlwaysOnTop(true);
-//            primaryStage.setTitle("Model Editor");
-//            primaryStage.show();
-//            primaryStage.setAlwaysOnTop(false);
-//        } catch (IOException ex) {
-//            logger.error(ex.getMessage(), ex);
-//        }
-        
-        //For the Final build
         try {
             logger.info("Bootstrapping the application...");
             //-- 1) Load the scene graph from the specified FXML file and 
             // associate it with its FXML controller.
-            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
-            mainAppLoader.setController(new MainAppController(primaryStage));
+            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
+            mainAppLoader.setController(new EditorController(primaryStage));
             Pane root = mainAppLoader.load();
 
             //-- 2) Create and set the scene to the stage.
@@ -64,12 +41,35 @@ public class MainApp extends Application {
             primaryStage.setResizable(false);
             // We just need to bring the main window to front.
             primaryStage.setAlwaysOnTop(true);
-            primaryStage.setTitle("Walking AI Simulator");
+            primaryStage.setTitle("Model Editor");
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }
+        
+//        //For the Final build
+//        try {
+//            logger.info("Bootstrapping the application...");
+//            //-- 1) Load the scene graph from the specified FXML file and 
+//            // associate it with its FXML controller.
+//            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
+//            mainAppLoader.setController(new MainAppController(primaryStage));
+//            Pane root = mainAppLoader.load();
+//
+//            //-- 2) Create and set the scene to the stage.
+//            Scene scene = new Scene(root);
+//            primaryStage.setScene(scene);
+//            primaryStage.setMaximized(false);
+//            primaryStage.setResizable(false);
+//            // We just need to bring the main window to front.
+//            primaryStage.setAlwaysOnTop(true);
+//            primaryStage.setTitle("Walking AI Simulator");
+//            primaryStage.show();
+//            primaryStage.setAlwaysOnTop(false);
+//        } catch (IOException ex) {
+//            logger.error(ex.getMessage(), ex);
+//        }
     }
 
     public static void main(String[] args) {

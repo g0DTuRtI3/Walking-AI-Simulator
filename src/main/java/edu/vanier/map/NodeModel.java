@@ -11,13 +11,17 @@ public class NodeModel extends javafx.scene.shape.Circle{
 
     private static double radius = 20;
     private static double mass = 5; //Might become non-static in the future
-    private Rigid2D body;
+    private double centerX;
+    private double centerY;
     private double speedX = 0;
     private double speedY = 0;
+    private Rigid2D body;
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
         this.body = body;
+        this.centerX = centerX;
+        this.centerY = centerY;
     }
 
     public void updateNode(double deltaTime) {
@@ -36,4 +40,7 @@ public class NodeModel extends javafx.scene.shape.Circle{
 
     }
 
+    public boolean equals(NodeModel model) {
+        return (model.getCenterX() == centerX) && (model.getCenterY() == centerY);
+    }
 }

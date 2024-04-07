@@ -232,18 +232,18 @@ public class EditorController {
 
     // Adds circle to the editor pane
     private void addCircle(MouseEvent event) {
+        boolean isTouching = false;
+
         if (event.getX() > circleRadius && event.getY() > circleRadius && event.getX() < (editorPane.getWidth() - circleRadius) && event.getY() < (editorPane.getHeight() - circleRadius)) {
             Circle circle = new Circle(event.getX(), event.getY(), circleRadius, circleColor);
-
-            boolean isTouching = false;
 
             if (circle_list.isEmpty()) {
                 circle_list.add(circle);
                 editorPane.getChildren().add(circle);
             } else {
                 for (Circle editor_Circle : circle_list) {
-                    isTouching = isCircleTouching(editor_Circle, circle);
-                    if (isTouching) {
+                    if (isCircleTouching(editor_Circle, circle)) {
+                        isTouching = true;
                         break;
                     }
                 }
@@ -271,6 +271,7 @@ public class EditorController {
     }
 
     private void addLink(MouseEvent event) {
+        boolean isCreated = false;
 
         if (circle1 == null) {
             try {
@@ -280,6 +281,7 @@ public class EditorController {
             } catch (Exception e) {
                 circle1 = null;
             }
+
         } else {
             try {
                 circle2 = (Circle) event.getTarget();
@@ -287,12 +289,31 @@ public class EditorController {
                 System.out.println("clicked on other things");
                 return;
             }
+
             nextNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
             prevNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
 
             BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
-            walker.addLink(basicModel);
-            editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
+
+            for (BasicModel model : walker.getBasicModels()) {
+                if (model.getPrevNode().equals(prevNode) && model.getNextNode().equals(nextNode) || model.getPrevNode().equals(nextNode) && model.getNextNode().equals(prevNode)) {
+                    isCreated = true;
+                    
+                    if (!model.getColor().equals(linkColor)) {
+                        editorPane.getChildren().remove(model.getLink());
+                        editorPane.getChildren().addAll(basicModel.getLink());
+                        model.setColor(linkColor);
+                    }
+                    break;
+                }
+            }
+
+            if (!isCreated) {
+                walker.addLink(basicModel);
+                editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
+            }
+            
+            circle1.setFill(ogColor);
             circle1 = null;
             circle2 = null;
         }
