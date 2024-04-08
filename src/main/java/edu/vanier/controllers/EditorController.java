@@ -171,6 +171,11 @@ public class EditorController {
             selected();
         }
     }
+    
+    @FXML
+    void loadOnAction(ActionEvent event) {
+
+    }
 
     @FXML
     void linkColorPickerOnAction(ActionEvent event) {
@@ -191,6 +196,11 @@ public class EditorController {
         } else {
             System.out.println("pane on mouse clicked error");
         }
+    }
+    
+    @FXML
+    void saveOnAction(ActionEvent event) {
+        
     }
 
     // Switches to the simulation scene
