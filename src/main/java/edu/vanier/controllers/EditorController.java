@@ -321,6 +321,7 @@ public class EditorController {
             if (!isCreated) {
                 walker.addLink(basicModel);
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
+                System.out.println("link has been created");
             }
             
             circle1.setFill(ogColor);
