@@ -208,6 +208,7 @@ public class EditorController {
     void startOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
         mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate));
+        walker.serialize(walker, "yes");
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);

@@ -1,5 +1,6 @@
 package edu.vanier.map;
 
+import java.io.Serializable;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -7,7 +8,7 @@ import javafx.scene.shape.Line;
  *
  * @author YOUSSEF
  */
-public class BasicModel {
+public class BasicModel implements Serializable{
 
     private static double strokeWidth = 10;
 
