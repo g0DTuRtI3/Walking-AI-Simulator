@@ -5,6 +5,9 @@ import edu.vanier.map.NodeModel;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.DoubleStream;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -37,8 +40,6 @@ public class Walker {
 
         allLayersList.addFirst(linksOfWalker.size() + 1);
         allLayersList.addLast(linksOfWalker.size() + 1);
-
-
 
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -125,5 +126,16 @@ public class Walker {
 
     public void learningRate(float learningRate) {
         Walker.learningRate = learningRate;
+    }
+
+    public double getPosition() {
+        double position = 0;
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+        return nodeMap.values().stream().mapToDouble(Double::doubleValue).average().getAsDouble();
+      
     }
 }

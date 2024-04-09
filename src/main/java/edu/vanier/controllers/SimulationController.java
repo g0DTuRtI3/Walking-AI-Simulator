@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -27,15 +29,17 @@ public class SimulationController {
     public AnimationTimer time = new AnimationTimer() {
         @Override
         public void handle(long now) {
-            
+
         }
+
         @Override
-        public void start(){
-        super.start();
+        public void start() {
+            super.start();
         }
+
         @Override
-        public void stop(){
-        super.stop();
+        public void stop() {
+            super.stop();
         }
     };
     @FXML
@@ -45,16 +49,16 @@ public class SimulationController {
     private Button btn_BackToEditor;
 
     @FXML
-    private LineChart<?, ?> chart_Network;
+    private LineChart<Double, Double> chart_Network;
 
     @FXML
-    private LineChart<?, ?> chart_Physics1;
+    private LineChart<Double, Double> chart_Physics1;
 
     @FXML
-    private LineChart<?, ?> chart_Physics2;
+    private LineChart<Double, Double> chart_Physics2;
 
     @FXML
-    private LineChart<?, ?> chart_Physics3;
+    private LineChart<Double, Double> chart_Physics3;
 
     @FXML
     private TextField tf_Time;
@@ -68,7 +72,6 @@ public class SimulationController {
     @FXML
     private Text txt_IsTraining;
 
-
     private int[] layers = {4, 8, 3};
     private long previousTime = -1;
 
@@ -81,34 +84,48 @@ public class SimulationController {
             startedTime = previousTime;
             super.start();
         }
+        Walker bestWalker = null;
+        double lastXbestWalker = 0;
 
         @Override
         public void handle(long now) {
             double elapsedTime = (now - previousTime) / 1000000000.0;
+
             if (now - startedTime >= Double.parseDouble(tf_Time.getText())) {
                 System.out.println("finished");
                 this.stop();
             }
-            Walker bestWalker = null;
+
             double bestDistance = 0;
             for (Walker walk : walkers) {
-                for (BasicModel model : walk.getBasicModels()) {
-                    if (model.getPrevNode().getCenterX() >= model.getPrevNode().getCenterX()) {
-                        if (model.getPrevNode().getCenterX() >= bestDistance) {
-                            bestWalker = walk;
-                            bestDistance = model.getPrevNode().getCenterX();
-                        }
-                    } else {
-                        if (model.getNextNode().getCenterX() >= bestDistance) {
-                            bestWalker = walk;
-                            bestDistance = model.getPrevNode().getCenterX();
-                        }
-                    }
+                if (walk.getPosition() > bestDistance) {
+                    bestWalker = walk;
+                    bestDistance = walk.getPosition();
                 }
+//                for (BasicModel model : walk.getBasicModels()) {
+//                    if (model.getPrevNode().getCenterX() >= model.getPrevNode().getCenterX()) {
+//                        if (model.getPrevNode().getCenterX() >= bestDistance) {
+//                            bestWalker = walk;
+//                            bestDistance = model.getPrevNode().getCenterX();
+//                            
+//                        }
+//                    } else {
+//                        if (model.getNextNode().getCenterX() >= bestDistance) {
+//                            bestWalker = walk;
+//                            bestDistance = model.getPrevNode().getCenterX();
+//                        }
+//                    }
+
+//                }
             }
-            if(bestWalker != null){
-                
+            if (bestWalker != null) {
+                Series updateSpeed = new Series<>();
+                double instantSpeed = (bestWalker.getPosition() - lastXbestWalker) / elapsedTime;
+                updateSpeed.getData().add(new XYChart.Data<>(now / 1000000000, instantSpeed));
+                chart_Physics1.getData().add(updateSpeed);
             }
+            lastXbestWalker = bestDistance;
+
             previousTime = now;
         }
 
@@ -119,22 +136,16 @@ public class SimulationController {
         }
     };
 
-    public SimulationController(Stage primaryStage, Walker walker, int nbModel) {
-        this.primaryStage = primaryStage;
-        walkers = new Walker[nbModel];
-        for (int i = 0; i < nbModel; i++) {
-            Walker walkerI = new Walker(walker.getBasicModels(), layers);
-            System.out.println(i);
-
-    
     public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate) {
         this.primaryStage = primaryStage;
+
         walkers = new Walker[nbModel];
+
         for (int i = 0; i < nbModel; i++) {
-            Walker walkerI = new Walker(walker.getBasicModels(),layers);
+            Walker walkerI = new Walker(walker.getBasicModels(), layers);
             walkerI.learningRate(learningRate);
             walkers[i] = walkerI;
-
+            System.out.println("gfpaojeofjaeoifj");
             for (BasicModel b : walkers[i].getBasicModels()) {
                 //simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
                 b.getLink().setOnMouseClicked(mouseE -> {
@@ -152,7 +163,6 @@ public class SimulationController {
     }
 
     private void showNeuralDisplay(Walker walker) {
-        
         if (simulationPane.getChildren().contains(neuralDisplay)) {
             simulationPane.getChildren().remove(neuralDisplay);
             neuralDisplay = new NeuralDisplay(walker);
@@ -168,9 +178,10 @@ public class SimulationController {
 
     @FXML
     void initialize() {
+
         for (Walker w : walkers) {
             for (BasicModel b : w.getBasicModels()) {
-
+                System.out.println("here");
                 if (!simulationPane.getChildren().contains(b.getNextNode())) {
                     simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
                 } else if (!simulationPane.getChildren().contains(b.getPrevNode())) {
