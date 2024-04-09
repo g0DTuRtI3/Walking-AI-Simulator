@@ -26,6 +26,8 @@ public class SimulationController {
 
     public NeuralDisplay neuralDisplay;
 
+    public int interval;
+
     public AnimationTimer time = new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -86,22 +88,28 @@ public class SimulationController {
         }
         Walker bestWalker = null;
         double lastXbestWalker = 0;
+        double currentInterval = 0;
+        final double nanoTOSecond = 1000000000.0;
 
         @Override
         public void handle(long now) {
-            double elapsedTime = (now - previousTime) / 1000000000.0;
+            countdownUpdate(now);
 
-            if (now - startedTime >= Double.parseDouble(tf_Time.getText())) {
+            double elapsedTime = (now - previousTime) / nanoTOSecond;
+            currentInterval = (now - startedTime) / nanoTOSecond;
+            if (currentInterval >= interval) {
                 System.out.println("finished");
                 this.stop();
             }
 
             double bestDistance = 0;
             for (Walker walk : walkers) {
+
                 if (walk.getPosition() > bestDistance) {
                     bestWalker = walk;
                     bestDistance = walk.getPosition();
                 }
+
 //                for (BasicModel model : walk.getBasicModels()) {
 //                    if (model.getPrevNode().getCenterX() >= model.getPrevNode().getCenterX()) {
 //                        if (model.getPrevNode().getCenterX() >= bestDistance) {
@@ -115,13 +123,13 @@ public class SimulationController {
 //                            bestDistance = model.getPrevNode().getCenterX();
 //                        }
 //                    }
-
 //                }
+                walk.updateWalker();
             }
             if (bestWalker != null) {
                 Series updateSpeed = new Series<>();
                 double instantSpeed = (bestWalker.getPosition() - lastXbestWalker) / elapsedTime;
-                updateSpeed.getData().add(new XYChart.Data<>(now / 1000000000, instantSpeed));
+                updateSpeed.getData().add(new XYChart.Data<>(String.format("%f", currentInterval), instantSpeed));
                 chart_Physics1.getData().add(updateSpeed);
             }
             lastXbestWalker = bestDistance;
@@ -134,18 +142,27 @@ public class SimulationController {
             previousTime = -1;
             super.stop();
         }
+
+        private void countdownUpdate(long now) {
+
+            txt_Countdown.setText(String.format("%.0f", interval - currentInterval));
+        }
     };
+    private double xtranslate;
+    private double ytranslate;
 
-    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate) {
+    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate, double xtranslate, double ytranslate) {
+        this.interval = interval;
         this.primaryStage = primaryStage;
-
+        this.xtranslate = xtranslate;
+        this.ytranslate = ytranslate;
         walkers = new Walker[nbModel];
 
         for (int i = 0; i < nbModel; i++) {
             Walker walkerI = new Walker(walker.getBasicModels(), layers);
             walkerI.learningRate(learningRate);
             walkers[i] = walkerI;
-            System.out.println("gfpaojeofjaeoifj");
+
             for (BasicModel b : walkers[i].getBasicModels()) {
                 //simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
                 b.getLink().setOnMouseClicked(mouseE -> {
@@ -178,20 +195,30 @@ public class SimulationController {
 
     @FXML
     void initialize() {
+        double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
+        double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
         for (Walker w : walkers) {
             for (BasicModel b : w.getBasicModels()) {
                 System.out.println("here");
                 if (!simulationPane.getChildren().contains(b.getNextNode())) {
                     simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
+                    b.getNextNode().setTranslateX(-realXTransition);
+                    b.getNextNode().setTranslateY(-realYTransition);
+                    b.getPrevNode().setTranslateX(-realXTransition);
+                    b.getPrevNode().setTranslateY(-realYTransition);
+
                 } else if (!simulationPane.getChildren().contains(b.getPrevNode())) {
                     simulationPane.getChildren().addAll(b.getLink(), b.getPrevNode());
+
+                    b.getPrevNode().setTranslateX(-realXTransition);
+                    b.getPrevNode().setTranslateY(-realYTransition);
                 } else if (!simulationPane.getChildren().contains(b.getLink())) {
                     simulationPane.getChildren().addAll(b.getLink());
                 }
             }
         }
-        time.start();
+        timer.start();
     }
 
     @FXML
