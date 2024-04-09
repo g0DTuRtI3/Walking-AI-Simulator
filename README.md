@@ -1,4 +1,4 @@
 # Walking AI Simulator
 
-# Referance
+# Reference
 https://github.com/frostybee/sqlite-jdbc-mvc/blob/main
