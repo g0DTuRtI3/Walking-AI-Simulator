@@ -14,6 +14,7 @@ public class BasicModel {
     private NodeModel prevNode;
     private NodeModel nextNode;
     private Line link = new Line();
+    private Color color;
 
     public BasicModel(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
         this.link.setStartX(prevNode.getCenterX());
@@ -24,6 +25,7 @@ public class BasicModel {
         this.link.setStroke(colorOfLine);
         this.prevNode = prevNode;
         this.nextNode = nextNode;
+        this.color = colorOfLine;
     }
 
   
@@ -38,6 +40,14 @@ public class BasicModel {
 
     public Line getLink() {
         return link;
+    }
+    
+    public Color getColor() {
+        return color;
+    }
+    
+    public void setColor(Color color) {
+        this.color = color;        
     }
 
     public void updateModel() {

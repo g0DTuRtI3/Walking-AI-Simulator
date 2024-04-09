@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <Pane fx:id="simulationPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
@@ -36,11 +35,11 @@
                   </VBox>
                   <HBox alignment="TOP_CENTER" spacing="10.0">
                      <children>
-                        <Button fx:id="btn_BackToEditor" mnemonicParsing="false" onAction="#backToEditorOnAction" text="Back To Editor" />
-                        <TextField fx:id="tf_Time" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
+                        <Button fx:id="btn_BackToEditor" focusTraversable="false" mnemonicParsing="false" onAction="#backToEditorOnAction" text="Back To Editor" />
+                        <TextField fx:id="tf_Time" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
                      </children>
                   </HBox>
-                  <TitledPane animated="false" prefHeight="481.0" prefWidth="250.0" text="Physics Graphs">
+                  <TitledPane animated="false" focusTraversable="false" prefHeight="481.0" prefWidth="250.0" text="Physics Graphs">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -72,7 +71,7 @@
                         </AnchorPane>
                     </content>
                   </TitledPane>
-                  <TitledPane animated="false" text="Network Graph">
+                  <TitledPane animated="false" focusTraversable="false" text="Network Graph">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>

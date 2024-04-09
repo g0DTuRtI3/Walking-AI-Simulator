@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
@@ -20,14 +21,14 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="menuItem_Save" mnemonicParsing="false" text="Save" />
-                  <MenuItem fx:id="menuItem_Load" mnemonicParsing="false" text="Load" />
+              <MenuItem fx:id="menuItem_Save" mnemonicParsing="false" onAction="#saveOnAction" text="Save" />
+                  <MenuItem fx:id="menuItem_Load" mnemonicParsing="false" onAction="#loadOnAction" text="Load" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -50,7 +51,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:" />
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_NbModel" majorTickUnit="10.0" max="40.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Slider fx:id="slider_NbModel" focusTraversable="false" majorTickUnit="10.0" max="40.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
                         <Label fx:id="label_NbModel" prefHeight="17.0" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
@@ -61,7 +62,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interval Between Generation:" />
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_Interval" max="60.0" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Slider fx:id="slider_Interval" focusTraversable="false" max="60.0" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
                         <Label fx:id="label_Interval" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
@@ -72,7 +73,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Learning Rate:" />
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_LearningRate" majorTickUnit="0.25" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Slider fx:id="slider_LearningRate" focusTraversable="false" majorTickUnit="0.25" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
                         <Label fx:id="label_LearningRate" prefHeight="17.0" prefWidth="35.0" text="Label" />
                      </children>
                   </HBox>
@@ -88,8 +89,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="158.0">
                      <children>
-                        <Rectangle fx:id="link" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="26.0" layoutY="191.0" onMouseClicked="#linkOnMouseClicked" onMouseDragged="#linkOnMouseDragged" onMousePressed="#linkOnMousePressed" stroke="BLACK" strokeType="INSIDE" width="110.0" />
-                        <Circle fx:id="editorCircle" fill="DODGERBLUE" layoutX="80.0" layoutY="63.0" onMouseClicked="#circleOnMouseClicked" onMouseDragged="#circleOnMouseDragged" onMousePressed="#circleOnMousePressed" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Rectangle fx:id="link" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="26.0" layoutY="191.0" onMouseClicked="#linkOnMouseClicked" stroke="BLACK" strokeType="INSIDE" width="110.0" />
+                        <Circle fx:id="editorCircle" fill="DODGERBLUE" layoutX="80.0" layoutY="63.0" onMouseClicked="#circleOnMouseClicked" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
                         <VBox alignment="TOP_CENTER" layoutX="18.0" layoutY="121.0" spacing="5.0">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Circle Color Picker" />
@@ -115,7 +116,7 @@
               </content>
             </TitledPane>
             <RadioButton fx:id="rb_DelMode" disable="true" mnemonicParsing="false" onAction="#delModeOnAction" text="Delete Mode" />
-            <Button fx:id="btn_Clear" mnemonicParsing="false" onAction="#clearOnAction" text="Clear Editor" />
+            <Button fx:id="btn_Clear" focusTraversable="false" mnemonicParsing="false" onAction="#clearOnAction" text="Clear Editor" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" top="20.0" />
@@ -123,7 +124,13 @@
       </VBox>
    </right>
    <center>
-      <Pane fx:id="editorPane" onMouseClicked="#paneOnMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" BorderPane.alignment="CENTER" />
+      <Pane fx:id="editorPane" onMouseClicked="#paneOnMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" BorderPane.alignment="CENTER">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin></Pane>
    </center>
    <bottom>
       <Button fx:id="btn_Start" focusTraversable="false" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="89.0" text="Start" BorderPane.alignment="CENTER" />

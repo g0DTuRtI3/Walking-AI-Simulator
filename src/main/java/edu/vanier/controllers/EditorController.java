@@ -22,16 +22,18 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-    private double mouseX;
-    private double mouseY;
+    private final int circleRadius = 20;
+    private final int circleSocialDistancing = 10;
     private int nbModel;
     private int interval;
     private float learningRate;
+    private double mouseX;
+    private double mouseY;
     private boolean isCircleMode;
     private boolean isLinkMode;
     private boolean isSelected;
     private boolean isDelMode = false;
-    private ArrayList circle_list = new ArrayList<Circle>();
+    private ArrayList<Circle> circle_list = new ArrayList<Circle>();
     private Circle circle1 = null;
     private Circle circle2 = null;
     private Color circleColor;
@@ -105,26 +107,26 @@ public class EditorController {
     void initialize() {
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
-        
+
         // Setting default value
         slider_NbModel.setValue(10);
         slider_LearningRate.setValue(0.3);
         label_NbModel.setText("10");
-        label_Interval.setText(Integer.toString((int)slider_Interval.getValue()));
+        label_Interval.setText(Integer.toString((int) slider_Interval.getValue()));
         label_LearningRate.setText("0.3");
-        
+
         //Add listener for when uses make slider slide
         slider_NbModel.valueProperty().addListener((observable, oldValue, newValue) -> {
-        label_NbModel.setText(Integer.toString(newValue.intValue()));
-        nbModel = newValue.intValue();
+            label_NbModel.setText(Integer.toString(newValue.intValue()));
+            nbModel = newValue.intValue();
         });
         slider_Interval.valueProperty().addListener((observable, oldValue, newValue) -> {
-        label_Interval.setText(Integer.toString(newValue.intValue()));
-        interval = newValue.intValue();
+            label_Interval.setText(Integer.toString(newValue.intValue()));
+            interval = newValue.intValue();
         });
         slider_LearningRate.valueProperty().addListener((observable, oldValue, newValue) -> {
-        label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
-        learningRate = newValue.floatValue();
+            label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
+            learningRate = newValue.floatValue();
         });
     }
 
@@ -142,28 +144,15 @@ public class EditorController {
     }
 
     @FXML
-    void circleOnMouseDragged(MouseEvent event) {
-//        circle.setLayoutX(event.getSceneX() - mouseX);
-//        circle.setLayoutY(event.getSceneY() - mouseY);
-//        System.out.println(mouseX + " " + mouseY + " " + circle.getLayoutX() + " " + circle.getLayoutY());
-    }
-
-    @FXML
-    void circleOnMousePressed(MouseEvent event) {
-//        mouseX = event.getX();
-//        mouseY = event.getY();
-    }
-
-    @FXML
     void circleColorPickerOnAction(ActionEvent event) {
         circleColor = circleColorPicker.getValue();
     }
-    
+
     @FXML
     void clearOnAction(ActionEvent event) {
         clearPane();
     }
-    
+
     @FXML
     void delModeOnAction(ActionEvent event) {
         isDelMode = rb_DelMode.isSelected();
@@ -182,14 +171,9 @@ public class EditorController {
             selected();
         }
     }
-
+    
     @FXML
-    void linkOnMouseDragged(MouseEvent event) {
-
-    }
-
-    @FXML
-    void linkOnMousePressed(MouseEvent event) {
+    void loadOnAction(ActionEvent event) {
 
     }
 
@@ -202,11 +186,10 @@ public class EditorController {
     void paneOnMouseClicked(MouseEvent event) {
         if (isDelMode) {
             removeCircle(event);
-            
-        // in circle mode: adds circle to the editor pane
+
+            // in circle mode: adds circle to the editor pane
         } else if (isCircleMode) {
             addCircle(event);
-
             // in link mode: add links between circles
         } else if (isLinkMode) {
             addLink(event);
@@ -214,12 +197,15 @@ public class EditorController {
             System.out.println("pane on mouse clicked error");
         }
     }
+    
+    @FXML
+    void saveOnAction(ActionEvent event) {
+        
+    }
 
     // Switches to the simulation scene
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
-        //////////////////// Error handeling for this
-        
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
         mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate));
         Pane root = mainAppLoader.load();
@@ -241,7 +227,7 @@ public class EditorController {
             link.setFill(Color.GREY);
             return;
         }
-        
+
         if (isCircleMode) {
             editorCircle.setFill(Color.PURPLE);
             link.setFill(Color.DODGERBLUE);
@@ -252,17 +238,50 @@ public class EditorController {
             editorCircle.setFill(Color.DODGERBLUE);
             link.setFill(Color.DODGERBLUE);
         }
-
     }
 
     // Adds circle to the editor pane
     private void addCircle(MouseEvent event) {
-        Circle circle = new Circle(event.getX(), event.getY(), 25, circleColor);
-        circle_list.add(circle);
-        editorPane.getChildren().add(circle);
+        boolean isTouching = false;
+
+        if (event.getX() > circleRadius && event.getY() > circleRadius && event.getX() < (editorPane.getWidth() - circleRadius) && event.getY() < (editorPane.getHeight() - circleRadius)) {
+            Circle circle = new Circle(event.getX(), event.getY(), circleRadius, circleColor);
+
+            if (circle_list.isEmpty()) {
+                circle_list.add(circle);
+                editorPane.getChildren().add(circle);
+            } else {
+                for (Circle editor_Circle : circle_list) {
+                    if (isCircleTouching(editor_Circle, circle)) {
+                        isTouching = true;
+                        break;
+                    }
+                }
+
+                if (!isTouching) {
+                    circle_list.add(circle);
+                    editorPane.getChildren().add(circle);
+                }
+            }
+        }
+    }
+
+    private boolean isCircleTouching(Circle oldCircle, Circle newCircle) {
+        boolean xTouching = false;
+        int distance = circleRadius * 2 + circleSocialDistancing;
+        if ((oldCircle.getCenterX() + distance) > newCircle.getCenterX() && (oldCircle.getCenterX() - distance) < newCircle.getCenterX()) {
+            xTouching = true;
+        }
+        if ((oldCircle.getCenterY() + distance) > newCircle.getCenterY() && (oldCircle.getCenterY() - distance) < newCircle.getCenterY()) {
+            if (xTouching) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addLink(MouseEvent event) {
+        boolean isCreated = false;
 
         if (circle1 == null) {
             try {
@@ -272,6 +291,7 @@ public class EditorController {
             } catch (Exception e) {
                 circle1 = null;
             }
+
         } else {
             try {
                 circle2 = (Circle) event.getTarget();
@@ -279,12 +299,32 @@ public class EditorController {
                 System.out.println("clicked on other things");
                 return;
             }
+
             nextNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
             prevNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
 
             BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
-            walker.addLink(basicModel);
-            editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
+
+            for (BasicModel model : walker.getBasicModels()) {
+                if (model.getPrevNode().equals(prevNode) && model.getNextNode().equals(nextNode) || model.getPrevNode().equals(nextNode) && model.getNextNode().equals(prevNode)) {
+                    isCreated = true;
+                    
+                    if (!model.getColor().equals(linkColor)) {
+                        editorPane.getChildren().remove(model.getLink());
+                        editorPane.getChildren().addAll(basicModel.getLink());
+                        model.setColor(linkColor);
+                    }
+                    break;
+                }
+            }
+
+            if (!isCreated) {
+                walker.addLink(basicModel);
+                editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
+                System.out.println("link has been created");
+            }
+            
+            circle1.setFill(ogColor);
             circle1 = null;
             circle2 = null;
         }
@@ -292,14 +332,15 @@ public class EditorController {
 
     private void clearPane() {
         editorPane.getChildren().clear();
+        circle_list.clear();
         walker.getBasicModels().clear();
     }
 
     private void removeCircle(MouseEvent event) {
-        Circle circle = (Circle)event.getTarget();
+        Circle circle = (Circle) event.getTarget();
         editorPane.getChildren().remove(circle);
     }
-    
+
 //    // A method that makes the shapes draggable
 //    private void dragObject(Node node) {
 //
