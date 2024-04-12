@@ -24,6 +24,10 @@ public class NodeModel extends javafx.scene.shape.Circle{
         this.centerY = centerY;
     }
 
+    public static double getMass() {
+        return mass;
+    }
+
     public void updateNode(double deltaTime) {
         // F_x = m*a_x
         // a_x = F_x/m

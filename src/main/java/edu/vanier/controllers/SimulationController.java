@@ -28,6 +28,8 @@ public class SimulationController {
 
     public int interval;
 
+    public static final double initialXPos = 45.0;
+    public static final double initialYPos = 499.0;
     public AnimationTimer time = new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -86,10 +88,12 @@ public class SimulationController {
             startedTime = previousTime;
             super.start();
         }
-        Walker bestWalker = null;
-        double lastXbestWalker = 0;
-        double currentInterval = 0;
-        final double nanoTOSecond = 1000000000.0;
+        private Walker bestWalker = null;
+        private double lastXbestWalker = 0;
+        private double currentInterval = 0;
+        private final double nanoTOSecond = 1000000000.0;
+        private int i = 0;
+        private final double pxlToMeterConst = 1 / 100;
 
         @Override
         public void handle(long now) {
@@ -97,17 +101,15 @@ public class SimulationController {
 
             double elapsedTime = (now - previousTime) / nanoTOSecond;
             currentInterval = (now - startedTime) / nanoTOSecond;
-            if (currentInterval >= interval) {
-                System.out.println("finished");
-                this.stop();
-            }
 
             double bestDistance = 0;
             for (Walker walk : walkers) {
-
+                walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
+                tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
                 if (walk.getPosition() > bestDistance) {
                     bestWalker = walk;
                     bestDistance = walk.getPosition();
+                    bestWalker.setFitnessScore(bestWalker.getFitnessScore() + 1);
                 }
 
 //                for (BasicModel model : walk.getBasicModels()) {
@@ -128,12 +130,26 @@ public class SimulationController {
             }
             if (bestWalker != null) {
                 Series updateSpeed = new Series<>();
-                double instantSpeed = (bestWalker.getPosition() - lastXbestWalker) / elapsedTime;
+                double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
                 updateSpeed.getData().add(new XYChart.Data<>(String.format("%f", currentInterval), instantSpeed));
                 chart_Physics1.getData().add(updateSpeed);
+                Series updatePos = new Series<>();
+                updatePos.getData().add(new XYChart.Data<>(String.format("%f", currentInterval), bestDistance * pxlToMeterConst));
+                chart_Physics3.getData().add(updatePos);
+                Series updateKE = new Series<>();
+                double KE = 1 / 2 * bestWalker.getMass() * Math.pow(instantSpeed, 2);
+                updateKE.getData().add(new XYChart.Data<>(String.format("%f", currentInterval), KE));
+                chart_Physics2.getData().add(updateKE);
+
             }
             lastXbestWalker = bestDistance;
+            if (currentInterval >= interval) {
+                System.out.println("finished " + i++);
+                bestWalker.setFitnessScore((int) (100 * lastXbestWalker * pxlToMeterConst));
+                settingNextGeneration(bestWalker);
+                startedTime = now;
 
+            }
             previousTime = now;
         }
 
@@ -147,6 +163,7 @@ public class SimulationController {
 
             txt_Countdown.setText(String.format("%.0f", interval - currentInterval));
         }
+
     };
     private double xtranslate;
     private double ytranslate;
@@ -179,6 +196,29 @@ public class SimulationController {
         }
     }
 
+    public void settingNextGeneration(Walker best) {
+        System.err.println("Generation " + this.txt_Generation.getText() + " finished");
+        Series updateGeneration = new Series<>();
+        updateGeneration.getData().add(new XYChart.Data<>(this.txt_Generation.getText(), best.getFitnessScore()));
+        this.chart_Network.getData().add(updateGeneration);
+
+        this.txt_Generation.setText(String.format("%d", Integer.parseInt(this.txt_Generation.getText()) + 1));
+        for (Walker w : walkers) {
+
+            w.setFitnessScore(0);
+            w.setTranslateX(800);
+            w.setTranslateY(700);
+
+            if (w == best) {
+                continue;
+            }
+            w.setBrain(best.getBrain().clone());
+
+            w.getBrain().mutate();
+
+        }
+    }
+
     private void showNeuralDisplay(Walker walker) {
         if (simulationPane.getChildren().contains(neuralDisplay)) {
             simulationPane.getChildren().remove(neuralDisplay);
@@ -195,10 +235,15 @@ public class SimulationController {
 
     @FXML
     void initialize() {
+        
+
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
         for (Walker w : walkers) {
+            w.setTranslateX(initialXPos);
+            w.setTranslateY(initialYPos);
+            tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
             for (BasicModel b : w.getBasicModels()) {
                 System.out.println("here");
                 if (!simulationPane.getChildren().contains(b.getNextNode())) {

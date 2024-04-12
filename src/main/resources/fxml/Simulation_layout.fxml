@@ -52,7 +52,26 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefWidth="100.0">
                      <children>
-                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation :" />
+                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Cooper Black" size="19.0" />
+                           </font>
+                           <fill>
+                              <LinearGradient cycleMethod="REFLECT" endX="0.6208530805687205" endY="1.0">
+                                 <stops>
+                                    <Stop>
+                                       <color>
+                                          <Color red="0.01315789483487606" />
+                                       </color>
+                                    </Stop>
+                                    <Stop offset="1.0">
+                                       <color>
+                                          <Color red="0.9078947305679321" />
+                                       </color>
+                                    </Stop>
+                                 </stops>
+                              </LinearGradient>
+                           </fill></Text>
                         <Text fx:id="txt_IsTraining" strokeType="OUTSIDE" strokeWidth="0.0" text="IsTraining :" />
                      </children>
                   </VBox>
@@ -68,26 +87,26 @@
                            <children>
                               <LineChart fx:id="chart_Physics1" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" title="velocity vs time" AnchorPane.rightAnchor="0.0">
                                 <xAxis>
-                                  <CategoryAxis side="BOTTOM" />
+                                  <CategoryAxis label="time(s)" side="BOTTOM" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis side="LEFT" />
+                                  <NumberAxis label="velocity(m/s)" side="LEFT" />
                                 </yAxis>
                               </LineChart>
                               <LineChart fx:id="chart_Physics2" layoutX="4.0" layoutY="141.0" prefHeight="128.0" prefWidth="234.0" title="Kinetic Energy vs Time">
                                  <xAxis>
-                                    <CategoryAxis side="BOTTOM" />
+                                    <CategoryAxis label="time (s)" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis side="LEFT" />
+                                    <NumberAxis label="K_e(J)" side="LEFT" />
                                  </yAxis>
                               </LineChart>
                               <LineChart fx:id="chart_Physics3" layoutX="7.0" layoutY="275.0" prefHeight="128.0" prefWidth="234.0" title="Position vs Time">
                                  <xAxis>
-                                    <CategoryAxis side="BOTTOM" />
+                                    <CategoryAxis label="time (s)" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis side="LEFT" />
+                                    <NumberAxis label="Position (m)" side="LEFT" />
                                  </yAxis>
                               </LineChart>
                            </children>
@@ -100,10 +119,10 @@
                            <children>
                               <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" prefHeight="128.0" prefWidth="234.0" title="Learning Rate Per Generation">
                                  <xAxis>
-                                    <CategoryAxis side="BOTTOM" />
+                                    <CategoryAxis label="Generation" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis side="LEFT" />
+                                    <NumberAxis label="learning rate" side="LEFT" />
                                  </yAxis>
                               </LineChart>
                            </children>

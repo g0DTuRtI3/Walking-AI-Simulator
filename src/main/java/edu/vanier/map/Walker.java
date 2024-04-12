@@ -21,6 +21,7 @@ public class Walker {
     private NeuralNetwork brain;
     private static float learningRate = 0.3f;
     private int fitnessScore;
+    private double trainedTime = 0;
 
     public Walker() {
 
@@ -28,6 +29,10 @@ public class Walker {
 
     public NeuralNetwork getBrain() {
         return this.brain;
+    }
+
+    public void setBrain(NeuralNetwork brain) {
+        this.brain = brain;
     }
 
     public Walker(ArrayList<BasicModel> linksOfWalker, int[] layers) {
@@ -45,6 +50,25 @@ public class Walker {
 
         this.brain = new NeuralNetwork(learningRate, allLayersList.stream().mapToInt(Integer::intValue).toArray());
 
+    }
+
+    public void setTranslateX(double finalX) {
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+       //nodeMap.keySet().stream().forEach();
+        
+    }
+
+    public void setTranslateY(double finalY) {
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+        //nodeMap.keySet().stream().forEach();
     }
 
     public void addLink(BasicModel link) {
@@ -136,6 +160,26 @@ public class Walker {
             nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
         }
         return nodeMap.values().stream().mapToDouble(Double::doubleValue).average().getAsDouble();
-      
+
     }
+
+    public double getMass() {
+        double mass = 0;
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+
+        return nodeMap.keySet().size() * NodeModel.getMass();
+    }
+
+    public double getTrainedTime() {
+        return trainedTime;
+    }
+
+    public void setTrainedTime(double trainedTime) {
+        this.trainedTime = trainedTime;
+    }
+
 }
