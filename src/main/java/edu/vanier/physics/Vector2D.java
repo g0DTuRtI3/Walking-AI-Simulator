@@ -21,6 +21,9 @@ public class Vector2D {
     
     private double angle;
 
+    public Vector2D() {
+    }
+
     public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;

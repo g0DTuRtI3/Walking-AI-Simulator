@@ -25,8 +25,8 @@ import javafx.stage.Stage;
  */
 public class Simulator2 extends Application{
     
-    NodeModel previousNode = new NodeModel(250.0, 375.0, Color.BLUE);
-    NodeModel nextNode = new NodeModel(50.0, 375.0, Color.BLUE);
+    NodeModel nextNode = new NodeModel(250.0+100, 375.0, Color.BLUE);
+    NodeModel previousNode = new NodeModel(50.0+100, 375.0, Color.BLUE);
     BasicModel basicModel = new BasicModel(previousNode, nextNode, Color.BLACK);
     Walker walker = new Walker(basicModel);
     
@@ -103,27 +103,6 @@ public class Simulator2 extends Application{
                     break;
             }
         });
-    }
-    
-    public void setTimer() {
-        timer = new AnimationTimer() {
-            
-            public void handle(long currentTime) {
-                elapsedTime = (currentTime - previousTime)/1000000000.0;
-                update(elapsedTime);
-                previousTime = currentTime;
-            }
-            
-            public void start() {
-                previousTime = System.nanoTime();
-                super.start();
-            }
-            
-            public void stop() {
-                previousTime = -1;
-                super.stop();
-            }
-        };
     }
     
     public void update(double elapsedTime) {
