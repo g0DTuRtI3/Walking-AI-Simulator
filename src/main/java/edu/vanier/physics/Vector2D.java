@@ -16,10 +16,19 @@ public class Vector2D {
      * is the vertical coordinate of the vector
      */
     private double y;
+    
+    private double magnitude;
+    
+    private double angle;
+
+    public Vector2D() {
+    }
 
     public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
+        this.magnitude = calculateMagnitude();
+        this.angle = getRotation();
     }
 
     public double getX() {
@@ -39,11 +48,11 @@ public class Vector2D {
     }
 
     /**
-     * Gets the magnitude of a vector
+     * Calculates the magnitude of a vector
      *
      * @return the magnitude of a vector
      */
-    public double getMagnitude() {
+    public double calculateMagnitude() {
         return Math.sqrt(x * x + y * y);
     }
 
@@ -53,7 +62,6 @@ public class Vector2D {
      * @return the normalized vector
      */
     public Vector2D normalize() {
-        double magnitude = getMagnitude();
         if (magnitude == 0) {
             return new Vector2D(0, 0);
         }
@@ -99,6 +107,10 @@ public class Vector2D {
     public Vector2D div(double value) {
         return new Vector2D(x / value, y / value);
     }
+    
+    public Vector2D inverse() {
+        return new Vector2D(-x, -y);
+    }
 
     /**
      * Rotates a vector to an angle based on a straight horizontal line that
@@ -108,7 +120,7 @@ public class Vector2D {
      * @return a new vector that is the result of the rotation
      */
     public Vector2D setRotation(double theta) {
-        return new Vector2D(getMagnitude() * Math.cos(theta), getMagnitude() * Math.sin(theta));
+        return new Vector2D(magnitude * Math.cos(theta), magnitude * Math.sin(theta));
     }
 
     /**
@@ -156,7 +168,7 @@ public class Vector2D {
      * @return the angle between the two vectors
      */
     public double getAngleBetween(Vector2D other) {
-        return Math.acos(this.dot(other) / (getMagnitude() * other.getMagnitude()));
+        return Math.acos(this.dot(other) / (magnitude * other.magnitude));
     }
 
     @Override

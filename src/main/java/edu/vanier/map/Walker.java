@@ -1,15 +1,17 @@
 package edu.vanier.map;
 
 import edu.vanier.core.NeuralNetwork;
-import edu.vanier.map.NodeModel;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.DoubleStream;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+
+import java.util.ArrayList;
+
 
 /**
  *
@@ -25,6 +27,14 @@ public class Walker {
 
     public Walker() {
 
+    }
+
+    public Walker(ArrayList<BasicModel> basicModels) {
+        this.basicModels.addAll(basicModels);
+    }
+
+    public Walker(BasicModel basicModel) {
+        addBasicModel(basicModel);
     }
 
     public NeuralNetwork getBrain() {
@@ -70,34 +80,25 @@ public class Walker {
         }
         //nodeMap.keySet().stream().forEach();
     }
-
-    public void addLink(BasicModel link) {
-        basicModels.add(link);
+        
+    public void addBasicModel(BasicModel basicModel) {
+        basicModels.add(basicModel);
     }
 
-    public void movePreviousLeft(Circle previousNode, Circle nextNode, Circle link) {
-//        previousNode.setCenterY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
-//        previousNode.setCenterX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-//        link.setStartY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
-//        link.setStartX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
+    public void movePrevious(BasicModel basicModel, double force, double time) {
+        //basicModel.getPrevNode().setForce(basicModel, force, time, basicModel.getNextNode());
+        basicModel.updateNextNode(basicModel, force, time);
     }
 
-    public void movePreviousRight(Circle previousNode, Circle nextNode, Circle link) {
-
-    }
-
-    public void moveNextLeft(Circle previousNode, Circle nextNode, Circle link) {
-
-    }
-
-    public void moveNextRight(Circle previousNode, Circle nextNode, Circle link) {
-
+    public void moveNext(BasicModel basicModel, double force, double time) {
+        //basicModel.getNextNode().setForce(basicModel, force, time, basicModel.getPrevNode());
+        basicModel.updatePreviousNode(basicModel, force, time);
     }
 
     public void updateWalker() {
 
         for (BasicModel basicModel : basicModels) {
-            basicModel.updateModel();
+            basicModel.updateLink();
         }
     }
 
@@ -152,6 +153,7 @@ public class Walker {
         Walker.learningRate = learningRate;
     }
 
+
     public double getPosition() {
         double position = 0;
         Map<NodeModel, Double> nodeMap = new HashMap<>();
@@ -180,6 +182,10 @@ public class Walker {
 
     public void setTrainedTime(double trainedTime) {
         this.trainedTime = trainedTime;
+    }
+    public ArrayList<BasicModel> getBasicModel() {
+        return this.basicModels;
+
     }
 
 }

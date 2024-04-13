@@ -2,7 +2,6 @@ package edu.vanier.ui;
 
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
-import edu.vanier.physics.Rigid2D;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
