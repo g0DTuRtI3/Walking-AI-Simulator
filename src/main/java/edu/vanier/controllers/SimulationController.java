@@ -9,7 +9,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
@@ -53,16 +56,16 @@ public class SimulationController {
     private Button btn_BackToEditor;
 
     @FXML
-    private LineChart<Double, Double> chart_Network;
+    private LineChart<String, Number> chart_Network;
 
     @FXML
-    private LineChart<Double, Double> chart_Physics1;
+    private LineChart<Number, Number> chart_Physics1;
 
     @FXML
-    private LineChart<Double, Double> chart_Physics2;
+    private LineChart<Number, Number> chart_Physics2;
 
     @FXML
-    private LineChart<Double, Double> chart_Physics3;
+    private LineChart<Number, Number> chart_Physics3;
 
     @FXML
     private TextField tf_Time;
@@ -84,6 +87,11 @@ public class SimulationController {
 
         @Override
         public void start() {
+            chart_Physics1.getData().add(updateSpeed);
+            chart_Physics3.getData().add(updatePos);
+            chart_Physics2.getData().add(updateKE);
+            chart_Network.getData().add(updateGeneration);
+            
             previousTime = System.nanoTime();
             startedTime = previousTime;
             super.start();
@@ -94,6 +102,10 @@ public class SimulationController {
         private final double nanoTOSecond = 1000000000.0;
         private int i = 0;
         private final double pxlToMeterConst = 1 / 100;
+        private Series<Number, Number> updateSpeed = new Series<>();
+        private Series<Number, Number> updatePos = new Series<>();
+        private Series<Number, Number> updateKE = new Series<>();
+        private Series<String, Number> updateGeneration = new Series<>();
 
         @Override
         public void handle(long now) {
@@ -101,10 +113,11 @@ public class SimulationController {
 
             double elapsedTime = (now - previousTime) / nanoTOSecond;
             currentInterval = (now - startedTime) / nanoTOSecond;
-
+            
             double bestDistance = 0;
             for (Walker walk : walkers) {
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
+                moveWalker();
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
                 if (walk.getPosition() > bestDistance) {
                     bestWalker = walk;
@@ -129,30 +142,26 @@ public class SimulationController {
                 walk.updateWalker();
             }
             if (bestWalker != null) {
-                Series<Double, Double> updateSpeed = new Series<>();
+
                 double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
-                updateSpeed.getData().add(new XYChart.Data<>( currentInterval, instantSpeed));
-                chart_Physics1.getData().add(updateSpeed);
-                
-                Series<Double, Double> updatePos = new Series<>();
+                updateSpeed.getData().add(new XYChart.Data<>(currentInterval, instantSpeed));
+
                 updatePos.getData().add(new XYChart.Data<>(currentInterval, bestDistance * pxlToMeterConst));
-                chart_Physics3.getData().add(updatePos);
-                
-                Series<Double, Double> updateKE = new Series<>();
+
                 double KE = 1 / 2 * bestWalker.getMass() * Math.pow(instantSpeed, 2);
                 updateKE.getData().add(new XYChart.Data<>(currentInterval, KE));
-                chart_Physics2.getData().add(updateKE);
 
             }
             lastXbestWalker = bestDistance;
             if (currentInterval >= interval) {
+                
                 System.out.println("finished " + i++);
                 bestWalker.setFitnessScore((int) (100 * lastXbestWalker * pxlToMeterConst));
-                settingNextGeneration(bestWalker);
+                settingNextGeneration(bestWalker, updateGeneration);
                 startedTime = now;
-                chart_Physics1.getData().clear();
-                chart_Physics2.getData().clear();
-                chart_Physics3.getData().clear();
+                updateSpeed.getData().clear();
+                updatePos.getData().clear();
+                updateKE.getData().clear();
 
             }
             previousTime = now;
@@ -169,7 +178,10 @@ public class SimulationController {
             txt_Countdown.setText(String.format("%.0f", interval - currentInterval));
         }
 
+        
+
     };
+    
     private double xtranslate;
     private double ytranslate;
 
@@ -201,11 +213,11 @@ public class SimulationController {
         }
     }
 
-    public void settingNextGeneration(Walker best) {
+    public void settingNextGeneration(Walker best, Series<String, Number> updateGeneration) {
         System.err.println("Generation " + this.txt_Generation.getText() + " finished");
-        Series updateGeneration = new Series<>();
+        
         updateGeneration.getData().add(new XYChart.Data<>(this.txt_Generation.getText(), best.getFitnessScore()));
-        this.chart_Network.getData().add(updateGeneration);
+        
 
         this.txt_Generation.setText(String.format("%d", Integer.parseInt(this.txt_Generation.getText()) + 1));
         for (Walker w : walkers) {
@@ -223,6 +235,21 @@ public class SimulationController {
 
         }
     }
+    private void moveWalker() {
+            for (Walker w : walkers) {
+
+            double[] forcesOnNodes = new double[w.getBasicModels().size()];
+
+            for (int i = 0; i < w.getBasicModels().size(); i++) {
+               //put all force on every node in every []
+            }
+            //all forces that walker will apply on every Node
+            double[] predictions = w.getBrain().predict(forcesOnNodes);
+
+          // make walker move here e.g. w.update(predictions); 
+
+        }
+        }
 
     private void showNeuralDisplay(Walker walker) {
         if (simulationPane.getChildren().contains(neuralDisplay)) {
@@ -240,7 +267,6 @@ public class SimulationController {
 
     @FXML
     void initialize() {
-        
 
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
@@ -250,7 +276,7 @@ public class SimulationController {
             w.setTranslateY(initialYPos);
             tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
             for (BasicModel b : w.getBasicModels()) {
-                System.out.println("here");
+
                 if (!simulationPane.getChildren().contains(b.getNextNode())) {
                     simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
                     b.getNextNode().setTranslateX(-realXTransition);

@@ -87,7 +87,7 @@
                            <children>
                               <LineChart fx:id="chart_Physics1" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" title="velocity vs time" AnchorPane.rightAnchor="0.0">
                                 <xAxis>
-                                  <CategoryAxis label="time(s)" side="BOTTOM" />
+                                  <NumberAxis label="time(s)" side="BOTTOM" />
                                 </xAxis>
                                 <yAxis>
                                   <NumberAxis label="velocity(m/s)" side="LEFT" />
@@ -95,7 +95,7 @@
                               </LineChart>
                               <LineChart fx:id="chart_Physics2" layoutX="4.0" layoutY="141.0" prefHeight="128.0" prefWidth="234.0" title="Kinetic Energy vs Time">
                                  <xAxis>
-                                    <CategoryAxis label="time (s)" side="BOTTOM" />
+                                    <NumberAxis label="time (s)" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
                                     <NumberAxis label="K_e(J)" side="LEFT" />
@@ -103,7 +103,7 @@
                               </LineChart>
                               <LineChart fx:id="chart_Physics3" layoutX="7.0" layoutY="275.0" prefHeight="128.0" prefWidth="234.0" title="Position vs Time">
                                  <xAxis>
-                                    <CategoryAxis label="time (s)" side="BOTTOM" />
+                                    <NumberAxis label="time (s)" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
                                     <NumberAxis label="Position (m)" side="LEFT" />
