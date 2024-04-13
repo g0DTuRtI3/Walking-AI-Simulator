@@ -319,12 +319,14 @@ public class EditorController {
             }
 
             if (!isCreated) {
-                walker.addLink(basicModel);
+                walker.addBasicModel(basicModel);
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
                 System.out.println("link has been created");
             }
             
             circle1.setFill(ogColor);
+            walker.addBasicModel(basicModel);
+            editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             circle1 = null;
             circle2 = null;
         }
