@@ -209,9 +209,9 @@ public class EditorController {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
         double xtranslate = walker.getBasicModels().get(0).getPrevNode().getCenterX();
         double ytranslate = walker.getBasicModels().get(0).getPrevNode().getCenterY();
-        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate,xtranslate,ytranslate));
+        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate, xtranslate, ytranslate));
         Pane root = mainAppLoader.load();
-        
+
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
@@ -324,11 +324,13 @@ public class EditorController {
                 walker.addBasicModel(basicModel);
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
                 System.out.println("link has been created");
+            } else {
+                editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             }
 
             circle1.setFill(ogColor);
             walker.addBasicModel(basicModel);
-            editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
+
             circle1 = null;
             circle2 = null;
         }

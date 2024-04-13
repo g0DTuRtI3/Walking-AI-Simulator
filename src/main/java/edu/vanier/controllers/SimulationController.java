@@ -129,16 +129,18 @@ public class SimulationController {
                 walk.updateWalker();
             }
             if (bestWalker != null) {
-                Series updateSpeed = new Series<>();
+                Series<Double, Double> updateSpeed = new Series<>();
                 double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
-                updateSpeed.getData().add(new XYChart.Data<>(String.format("%f", currentInterval), instantSpeed));
+                updateSpeed.getData().add(new XYChart.Data<>( currentInterval, instantSpeed));
                 chart_Physics1.getData().add(updateSpeed);
-                Series updatePos = new Series<>();
-                updatePos.getData().add(new XYChart.Data<>(String.format("%f", currentInterval), bestDistance * pxlToMeterConst));
+                
+                Series<Double, Double> updatePos = new Series<>();
+                updatePos.getData().add(new XYChart.Data<>(currentInterval, bestDistance * pxlToMeterConst));
                 chart_Physics3.getData().add(updatePos);
-                Series updateKE = new Series<>();
+                
+                Series<Double, Double> updateKE = new Series<>();
                 double KE = 1 / 2 * bestWalker.getMass() * Math.pow(instantSpeed, 2);
-                updateKE.getData().add(new XYChart.Data<>(String.format("%f", currentInterval), KE));
+                updateKE.getData().add(new XYChart.Data<>(currentInterval, KE));
                 chart_Physics2.getData().add(updateKE);
 
             }
@@ -148,6 +150,9 @@ public class SimulationController {
                 bestWalker.setFitnessScore((int) (100 * lastXbestWalker * pxlToMeterConst));
                 settingNextGeneration(bestWalker);
                 startedTime = now;
+                chart_Physics1.getData().clear();
+                chart_Physics2.getData().clear();
+                chart_Physics3.getData().clear();
 
             }
             previousTime = now;
