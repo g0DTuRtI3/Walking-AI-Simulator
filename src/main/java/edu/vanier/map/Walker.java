@@ -12,7 +12,6 @@ import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
-
 /**
  *
  * @author 2248826
@@ -68,8 +67,8 @@ public class Walker {
             nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
             nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
         }
-       //nodeMap.keySet().stream().forEach();
-        
+        //nodeMap.keySet().stream().forEach();
+
     }
 
     public void setTranslateY(double finalY) {
@@ -80,7 +79,7 @@ public class Walker {
         }
         //nodeMap.keySet().stream().forEach();
     }
-        
+
     public void addBasicModel(BasicModel basicModel) {
         basicModels.add(basicModel);
     }
@@ -153,7 +152,6 @@ public class Walker {
         Walker.learningRate = learningRate;
     }
 
-
     public double getPosition() {
         double position = 0;
         Map<NodeModel, Double> nodeMap = new HashMap<>();
@@ -182,10 +180,6 @@ public class Walker {
 
     public void setTrainedTime(double trainedTime) {
         this.trainedTime = trainedTime;
-    }
-    public ArrayList<BasicModel> getBasicModel() {
-        return this.basicModels;
-
     }
 
 }
