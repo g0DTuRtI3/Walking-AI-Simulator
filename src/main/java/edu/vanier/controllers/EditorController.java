@@ -24,9 +24,9 @@ public class EditorController {
 
     private final int circleRadius = 20;
     private final int circleSocialDistancing = 10;
-    private int nbModel;
-    private int interval;
-    private float learningRate;
+    private int nbModel = 10;
+    private int interval = 10;
+    private float learningRate = 0.3f;
     private double mouseX;
     private double mouseY;
     private boolean isCircleMode;
@@ -173,7 +173,7 @@ public class EditorController {
             selected();
         }
     }
-    
+
     @FXML
     void loadOnAction(ActionEvent event) {
 
@@ -199,18 +199,20 @@ public class EditorController {
             System.out.println("pane on mouse clicked error");
         }
     }
-    
+
     @FXML
     void saveOnAction(ActionEvent event) {
-        
+
     }
 
     // Switches to the simulation scene
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
-        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate));
         walker.serialize(walker, "yes");
+        double xtranslate = walker.getBasicModels().get(0).getPrevNode().getCenterX();
+        double ytranslate = walker.getBasicModels().get(0).getPrevNode().getCenterY();
+        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate, xtranslate, ytranslate));
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);
@@ -311,7 +313,7 @@ public class EditorController {
             for (BasicModel model : walker.getBasicModels()) {
                 if (model.getPrevNode().equals(prevNode) && model.getNextNode().equals(nextNode) || model.getPrevNode().equals(nextNode) && model.getNextNode().equals(prevNode)) {
                     isCreated = true;
-                    
+
                     if (!model.getColor().equals(linkColor)) {
                         editorPane.getChildren().remove(model.getLink());
                         editorPane.getChildren().addAll(basicModel.getLink());
@@ -322,12 +324,16 @@ public class EditorController {
             }
 
             if (!isCreated) {
-                walker.addLink(basicModel);
+                walker.addBasicModel(basicModel);
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
                 System.out.println("link has been created");
+            } else {
+                editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             }
-            
+
             circle1.setFill(ogColor);
+            walker.addBasicModel(basicModel);
+
             circle1 = null;
             circle2 = null;
         }

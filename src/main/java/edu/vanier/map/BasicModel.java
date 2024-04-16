@@ -29,8 +29,6 @@ public class BasicModel implements Serializable{
         this.color = colorOfLine;
     }
 
-  
-
     public NodeModel getPrevNode() {
         return prevNode;
     }
@@ -51,13 +49,12 @@ public class BasicModel implements Serializable{
         this.color = color;        
     }
 
-    public void updateModel() {
+    public void updateLink() {
         this.link.setStartX(prevNode.getCenterX());
         this.link.setStartY(prevNode.getCenterY());
         this.link.setEndX(nextNode.getCenterX());
         this.link.setEndY(nextNode.getCenterY());
     }
-    
 
     public double getRadAngle() {
         System.out.println("in rad angle");
@@ -80,6 +77,42 @@ public class BasicModel implements Serializable{
         }
         
         return angleRad;
+    }
+    
+    public void updateNextNode(BasicModel basicModel, double force, double time) {
+        
+        nextNode.setForce(force, time, basicModel);
+        updateLink();
+        
+    }
+    
+    public void updatePreviousNode(BasicModel basicModel, double force, double time) {
+        
+        prevNode.setForce(force, time, basicModel);
+        updateLink();
+        
+    }
+    
+    public NodeModel getNode(NodeModel nodeModel) {
+        
+        if (nodeModel == nextNode) {
+            return nextNode;
+        }
+        
+        return prevNode;
+    }
+    
+    public NodeModel getOtherNode(NodeModel nodeModel) {
+        
+        if (nodeModel == nextNode) {
+            return prevNode;
+        }
+        
+        return nextNode;
+    }
+    
+    public double getLinkMagnitude() {
+        return Math.sqrt(Math.pow((link.getStartX()-link.getEndX()),2) + Math.pow((link.getStartY()-link.getEndY()),2));
     }
     
 }

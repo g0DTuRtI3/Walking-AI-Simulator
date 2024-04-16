@@ -12,10 +12,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.DoubleStream;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -27,6 +32,7 @@ public class Walker implements Serializable{
     private NeuralNetwork brain;
     private static float learningRate = 0.3f;
     private int fitnessScore;
+    private double trainedTime = 0;
     
     public void serialize(Object walker, String file) throws IOException{
         MyWalker serializeWalker = new MyWalker();
@@ -60,8 +66,20 @@ public class Walker implements Serializable{
 
     }
 
+    public Walker(ArrayList<BasicModel> basicModels) {
+        this.basicModels.addAll(basicModels);
+    }
+
+    public Walker(BasicModel basicModel) {
+        addBasicModel(basicModel);
+    }
+
     public NeuralNetwork getBrain() {
         return this.brain;
+    }
+
+    public void setBrain(NeuralNetwork brain) {
+        this.brain = brain;
     }
 
     public Walker(ArrayList<BasicModel> linksOfWalker, int[] layers) {
@@ -72,41 +90,52 @@ public class Walker implements Serializable{
             allLayersList.add(nbNeurons);
         }
 
-        allLayersList.addFirst(linksOfWalker.size());
-        allLayersList.addLast(2);
+        allLayersList.addFirst(linksOfWalker.size() + 1);
+        allLayersList.addLast(linksOfWalker.size() + 1);
 
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
         this.brain = new NeuralNetwork(learningRate, allLayersList.stream().mapToInt(Integer::intValue).toArray());
-    }
-
-    public void addLink(BasicModel link) {
-        basicModels.add(link);
-    }
-
-    public void movePreviousLeft(Circle previousNode, Circle nextNode, Circle link) {
-//        previousNode.setCenterY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
-//        previousNode.setCenterX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-//        link.setStartY(nextNode.getCenterY() - 200 * Math.sin(Math.toRadians(angleRight)));
-//        link.setStartX(nextNode.getCenterX() + 200 * Math.cos(Math.toRadians(angleRight)));
-    }
-
-    public void movePreviousRight(Circle previousNode, Circle nextNode, Circle link) {
 
     }
 
-    public void moveNextLeft(Circle previousNode, Circle nextNode, Circle link) {
+    public void setTranslateX(double finalX) {
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+        //nodeMap.keySet().stream().forEach();
 
     }
 
-    public void moveNextRight(Circle previousNode, Circle nextNode, Circle link) {
+    public void setTranslateY(double finalY) {
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+        //nodeMap.keySet().stream().forEach();
+    }
 
+    public void addBasicModel(BasicModel basicModel) {
+        basicModels.add(basicModel);
+    }
+
+    public void movePrevious(BasicModel basicModel, double force, double time) {
+        //basicModel.getPrevNode().setForce(basicModel, force, time, basicModel.getNextNode());
+        basicModel.updateNextNode(basicModel, force, time);
+    }
+
+    public void moveNext(BasicModel basicModel, double force, double time) {
+        //basicModel.getNextNode().setForce(basicModel, force, time, basicModel.getPrevNode());
+        basicModel.updatePreviousNode(basicModel, force, time);
     }
 
     public void updateWalker() {
 
         for (BasicModel basicModel : basicModels) {
-            basicModel.updateModel();
+            basicModel.updateLink();
         }
     }
 
@@ -160,4 +189,35 @@ public class Walker implements Serializable{
     public void learningRate(float learningRate) {
         Walker.learningRate = learningRate;
     }
+
+    public double getPosition() {
+        double position = 0;
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+        return nodeMap.values().stream().mapToDouble(Double::doubleValue).average().getAsDouble();
+
+    }
+
+    public double getMass() {
+        double mass = 0;
+        Map<NodeModel, Double> nodeMap = new HashMap<>();
+        for (BasicModel bm : this.basicModels) {
+            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
+            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        }
+
+        return nodeMap.keySet().size() * NodeModel.getMass();
+    }
+
+    public double getTrainedTime() {
+        return trainedTime;
+    }
+
+    public void setTrainedTime(double trainedTime) {
+        this.trainedTime = trainedTime;
+    }
+
 }

@@ -12,13 +12,36 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <Pane fx:id="simulationPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
          <children>
-            <Text fx:id="txt_Countdown" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Countdown: x sec" />
+            <Text fx:id="txt_Countdown" layoutX="14.0" layoutY="119.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="211.59375">
+               <font>
+                  <Font name="Dubai Light" size="93.0" />
+               </font>
+               <fill>
+                  <LinearGradient cycleMethod="REFLECT" endX="0.7440758293838863" endY="0.5308056872037914" startX="0.6303317535545023" startY="0.2843601895734597">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color green="0.8899999856948853" blue="0.8137142658233643" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.9342105388641357" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill></Text>
          </children>
       </Pane>
    </center>
@@ -29,42 +52,61 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefWidth="100.0">
                      <children>
-                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="Generation : x" />
-                        <Text fx:id="txt_IsTraining" strokeType="OUTSIDE" strokeWidth="0.0" text="IsTraining : True" />
+                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Cooper Black" size="19.0" />
+                           </font>
+                           <fill>
+                              <LinearGradient cycleMethod="REFLECT" endX="0.6208530805687205" endY="1.0">
+                                 <stops>
+                                    <Stop>
+                                       <color>
+                                          <Color red="0.01315789483487606" />
+                                       </color>
+                                    </Stop>
+                                    <Stop offset="1.0">
+                                       <color>
+                                          <Color red="0.9078947305679321" />
+                                       </color>
+                                    </Stop>
+                                 </stops>
+                              </LinearGradient>
+                           </fill></Text>
+                        <Text fx:id="txt_IsTraining" strokeType="OUTSIDE" strokeWidth="0.0" text="IsTraining :" />
                      </children>
                   </VBox>
                   <HBox alignment="TOP_CENTER" spacing="10.0">
                      <children>
                         <Button fx:id="btn_BackToEditor" focusTraversable="false" mnemonicParsing="false" onAction="#backToEditorOnAction" text="Back To Editor" />
-                        <TextField fx:id="tf_Time" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
+                        <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
                      </children>
                   </HBox>
                   <TitledPane animated="false" focusTraversable="false" prefHeight="481.0" prefWidth="250.0" text="Physics Graphs">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <LineChart fx:id="chart_Physics1" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" AnchorPane.rightAnchor="0.0">
+                              <LineChart fx:id="chart_Physics1" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" title="velocity vs time" AnchorPane.rightAnchor="0.0">
                                 <xAxis>
-                                  <CategoryAxis side="BOTTOM" />
+                                  <NumberAxis label="time(s)" side="BOTTOM" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis side="LEFT" />
+                                  <NumberAxis label="velocity(m/s)" side="LEFT" />
                                 </yAxis>
                               </LineChart>
-                              <LineChart fx:id="chart_Physics2" layoutX="4.0" layoutY="141.0" prefHeight="128.0" prefWidth="234.0">
+                              <LineChart fx:id="chart_Physics2" layoutX="4.0" layoutY="141.0" prefHeight="128.0" prefWidth="234.0" title="Kinetic Energy vs Time">
                                  <xAxis>
-                                    <CategoryAxis side="BOTTOM" />
+                                    <NumberAxis label="time (s)" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis side="LEFT" />
+                                    <NumberAxis label="K_e(J)" side="LEFT" />
                                  </yAxis>
                               </LineChart>
-                              <LineChart fx:id="chart_Physics3" layoutX="7.0" layoutY="275.0" prefHeight="128.0" prefWidth="234.0">
+                              <LineChart fx:id="chart_Physics3" layoutX="7.0" layoutY="275.0" prefHeight="128.0" prefWidth="234.0" title="Position vs Time">
                                  <xAxis>
-                                    <CategoryAxis side="BOTTOM" />
+                                    <NumberAxis label="time (s)" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis side="LEFT" />
+                                    <NumberAxis label="Position (m)" side="LEFT" />
                                  </yAxis>
                               </LineChart>
                            </children>
@@ -75,12 +117,12 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" prefHeight="128.0" prefWidth="234.0">
+                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" prefHeight="128.0" prefWidth="234.0" title="Learning Rate Per Generation">
                                  <xAxis>
-                                    <CategoryAxis side="BOTTOM" />
+                                    <CategoryAxis label="Generation" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis side="LEFT" />
+                                    <NumberAxis label="learning rate" side="LEFT" />
                                  </yAxis>
                               </LineChart>
                            </children>
