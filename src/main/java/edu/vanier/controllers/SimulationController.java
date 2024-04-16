@@ -119,7 +119,7 @@ public class SimulationController {
             double bestDistance = 0;
             for (Walker walk : walkers) {
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
-                moveWalker();
+                //moveWalker();
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
                 if (walk.getPosition() > bestDistance) {
                     bestWalker = walk;

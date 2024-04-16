@@ -16,19 +16,13 @@ public class NodeModel extends javafx.scene.shape.Circle {
     private double centerY;
     private double speedX = 0;
     private double speedY = 0;
-
     private double angle = 0;
     private boolean nodeMoved = false;
-
     private double vf = 0;
     private double vi = 0;
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
-    }
-
-    public static double getMass() {
-        return mass;
     }
 
     public void updateNode(double deltaTime) {
@@ -133,5 +127,9 @@ public class NodeModel extends javafx.scene.shape.Circle {
 
     public boolean equals(NodeModel model) {
         return (model.getCenterX() == centerX) && (model.getCenterY() == centerY);
+    }
+
+    public static double getMass() {
+        return mass;
     }
 }

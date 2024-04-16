@@ -128,6 +128,8 @@ public class EditorController {
             label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
             learningRate = newValue.floatValue();
         });
+        
+        System.out.println(circleColor.toString().substring(4));
     }
 
     @FXML
@@ -207,6 +209,7 @@ public class EditorController {
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
+        walker.serialize(walker, "yes");
         double xtranslate = walker.getBasicModels().get(0).getPrevNode().getCenterX();
         double ytranslate = walker.getBasicModels().get(0).getPrevNode().getCenterY();
         mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate, xtranslate, ytranslate));
