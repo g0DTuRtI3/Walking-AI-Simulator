@@ -2,8 +2,10 @@ package edu.vanier.controllers;
 
 import edu.vanier.core.NeuralDisplay;
 import edu.vanier.map.BasicModel;
+import edu.vanier.map.NodeModel;
 import edu.vanier.map.Walker;
 import java.io.IOException;
+import java.util.HashSet;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -79,7 +81,7 @@ public class SimulationController {
     @FXML
     private Text txt_IsTraining;
 
-    private int[] layers = {4, 8, 3};
+    private int[] layers = {4, 8, 2};
     private long previousTime = -1;
 
     AnimationTimer timer = new AnimationTimer() {
@@ -91,7 +93,7 @@ public class SimulationController {
             chart_Physics3.getData().add(updatePos);
             chart_Physics2.getData().add(updateKE);
             chart_Network.getData().add(updateGeneration);
-            
+
             previousTime = System.nanoTime();
             startedTime = previousTime;
             super.start();
@@ -113,7 +115,7 @@ public class SimulationController {
 
             double elapsedTime = (now - previousTime) / nanoTOSecond;
             currentInterval = (now - startedTime) / nanoTOSecond;
-            
+
             double bestDistance = 0;
             for (Walker walk : walkers) {
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
@@ -154,7 +156,7 @@ public class SimulationController {
             }
             lastXbestWalker = bestDistance;
             if (currentInterval >= interval) {
-                
+
                 System.out.println("finished " + i++);
                 bestWalker.setFitnessScore((int) (100 * lastXbestWalker * pxlToMeterConst));
                 settingNextGeneration(bestWalker, updateGeneration);
@@ -178,10 +180,8 @@ public class SimulationController {
             txt_Countdown.setText(String.format("%.0f", interval - currentInterval));
         }
 
-        
-
     };
-    
+
     private double xtranslate;
     private double ytranslate;
 
@@ -215,9 +215,8 @@ public class SimulationController {
 
     public void settingNextGeneration(Walker best, Series<String, Number> updateGeneration) {
         System.err.println("Generation " + this.txt_Generation.getText() + " finished");
-        
+
         updateGeneration.getData().add(new XYChart.Data<>(this.txt_Generation.getText(), best.getFitnessScore()));
-        
 
         this.txt_Generation.setText(String.format("%d", Integer.parseInt(this.txt_Generation.getText()) + 1));
         for (Walker w : walkers) {
@@ -235,21 +234,27 @@ public class SimulationController {
 
         }
     }
+
     private void moveWalker() {
-            for (Walker w : walkers) {
 
-            double[] forcesOnNodes = new double[w.getBasicModels().size()];
-
+        for (Walker w : walkers) {
+            HashSet<NodeModel> nodes = new HashSet<>();
+            for (BasicModel bm : w.getBasicModels()) {
+                nodes.add(bm.getNextNode());
+                nodes.add(bm.getPrevNode());
+                w.updateWalker();
+                System.out.println(w.getBrain());
+            }
+            double[] forcesOnNodes = new double[nodes.size()];
             for (int i = 0; i < w.getBasicModels().size(); i++) {
-               //put all force on every node in every []
+                forcesOnNodes[i] = 10 * Math.random();
             }
             //all forces that walker will apply on every Node
             double[] predictions = w.getBrain().predict(forcesOnNodes);
 
-          // make walker move here e.g. w.update(predictions); 
-
+            // make walker move here e.g. w.update(predictions); 
         }
-        }
+    }
 
     private void showNeuralDisplay(Walker walker) {
         if (simulationPane.getChildren().contains(neuralDisplay)) {

@@ -52,8 +52,8 @@ public class Walker {
             allLayersList.add(nbNeurons);
         }
 
-        allLayersList.addFirst(linksOfWalker.size() + 1);
-        allLayersList.addLast(linksOfWalker.size() + 1);
+        allLayersList.addFirst(linksOfWalker.size());
+        allLayersList.addLast(linksOfWalker.size());
 
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -95,15 +95,14 @@ public class Walker {
     }
 
     public void updateWalker() {
-
         for (BasicModel basicModel : basicModels) {
             basicModel.updateLink();
         }
     }
 
     public static double multiplyVectors(double[] a, double[] b) {
-
-        if (a.length != b.length) {
+        
+       if (a.length != b.length) {
             throw new IllegalArgumentException("Input vectors must have the same length");
         }
 
