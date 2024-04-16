@@ -2,7 +2,6 @@ package edu.vanier.map;
 
 import edu.vanier.physics.Vector2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 /**
  *

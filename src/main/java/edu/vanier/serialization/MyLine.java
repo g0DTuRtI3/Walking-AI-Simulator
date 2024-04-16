@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.serialization;
 
 /**
  *
- * @author 2253883
+ * @author Zeyu Huang
  */
 public class MyLine {
     private double strokeWidth;
@@ -14,19 +10,17 @@ public class MyLine {
     private double startY;
     private double EndX;
     private double EndY;
-    private String Color;
     
     public MyLine() {
         
     }
 
-    public MyLine(double strokeWidth, double startX, double startY, double EndX, double EndY, String Color) {
+    public MyLine(double strokeWidth, double startX, double startY, double EndX, double EndY) {
         this.strokeWidth = strokeWidth;
         this.startX = startX;
         this.startY = startY;
         this.EndX = EndX;
         this.EndY = EndY;
-        this.Color = Color;
     }
 
     public double getStrokeWidth() {
@@ -48,9 +42,4 @@ public class MyLine {
     public double getEndY() {
         return EndY;
     }
-
-    public String getColor() {
-        return Color;
-    }
-    
 }

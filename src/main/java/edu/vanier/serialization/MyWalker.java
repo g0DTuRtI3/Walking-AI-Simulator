@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author 2253883
+ * @author Zeyu Huang
  */
 public class MyWalker implements Serializable{
     private ArrayList<MyBasicModel> basicModels = new ArrayList<>();
@@ -20,7 +20,6 @@ public class MyWalker implements Serializable{
     private int fitnessScore;
     
     public void serialize(Object walker, String file) throws IOException{
-        System.out.println(walker);
         FileOutputStream fos = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(walker);
