@@ -13,7 +13,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.DoubleStream;
@@ -41,10 +40,9 @@ public class Walker implements Serializable{
         
         ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
         for (BasicModel basicModel : basicModels) {
-            String str = basicModel.getColor().toString();
-            str.substring(3);
-            MyNodeModel serializeNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), file);
-        
+            MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(3));
+            MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), "tes");
+            MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, basicModel.getColor().toString().substring(4));
         }
 //        System.out.println(walker);
 //        FileOutputStream fos = new FileOutputStream(file);

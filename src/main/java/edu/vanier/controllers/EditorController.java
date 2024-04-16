@@ -129,7 +129,8 @@ public class EditorController {
             learningRate = newValue.floatValue();
         });
         
-        System.out.println(circleColor.toString().substring(4));
+        System.out.println(circleColor.toString().substring(2, 8));
+        System.out.println(editorCircle.getFill().toString().substring(2, 8));
     }
 
     @FXML

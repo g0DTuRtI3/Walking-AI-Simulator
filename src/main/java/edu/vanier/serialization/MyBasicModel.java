@@ -1,7 +1,5 @@
 package edu.vanier.serialization;
 
-import javafx.scene.paint.Color;
-
 /**
  *
  * @author 2253883
@@ -11,6 +9,13 @@ public class MyBasicModel {
 
     private MyNodeModel prevNode;
     private MyNodeModel nextNode;
-    private MyLine link = new MyLine();
-    private Color color;
+    private MyLine link;
+    private String color;
+
+    public MyBasicModel(MyNodeModel prevNode, MyNodeModel nextNode, MyLine line ,String color) {
+        this.prevNode = prevNode;
+        this.nextNode = nextNode;
+        this.link = line;
+        this.color = color;
+    }
 }

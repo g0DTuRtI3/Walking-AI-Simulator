@@ -14,19 +14,17 @@ public class MyLine {
     private double startY;
     private double EndX;
     private double EndY;
-    private String Color;
     
     public MyLine() {
         
     }
 
-    public MyLine(double strokeWidth, double startX, double startY, double EndX, double EndY, String Color) {
+    public MyLine(double strokeWidth, double startX, double startY, double EndX, double EndY) {
         this.strokeWidth = strokeWidth;
         this.startX = startX;
         this.startY = startY;
         this.EndX = EndX;
         this.EndY = EndY;
-        this.Color = Color;
     }
 
     public double getStrokeWidth() {
