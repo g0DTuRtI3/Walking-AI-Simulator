@@ -256,6 +256,13 @@ public class SimulationController {
         }
     }
 
+    private static void WorldToScreen() {
+
+    }
+
+    private static void ScreenToWorld() {
+    }
+
     private void showNeuralDisplay(Walker walker) {
         if (simulationPane.getChildren().contains(neuralDisplay)) {
             simulationPane.getChildren().remove(neuralDisplay);
