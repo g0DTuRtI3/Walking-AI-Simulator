@@ -3,6 +3,7 @@ package edu.vanier.map;
 import edu.vanier.core.NeuralNetwork;
 import edu.vanier.map.NodeModel;
 import edu.vanier.serialization.MyBasicModel;
+import edu.vanier.serialization.MyLine;
 import edu.vanier.serialization.MyNodeModel;
 import edu.vanier.serialization.MyWalker;
 import java.io.FileInputStream;
@@ -40,16 +41,15 @@ public class Walker implements Serializable{
         
         ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
         for (BasicModel basicModel : basicModels) {
-            MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(3));
-            MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), "tes");
-            MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, basicModel.getColor().toString().substring(4));
+            MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(2, 8));
+            MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), basicModel.getNextNode().getFill().toString().substring(2, 8));
+            MyLine serializeLine = new MyLine(basicModel.getLink().getStrokeWidth(), basicModel.getLink().getStartX(), basicModel.getLink().getStartY(), basicModel.getLink().getEndX(), basicModel.getLink().getEndY());
+            MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, serializeLine, basicModel.getColor().toString().substring(2, 8));
+            
+            serializeBasicModels.add(serializeModel);
         }
-//        System.out.println(walker);
-//        FileOutputStream fos = new FileOutputStream(file);
-//        ObjectOutputStream oos = new ObjectOutputStream(fos);
-//        oos.writeObject(walker);
-//        
-//        fos.close();
+        
+        serializeWalker.setBasicModels(serializeBasicModels);
     }
     
     public Object deserialize(String file) throws IOException, ClassNotFoundException{

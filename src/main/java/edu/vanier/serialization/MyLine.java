@@ -46,9 +46,4 @@ public class MyLine {
     public double getEndY() {
         return EndY;
     }
-
-    public String getColor() {
-        return Color;
-    }
-    
 }
