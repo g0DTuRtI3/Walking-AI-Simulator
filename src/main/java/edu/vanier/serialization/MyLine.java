@@ -15,6 +15,10 @@ public class MyLine {
     private double EndX;
     private double EndY;
     private String Color;
+    
+    public MyLine() {
+        
+    }
 
     public MyLine(double strokeWidth, double startX, double startY, double EndX, double EndY, String Color) {
         this.strokeWidth = strokeWidth;

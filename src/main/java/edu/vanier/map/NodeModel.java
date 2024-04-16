@@ -43,4 +43,26 @@ public class NodeModel extends javafx.scene.shape.Circle{
     public boolean equals(NodeModel model) {
         return (model.getCenterX() == centerX) && (model.getCenterY() == centerY);
     }
+
+    public static double getMass() {
+        return mass;
+    }
+
+    public double getSpeedX() {
+        return speedX;
+    }
+
+    public double getSpeedY() {
+        return speedY;
+    }
+
+    public Rigid2D getBody() {
+        return body;
+    }
+
+    public static double getBASELINE_OFFSET_SAME_AS_HEIGHT() {
+        return BASELINE_OFFSET_SAME_AS_HEIGHT;
+    }
+    
+    
 }

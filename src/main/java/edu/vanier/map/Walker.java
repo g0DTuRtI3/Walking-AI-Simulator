@@ -2,6 +2,9 @@ package edu.vanier.map;
 
 import edu.vanier.core.NeuralNetwork;
 import edu.vanier.map.NodeModel;
+import edu.vanier.serialization.MyBasicModel;
+import edu.vanier.serialization.MyNodeModel;
+import edu.vanier.serialization.MyWalker;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,12 +29,23 @@ public class Walker implements Serializable{
     private int fitnessScore;
     
     public void serialize(Object walker, String file) throws IOException{
-        System.out.println(walker);
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(walker);
+        MyWalker serializeWalker = new MyWalker();
+        serializeWalker.setBrain(brain);
+        serializeWalker.setFitnessScore(fitnessScore);
         
-        fos.close();
+        ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
+        for (BasicModel basicModel : basicModels) {
+            String str = basicModel.getColor().toString();
+            str.substring(3);
+            MyNodeModel serializeNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), file);
+        
+        }
+//        System.out.println(walker);
+//        FileOutputStream fos = new FileOutputStream(file);
+//        ObjectOutputStream oos = new ObjectOutputStream(fos);
+//        oos.writeObject(walker);
+//        
+//        fos.close();
     }
     
     public Object deserialize(String file) throws IOException, ClassNotFoundException{
