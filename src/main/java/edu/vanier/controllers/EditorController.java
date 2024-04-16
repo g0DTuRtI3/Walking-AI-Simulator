@@ -128,9 +128,6 @@ public class EditorController {
             label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
             learningRate = newValue.floatValue();
         });
-        
-        System.out.println(circleColor.toString().substring(2, 8));
-        System.out.println(editorCircle.getFill().toString().substring(2, 8));
     }
 
     @FXML

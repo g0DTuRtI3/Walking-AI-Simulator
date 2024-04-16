@@ -1,24 +1,18 @@
 package edu.vanier.map;
 
 import edu.vanier.core.NeuralNetwork;
-import edu.vanier.map.NodeModel;
 import edu.vanier.serialization.MyBasicModel;
 import edu.vanier.serialization.MyLine;
 import edu.vanier.serialization.MyNodeModel;
 import edu.vanier.serialization.MyWalker;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.DoubleStream;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
@@ -70,10 +64,6 @@ public class Walker implements Serializable{
 
     public Walker(BasicModel basicModel) {
         addBasicModel(basicModel);
-    }
-
-    public NeuralNetwork getBrain() {
-        return this.brain;
     }
 
     public void setBrain(NeuralNetwork brain) {
@@ -163,25 +153,12 @@ public class Walker implements Serializable{
         Walker.learningRate = learningRate;
     }
 
-    public int getFitnessScore() {
-
-        return this.fitnessScore;
-    }
-
     /**
      *
      * @param score
      */
     public void setFitnessScore(int score) {
         this.fitnessScore = score;
-    }
-
-    public ArrayList<BasicModel> getBasicModels() {
-        return basicModels;
-    }
-
-    public static float getLearningRate() {
-        return learningRate;
     }
 
     public void learningRate(float learningRate) {
@@ -208,6 +185,23 @@ public class Walker implements Serializable{
         }
 
         return nodeMap.keySet().size() * NodeModel.getMass();
+    }
+
+    public ArrayList<BasicModel> getBasicModels() {
+        return basicModels;
+    }
+
+    public static float getLearningRate() {
+        return learningRate;
+    }
+
+    public int getFitnessScore() {
+
+        return this.fitnessScore;
+    }
+
+    public NeuralNetwork getBrain() {
+        return this.brain;
     }
 
     public double getTrainedTime() {

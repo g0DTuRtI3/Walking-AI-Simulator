@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author 2253883
+ * @author Zeyu Huang
  */
 public class MyWalker implements Serializable{
     private ArrayList<MyBasicModel> basicModels = new ArrayList<>();

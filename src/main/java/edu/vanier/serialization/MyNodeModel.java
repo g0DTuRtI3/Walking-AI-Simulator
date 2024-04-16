@@ -2,7 +2,7 @@ package edu.vanier.serialization;
 
 /**
  *
- * @author 2253883
+ * @author Zeyu Huang
  */
 public class MyNodeModel extends MyCircle{
     private static double radius = 20;
