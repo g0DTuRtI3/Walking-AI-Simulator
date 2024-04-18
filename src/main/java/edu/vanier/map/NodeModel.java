@@ -13,6 +13,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
     private static double mass = 5; //Might become non-static in the future
     private double centerX;
     private double centerY;
+    private Color color;
     private double speedX = 0;
     private double speedY = 0;
     private double angle = 0;
@@ -22,6 +23,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
+        this.color = color;
     }
 
     public void updateNode(double deltaTime) {
@@ -130,5 +132,13 @@ public class NodeModel extends javafx.scene.shape.Circle {
 
     public static double getMass() {
         return mass;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public String getHexColor() {
+        return color.toString().substring(2, 8);
     }
 }

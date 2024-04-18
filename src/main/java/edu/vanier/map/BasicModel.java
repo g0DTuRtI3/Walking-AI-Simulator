@@ -8,7 +8,7 @@ import javafx.scene.shape.Line;
  *
  * @author YOUSSEF
  */
-public class BasicModel implements Serializable{
+public class BasicModel implements Serializable {
 
     private static double strokeWidth = 10;
 
@@ -40,13 +40,17 @@ public class BasicModel implements Serializable{
     public Line getLink() {
         return link;
     }
-    
+
     public Color getColor() {
         return color;
     }
-    
+
     public void setColor(Color color) {
-        this.color = color;        
+        this.color = color;
+    }
+
+    public void setColor(String hexColor) {
+        color = Color.web(hexColor);
     }
 
     public void updateLink() {
@@ -59,7 +63,7 @@ public class BasicModel implements Serializable{
     public double getRadAngle() {
         System.out.println("in rad angle");
         System.out.println(nextNode.getCenterX());
-        double adjacent = nextNode.getCenterX()- prevNode.getCenterX();
+        double adjacent = nextNode.getCenterX() - prevNode.getCenterX();
         double opposite = nextNode.getCenterY() - nextNode.getCenterY();
         double angleRad;
         try {
@@ -75,44 +79,44 @@ public class BasicModel implements Serializable{
         } else if (opposite < 0) {
             return (2 * Math.PI) - angleRad;
         }
-        
+
         return angleRad;
     }
-    
+
     public void updateNextNode(BasicModel basicModel, double force, double time) {
-        
+
         nextNode.setForce(force, time, basicModel);
         updateLink();
-        
+
     }
-    
+
     public void updatePreviousNode(BasicModel basicModel, double force, double time) {
-        
+
         prevNode.setForce(force, time, basicModel);
         updateLink();
-        
+
     }
-    
+
     public NodeModel getNode(NodeModel nodeModel) {
-        
+
         if (nodeModel == nextNode) {
             return nextNode;
         }
-        
+
         return prevNode;
     }
-    
+
     public NodeModel getOtherNode(NodeModel nodeModel) {
-        
+
         if (nodeModel == nextNode) {
             return prevNode;
         }
-        
+
         return nextNode;
     }
-    
+
     public double getLinkMagnitude() {
-        return Math.sqrt(Math.pow((link.getStartX()-link.getEndX()),2) + Math.pow((link.getStartY()-link.getEndY()),2));
+        return Math.sqrt(Math.pow((link.getStartX() - link.getEndX()), 2) + Math.pow((link.getStartY() - link.getEndY()), 2));
     }
-    
+
 }

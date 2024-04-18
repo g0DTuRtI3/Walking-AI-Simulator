@@ -28,23 +28,23 @@ public class Walker implements Serializable{
     private int fitnessScore;
     private double trainedTime = 0;
     
-    public void serialize(Object walker, String file) throws IOException{
-        MyWalker serializeWalker = new MyWalker();
-        serializeWalker.setBrain(brain);
-        serializeWalker.setFitnessScore(fitnessScore);
-        
-        ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
-        for (BasicModel basicModel : basicModels) {
-            MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(2, 8));
-            MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), basicModel.getNextNode().getFill().toString().substring(2, 8));
-            MyLine serializeLine = new MyLine(basicModel.getLink().getStrokeWidth(), basicModel.getLink().getStartX(), basicModel.getLink().getStartY(), basicModel.getLink().getEndX(), basicModel.getLink().getEndY());
-            MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, serializeLine, basicModel.getColor().toString().substring(2, 8));
-            
-            serializeBasicModels.add(serializeModel);
-        }
-        
-        serializeWalker.setBasicModels(serializeBasicModels);
-    }
+//    public void serialize(Object walker, String file) throws IOException{
+//        MyWalker serializeWalker = new MyWalker();
+//        serializeWalker.setBrain(brain);
+//        serializeWalker.setFitnessScore(fitnessScore);
+//        
+//        ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
+//        for (BasicModel basicModel : basicModels) {
+//            MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(2, 8));
+//            MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), basicModel.getNextNode().getFill().toString().substring(2, 8));
+//            MyLine serializeLine = new MyLine(basicModel.getLink().getStrokeWidth(), basicModel.getLink().getStartX(), basicModel.getLink().getStartY(), basicModel.getLink().getEndX(), basicModel.getLink().getEndY());
+//            MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, serializeLine, basicModel.getColor().toString().substring(2, 8));
+//            
+//            serializeBasicModels.add(serializeModel);
+//        }
+//        
+//        serializeWalker.setBasicModels(serializeBasicModels);
+//    }
     
     public Object deserialize(String file) throws IOException, ClassNotFoundException{
         FileInputStream fis = new FileInputStream(file);
@@ -210,6 +210,10 @@ public class Walker implements Serializable{
 
     public void setTrainedTime(double trainedTime) {
         this.trainedTime = trainedTime;
+    }
+    
+    public void setBasicModels(ArrayList<BasicModel> basicModels) {
+        this.basicModels = basicModels;
     }
 
 }

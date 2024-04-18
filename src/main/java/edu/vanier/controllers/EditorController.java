@@ -1,6 +1,10 @@
 package edu.vanier.controllers;
 
 import edu.vanier.map.*;
+import edu.vanier.serialization.MyBasicModel;
+import edu.vanier.serialization.MyLine;
+import edu.vanier.serialization.MyNodeModel;
+import edu.vanier.serialization.MyWalker;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
@@ -207,7 +211,7 @@ public class EditorController {
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
-        walker.serialize(walker, "yes");
+//        walker.serialize(walker, "yes");
         double xtranslate = walker.getBasicModels().get(0).getPrevNode().getCenterX();
         double ytranslate = walker.getBasicModels().get(0).getPrevNode().getCenterY();
         mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate, xtranslate, ytranslate));
@@ -346,6 +350,44 @@ public class EditorController {
     private void removeCircle(MouseEvent event) {
         Circle circle = (Circle) event.getTarget();
         editorPane.getChildren().remove(circle);
+    }
+
+    private MyWalker saveModel() {
+        if (walker == null) {
+            return null;
+        }
+
+        MyWalker serializeWalker = new MyWalker();
+        serializeWalker.setBrain(walker.getBrain());
+        serializeWalker.setFitnessScore(walker.getFitnessScore());
+
+        ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
+        for (BasicModel basicModel : walker.getBasicModels()) {
+            MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(2, 8));
+            MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), basicModel.getNextNode().getFill().toString().substring(2, 8));
+            MyLine serializeLine = new MyLine(basicModel.getLink().getStrokeWidth(), basicModel.getLink().getStartX(), basicModel.getLink().getStartY(), basicModel.getLink().getEndX(), basicModel.getLink().getEndY());
+            MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, serializeLine, basicModel.getColor().toString().substring(2, 8));
+
+            serializeBasicModels.add(serializeModel);
+        }
+
+        serializeWalker.setBasicModels(serializeBasicModels);
+
+        return serializeWalker;
+    }
+
+    private Walker loadModel(MyWalker serializedWalker) {
+        Walker load = new Walker();
+
+        load.setBrain(serializedWalker.getBrain());
+        load.setFitnessScore(serializedWalker.getFitnessScore());
+        ArrayList<BasicModel> basicModels = new ArrayList<>();
+
+        for (MyBasicModel myBasicModel : serializedWalker.getBasicModels()) {
+            NodeModel prevNode = new NodeModel(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), Color.web(myBasicModel.getPrevNode().getHexColor()));
+        }
+
+        return load;
     }
 
 //    // A method that makes the shapes draggable
