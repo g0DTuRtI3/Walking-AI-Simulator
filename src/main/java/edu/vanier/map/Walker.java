@@ -78,10 +78,6 @@ public class Walker implements Serializable{
         return returnedLinks;
     }
 
-    public Walker(ArrayList<BasicModel> basicModels) {
-        this.basicModels.addAll(basicModels);
-    }
-
     public Walker(BasicModel basicModel) {
         addBasicModel(basicModel);
     }
@@ -98,8 +94,8 @@ public class Walker implements Serializable{
             allLayersList.add(nbNeurons);
         }
 
-        allLayersList.addFirst(linksOfWalker.size());
-        allLayersList.addLast(linksOfWalker.size());
+        allLayersList.addFirst(this.getAllNodes().size());
+        allLayersList.addLast(this.getAllNodes().size());
 
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -147,8 +143,10 @@ public class Walker implements Serializable{
     }
 
     public static double multiplyVectors(double[] a, double[] b) {
-        
-       if (a.length != b.length) {
+        System.out.println(a.length);
+        System.out.println(b.length);
+        System.out.println("");
+        if (a.length != b.length) {
             throw new IllegalArgumentException("Input vectors must have the same length");
         }
 
@@ -196,14 +194,7 @@ public class Walker implements Serializable{
     }
 
     public double getMass() {
-        double mass = 0;
-        Map<NodeModel, Double> nodeMap = new HashMap<>();
-        for (BasicModel bm : this.basicModels) {
-            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
-            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
-        }
-
-        return nodeMap.keySet().size() * NodeModel.getMass();
+        return this.getAllNodes().size() * NodeModel.getMass();
     }
 
     public ArrayList<BasicModel> getBasicModels() {
@@ -235,10 +226,15 @@ public class Walker implements Serializable{
         ArrayList<BasicModel> returnedBasicModels = new ArrayList<>();
         for (BasicModel bm : this.basicModels) {
             BasicModel newBasicModel = new BasicModel(new NodeModel(bm.getPrevNode().getCenterX(), bm.getPrevNode().getCenterY(), bm.getPrevNode().getColor()),
-                     new NodeModel(bm.getNextNode().getCenterX(), bm.getNextNode().getCenterY(), bm.getNextNode().getColor()), bm.getColor());
+                    new NodeModel(bm.getNextNode().getCenterX(), bm.getNextNode().getCenterY(), bm.getNextNode().getColor()), bm.getColor());
             returnedBasicModels.add(newBasicModel);
         }
         return returnedBasicModels;
+    }
+
+    public void setOpacity(double percent) {
+        this.getAllLinks().forEach(link -> link.setOpacity(percent));
+        this.getAllNodes().forEach(node -> node.setOpacity(percent));
     }
 
 }

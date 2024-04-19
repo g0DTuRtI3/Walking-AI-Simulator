@@ -60,6 +60,7 @@ public class NeuralNetwork {
      * @return
      */
     public double[] predict(double[] input) {
+        
         activations[0] = input;
         for (int i = 0; i < hiddenLayers.length; i++) {
             activations[i + 1] = hiddenLayers[i].activate(activations[i]);

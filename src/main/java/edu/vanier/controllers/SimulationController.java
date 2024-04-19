@@ -20,7 +20,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -56,6 +59,12 @@ public class SimulationController {
     private Pane simulationPane;
 
     @FXML
+    private TitledPane networkPane;
+
+    @FXML
+    private TitledPane physicGraphPane;
+    
+    @FXML
     private Button btn_BackToEditor;
 
     @FXML
@@ -81,7 +90,8 @@ public class SimulationController {
 
     @FXML
     private Text txt_IsTraining;
-
+    @FXML
+    private VBox physicalGraphVBox;
     private int[] layers = {4, 8, 2};
     private long previousTime = -1;
 
@@ -126,6 +136,7 @@ public class SimulationController {
                     bestWalker = walk;
                     bestDistance = walk.getPosition();
                     bestWalker.setFitnessScore(bestWalker.getFitnessScore() + 1);
+                    walk.setOpacity(1);
                 }
 
 //                for (BasicModel model : walk.getBasicModels()) {
@@ -238,20 +249,13 @@ public class SimulationController {
 
     private void moveWalker() {
 
-
         for (Walker w : walkers) {
-            HashSet<NodeModel> nodes = new HashSet<>();
-            for (BasicModel bm : w.getBasicModels()) {
-                nodes.add(bm.getNextNode());
-                nodes.add(bm.getPrevNode());
-                w.updateWalker();
-                System.out.println(w.getBrain());
-            }
+            HashSet<NodeModel> nodes = w.getAllNodes();
+
             double[] forcesOnNodes = new double[nodes.size()];
-            for (int i = 0; i < w.getBasicModels().size(); i++) {
+            for (int i = 0; i < w.getAllNodes().size(); i++) {
 
                 //put all force on every node in every []
-
                 forcesOnNodes[i] = 10 * Math.random();
 
             }
@@ -285,8 +289,7 @@ public class SimulationController {
 
     @FXML
     void initialize() {
-        PerspectiveCamera camera = new PerspectiveCamera(true);
-        simulationPane.getChildren().add(camera);
+
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
@@ -315,7 +318,7 @@ public class SimulationController {
             }*/
             simulationPane.getChildren().addAll(w.getAllLinks());
             simulationPane.getChildren().addAll(w.getAllNodes());
-
+            w.setOpacity(0.5);
         }
         timer.start();
     }
