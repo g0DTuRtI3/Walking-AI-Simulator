@@ -38,7 +38,7 @@ public class MainApp extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setMaximized(false);
-            primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
             // We just need to bring the main window to front.
             primaryStage.setAlwaysOnTop(true);
             primaryStage.setTitle("Model Editor");
