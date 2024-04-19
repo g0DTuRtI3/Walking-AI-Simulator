@@ -115,15 +115,14 @@ public class Walker {
     }
 
     public void updateWalker() {
-
         for (BasicModel basicModel : basicModels) {
             basicModel.updateLink();
         }
     }
 
     public static double multiplyVectors(double[] a, double[] b) {
-
-        if (a.length != b.length) {
+        
+       if (a.length != b.length) {
             throw new IllegalArgumentException("Input vectors must have the same length");
         }
 

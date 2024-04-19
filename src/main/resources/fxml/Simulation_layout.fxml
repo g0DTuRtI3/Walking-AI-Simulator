@@ -52,7 +52,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefWidth="100.0">
                      <children>
-                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                            <font>
                               <Font name="Cooper Black" size="19.0" />
                            </font>
@@ -85,7 +85,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <LineChart fx:id="chart_Physics1" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" title="velocity vs time" AnchorPane.rightAnchor="0.0">
+                              <LineChart fx:id="chart_Physics1" animated="false" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" title="velocity vs time" AnchorPane.rightAnchor="0.0">
                                 <xAxis>
                                   <NumberAxis label="time(s)" side="BOTTOM" />
                                 </xAxis>
