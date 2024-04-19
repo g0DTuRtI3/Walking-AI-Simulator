@@ -10,13 +10,14 @@ import javafx.scene.shape.Line;
  */
 public class NodeModel extends javafx.scene.shape.Circle {
 
+    
     private static double radius = 25;
     private static double mass = 5; //Might become non-static in the future
-    private double centerX;
-    private double centerY;
+    //this was added since getColor is somehow not present in the Circle Class of Java...
+    private Color color;
     private double speedX = 0;
     private double speedY = 0;
-
+    
     private double angle = 0;
     private boolean nodeMoved = false;
 
@@ -25,8 +26,12 @@ public class NodeModel extends javafx.scene.shape.Circle {
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
+        
+        this.color = color;
     }
-
+public Color getColor(){
+    return this.color;
+}
     public static double getMass() {
         return mass;
     }
@@ -132,6 +137,6 @@ public class NodeModel extends javafx.scene.shape.Circle {
     }
 
     public boolean equals(NodeModel model) {
-        return (model.getCenterX() == centerX) && (model.getCenterY() == centerY);
+        return (model.getCenterX() == super.getCenterX()) && (model.getCenterY() == super.getCenterY());
     }
 }

@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import javafx.scene.shape.Line;
 
 /**
  *
@@ -26,6 +28,24 @@ public class Walker {
 
     public Walker() {
 
+    }
+
+    public HashSet<NodeModel> getAllNodes() {
+        HashSet<NodeModel> returnedNodes = new HashSet<>();
+        for (BasicModel bm : this.basicModels) {
+            returnedNodes.add(bm.getPrevNode());
+            returnedNodes.add(bm.getNextNode());
+        }
+
+        return returnedNodes;
+    }
+
+    public HashSet<Line> getAllLinks() {
+        HashSet<Line> returnedLinks = new HashSet<>();
+        for (BasicModel bm : this.basicModels) {
+            returnedLinks.add(bm.getLink());
+        }
+        return returnedLinks;
     }
 
     public Walker(ArrayList<BasicModel> basicModels) {
@@ -46,14 +66,14 @@ public class Walker {
 
     public Walker(ArrayList<BasicModel> linksOfWalker, int[] layers) {
         this.basicModels.addAll(linksOfWalker);
-        Deque<Integer> allLayersList = new ArrayDeque<Integer>();
+        Deque<Integer> allLayersList = new ArrayDeque<>();
 
         for (int nbNeurons : layers) {
             allLayersList.add(nbNeurons);
         }
 
-        allLayersList.addFirst(linksOfWalker.size() + 1);
-        allLayersList.addLast(linksOfWalker.size() + 1);
+        allLayersList.addFirst(linksOfWalker.size());
+        allLayersList.addLast(linksOfWalker.size());
 
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -180,6 +200,16 @@ public class Walker {
 
     public void setTrainedTime(double trainedTime) {
         this.trainedTime = trainedTime;
+    }
+
+    public ArrayList<BasicModel> getBasicModelsONLYATTRIBUTES() {
+        ArrayList<BasicModel> returnedBasicModels = new ArrayList<>();
+        for (BasicModel bm : this.basicModels) {
+            BasicModel newBasicModel = new BasicModel(new NodeModel(bm.getPrevNode().getCenterX(), bm.getPrevNode().getCenterY(), bm.getPrevNode().getColor()),
+                     new NodeModel(bm.getNextNode().getCenterX(), bm.getNextNode().getCenterY(), bm.getNextNode().getColor()), bm.getColor());
+            returnedBasicModels.add(newBasicModel);
+        }
+        return returnedBasicModels;
     }
 
 }
