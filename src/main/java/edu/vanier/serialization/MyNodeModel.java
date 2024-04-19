@@ -1,10 +1,12 @@
 package edu.vanier.serialization;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Zeyu Huang
  */
-public class MyNodeModel {
+public class MyNodeModel implements Serializable{
 
     private static double radius = 20;
     private static double mass = 5; //Might become non-static in the future

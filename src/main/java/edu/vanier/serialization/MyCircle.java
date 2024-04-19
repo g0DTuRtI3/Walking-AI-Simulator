@@ -1,10 +1,12 @@
 package edu.vanier.serialization;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Zeyu Huang
  */
-public class MyCircle {
+public class MyCircle implements Serializable{
     private double centerX;
     private double centerY;
     private double radius;

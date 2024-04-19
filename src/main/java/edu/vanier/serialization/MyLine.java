@@ -1,10 +1,12 @@
 package edu.vanier.serialization;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Zeyu Huang
  */
-public class MyLine {
+public class MyLine implements Serializable{
     private double strokeWidth;
     private double startX;
     private double startY;

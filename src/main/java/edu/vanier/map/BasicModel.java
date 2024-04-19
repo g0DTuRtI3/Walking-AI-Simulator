@@ -8,7 +8,7 @@ import javafx.scene.shape.Line;
  *
  * @author YOUSSEF
  */
-public class BasicModel implements Serializable {
+public class BasicModel {
 
     private static double strokeWidth = 10;
 

@@ -1,10 +1,12 @@
 package edu.vanier.serialization;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Zeyu Huang
  */
-public class MyBasicModel {
+public class MyBasicModel implements Serializable{
 
     private static double strokeWidth = 10;
 

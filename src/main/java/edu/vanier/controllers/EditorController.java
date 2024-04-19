@@ -5,8 +5,11 @@ import edu.vanier.serialization.MyBasicModel;
 import edu.vanier.serialization.MyLine;
 import edu.vanier.serialization.MyNodeModel;
 import edu.vanier.serialization.MyWalker;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,8 +29,8 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-    private final int circleRadius = 20;
-    private final int circleSocialDistancing = 10;
+    private final static int CIRCLE_RADIUS = 20;
+    private final static int CIRCLE_SOCIAL_DISTANCING = 10;
     private int nbModel = 10;
     private int interval = 10;
     private float learningRate = 0.3f;
@@ -47,6 +50,7 @@ public class EditorController {
     private NodeModel nextNode;
     private Stage primaryStage;
     private Walker walker = new Walker();
+    private MyWalker seriWalker;
 
     @FXML
     private Button btn_Clear;
@@ -178,7 +182,10 @@ public class EditorController {
 
     @FXML
     void loadOnAction(ActionEvent event) {
+        walker = loadModel(seriWalker);
 
+        for (BasicModel basicModel : walker.getBasicModels()) {
+        }
     }
 
     @FXML
@@ -203,8 +210,9 @@ public class EditorController {
     }
 
     @FXML
-    void saveOnAction(ActionEvent event) {
-
+    void saveOnAction(ActionEvent event) throws IOException {
+        seriWalker = saveModel();
+        System.out.println(serialize(seriWalker));
     }
 
     // Switches to the simulation scene
@@ -251,8 +259,8 @@ public class EditorController {
     private void addCircle(MouseEvent event) {
         boolean isTouching = false;
 
-        if (event.getX() > circleRadius && event.getY() > circleRadius && event.getX() < (editorPane.getWidth() - circleRadius) && event.getY() < (editorPane.getHeight() - circleRadius)) {
-            Circle circle = new Circle(event.getX(), event.getY(), circleRadius, circleColor);
+        if (event.getX() > CIRCLE_RADIUS && event.getY() > CIRCLE_RADIUS && event.getX() < (editorPane.getWidth() - CIRCLE_RADIUS) && event.getY() < (editorPane.getHeight() - CIRCLE_RADIUS)) {
+            Circle circle = new Circle(event.getX(), event.getY(), CIRCLE_RADIUS, circleColor);
 
             if (circle_list.isEmpty()) {
                 circle_list.add(circle);
@@ -275,7 +283,7 @@ public class EditorController {
 
     private boolean isCircleTouching(Circle oldCircle, Circle newCircle) {
         boolean xTouching = false;
-        int distance = circleRadius * 2 + circleSocialDistancing;
+        int distance = CIRCLE_RADIUS * 2 + CIRCLE_SOCIAL_DISTANCING;
         if ((oldCircle.getCenterX() + distance) > newCircle.getCenterX() && (oldCircle.getCenterX() - distance) < newCircle.getCenterX()) {
             xTouching = true;
         }
@@ -332,9 +340,7 @@ public class EditorController {
             } else {
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             }
-
             circle1.setFill(ogColor);
-            walker.addBasicModel(basicModel);
 
             circle1 = null;
             circle2 = null;
@@ -353,10 +359,6 @@ public class EditorController {
     }
 
     private MyWalker saveModel() {
-        if (walker == null) {
-            return null;
-        }
-
         MyWalker serializeWalker = new MyWalker();
         serializeWalker.setBrain(walker.getBrain());
         serializeWalker.setFitnessScore(walker.getFitnessScore());
@@ -377,6 +379,7 @@ public class EditorController {
     }
 
     private Walker loadModel(MyWalker serializedWalker) {
+        clearPane();
         Walker load = new Walker();
 
         load.setBrain(serializedWalker.getBrain());
@@ -385,9 +388,30 @@ public class EditorController {
 
         for (MyBasicModel myBasicModel : serializedWalker.getBasicModels()) {
             NodeModel prevNode = new NodeModel(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), Color.web(myBasicModel.getPrevNode().getHexColor()));
+            NodeModel nextNode = new NodeModel(myBasicModel.getNextNode().getCenterX(), myBasicModel.getNextNode().getCenterY(), Color.web(myBasicModel.getNextNode().getHexColor()));
+            Color color = Color.web(myBasicModel.getColor());
+            BasicModel loadModel = new BasicModel(prevNode, nextNode, color);
+
+            Circle prevCircle = new Circle(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), CIRCLE_RADIUS, Color.web(myBasicModel.getPrevNode().getHexColor()));
+            Circle nextCircle = new Circle(myBasicModel.getNextNode().getCenterX(), myBasicModel.getNextNode().getCenterY(), CIRCLE_RADIUS, Color.web(myBasicModel.getNextNode().getHexColor()));
+            editorPane.getChildren().addAll(loadModel.getLink(), prevCircle, nextCircle);
+
+            load.getBasicModels().add(loadModel);
         }
 
         return load;
+    }
+
+    /*
+    * REF:https://www.baeldung.com/java-serial-version-uid
+    */
+    public String serialize(MyWalker serializableWalker) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(serializableWalker);
+        oos.close();
+
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
     }
 
 //    // A method that makes the shapes draggable

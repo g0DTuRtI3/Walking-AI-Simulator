@@ -1,1 +1,4 @@
+DataBase:
 https://www.digitalocean.com/community/tutorials/serialization-in-java
+https://stackoverflow.com/questions/5080438/storing-serializable-objects-in-the-database
+https://www.baeldung.com/java-serial-version-uid

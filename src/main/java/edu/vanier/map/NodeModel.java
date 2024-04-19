@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 public class NodeModel extends javafx.scene.shape.Circle {
 
     
-    private static double radius = 25;
+    private static double radius = 20;
     private static double mass = 5; //Might become non-static in the future
     private double centerX;
     private double centerY;
