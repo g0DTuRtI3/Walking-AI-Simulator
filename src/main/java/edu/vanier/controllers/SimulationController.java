@@ -10,6 +10,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
@@ -193,12 +194,12 @@ public class SimulationController {
         walkers = new Walker[nbModel];
 
         for (int i = 0; i < nbModel; i++) {
-            Walker walkerI = new Walker(walker.getBasicModels(), layers);
+            Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers);
             walkerI.learningRate(learningRate);
             walkers[i] = walkerI;
 
             for (BasicModel b : walkers[i].getBasicModels()) {
-                //simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
+
                 b.getLink().setOnMouseClicked(mouseE -> {
                     showNeuralDisplay(walkerI);
                 });
@@ -237,6 +238,7 @@ public class SimulationController {
 
     private void moveWalker() {
 
+
         for (Walker w : walkers) {
             HashSet<NodeModel> nodes = new HashSet<>();
             for (BasicModel bm : w.getBasicModels()) {
@@ -247,7 +249,11 @@ public class SimulationController {
             }
             double[] forcesOnNodes = new double[nodes.size()];
             for (int i = 0; i < w.getBasicModels().size(); i++) {
+
+                //put all force on every node in every []
+
                 forcesOnNodes[i] = 10 * Math.random();
+
             }
             //all forces that walker will apply on every Node
             double[] predictions = w.getBrain().predict(forcesOnNodes);
@@ -279,15 +285,17 @@ public class SimulationController {
 
     @FXML
     void initialize() {
-
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        simulationPane.getChildren().add(camera);
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
         for (Walker w : walkers) {
             w.setTranslateX(initialXPos);
             w.setTranslateY(initialYPos);
+
             tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
-            for (BasicModel b : w.getBasicModels()) {
+            /*for (BasicModel b : w.getBasicModels()) {
 
                 if (!simulationPane.getChildren().contains(b.getNextNode())) {
                     simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
@@ -304,7 +312,10 @@ public class SimulationController {
                 } else if (!simulationPane.getChildren().contains(b.getLink())) {
                     simulationPane.getChildren().addAll(b.getLink());
                 }
-            }
+            }*/
+            simulationPane.getChildren().addAll(w.getAllLinks());
+            simulationPane.getChildren().addAll(w.getAllNodes());
+
         }
         timer.start();
     }
