@@ -5,8 +5,10 @@ import edu.vanier.serialization.MyBasicModel;
 import edu.vanier.serialization.MyLine;
 import edu.vanier.serialization.MyNodeModel;
 import edu.vanier.serialization.MyWalker;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -51,6 +53,9 @@ public class EditorController {
     private Stage primaryStage;
     private Walker walker = new Walker();
     private MyWalker seriWalker;
+    
+    // delete str when done
+    String str = "";
 
     @FXML
     private Button btn_Clear;
@@ -181,11 +186,10 @@ public class EditorController {
     }
 
     @FXML
-    void loadOnAction(ActionEvent event) {
+    void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        seriWalker = (MyWalker)deSerializeObjectFromString(str);
         walker = loadModel(seriWalker);
-
-        for (BasicModel basicModel : walker.getBasicModels()) {
-        }
+        System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
     }
 
     @FXML
@@ -212,7 +216,9 @@ public class EditorController {
     @FXML
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
-        System.out.println(serialize(seriWalker));
+        String str = serialize(seriWalker);
+        System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
+        System.out.println(str);
     }
 
     // Switches to the simulation scene
@@ -404,14 +410,28 @@ public class EditorController {
 
     /*
     * REF:https://www.baeldung.com/java-serial-version-uid
-    */
+     */
     public String serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(serializableWalker);
         oos.close();
-
+        
+        System.out.println("byte: " + baos.toByteArray());
         return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
+
+    /*
+    * REF:https://www.baeldung.com/java-serial-version-uid
+     */
+    public static Object deSerializeObjectFromString(String s) throws IOException, ClassNotFoundException {
+
+        byte[] data = Base64.getDecoder().decode(s);
+        System.out.println("data: " + data);
+        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+        Object o = ois.readObject();
+        ois.close();
+        return o;
     }
 
 //    // A method that makes the shapes draggable
