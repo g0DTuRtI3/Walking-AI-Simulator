@@ -55,6 +55,8 @@ public class Walker implements Serializable{
         ois.close();
         return obj;
     } 
+    private double elapsedTime = 0;
+
 
     public Walker() {
 
@@ -128,16 +130,18 @@ public class Walker implements Serializable{
 
     public void movePrevious(BasicModel basicModel, double force, double time) {
         //basicModel.getPrevNode().setForce(basicModel, force, time, basicModel.getNextNode());
-        basicModel.updateNextNode(basicModel, force, time);
+        basicModel.updatePreviousNode(basicModel, force, time);
     }
 
     public void moveNext(BasicModel basicModel, double force, double time) {
         //basicModel.getNextNode().setForce(basicModel, force, time, basicModel.getPrevNode());
-        basicModel.updatePreviousNode(basicModel, force, time);
+        basicModel.updateNextNode(basicModel, force, time);
     }
 
     public void updateWalker() {
         for (BasicModel basicModel : basicModels) {
+            basicModel.updateNextNode(basicModel, basicModel.getNextForce(), elapsedTime);
+            basicModel.updatePreviousNode(basicModel, basicModel.getPreviousForce(), elapsedTime);
             basicModel.updateLink();
         }
     }
@@ -220,7 +224,6 @@ public class Walker implements Serializable{
     public void setTrainedTime(double trainedTime) {
         this.trainedTime = trainedTime;
     }
-
     public ArrayList<BasicModel> getBasicModelsONLYATTRIBUTES() {
         ArrayList<BasicModel> returnedBasicModels = new ArrayList<>();
         for (BasicModel bm : this.basicModels) {
@@ -234,6 +237,15 @@ public class Walker implements Serializable{
     public void setOpacity(double percent) {
         this.getAllLinks().forEach(link -> link.setOpacity(percent));
         this.getAllNodes().forEach(node -> node.setOpacity(percent));
+        
+    }
+
+    public double getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(double elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
 }
