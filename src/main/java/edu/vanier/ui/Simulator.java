@@ -7,11 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import edu.vanier.physics.Vector2D;
-import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 
 /**

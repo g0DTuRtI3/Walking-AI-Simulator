@@ -6,9 +6,6 @@ import java.util.Deque;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.DoubleStream;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
@@ -23,6 +20,7 @@ public class Walker {
     private static float learningRate = 0.3f;
     private int fitnessScore;
     private double trainedTime = 0;
+    private double elapsedTime = 0;
 
     public Walker() {
 
@@ -86,17 +84,19 @@ public class Walker {
 
     public void movePrevious(BasicModel basicModel, double force, double time) {
         //basicModel.getPrevNode().setForce(basicModel, force, time, basicModel.getNextNode());
-        basicModel.updateNextNode(basicModel, force, time);
+        basicModel.updatePreviousNode(basicModel, force, time);
     }
 
     public void moveNext(BasicModel basicModel, double force, double time) {
         //basicModel.getNextNode().setForce(basicModel, force, time, basicModel.getPrevNode());
-        basicModel.updatePreviousNode(basicModel, force, time);
+        basicModel.updateNextNode(basicModel, force, time);
     }
 
     public void updateWalker() {
 
         for (BasicModel basicModel : basicModels) {
+            basicModel.updateNextNode(basicModel, basicModel.getNextForce(), elapsedTime);
+            basicModel.updatePreviousNode(basicModel, basicModel.getPreviousForce(), elapsedTime);
             basicModel.updateLink();
         }
     }
@@ -180,6 +180,14 @@ public class Walker {
 
     public void setTrainedTime(double trainedTime) {
         this.trainedTime = trainedTime;
+    }
+
+    public double getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(double elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
 }

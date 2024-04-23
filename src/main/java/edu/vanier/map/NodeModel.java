@@ -2,7 +2,6 @@ package edu.vanier.map;
 
 import edu.vanier.physics.Vector2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 /**
  *
@@ -12,126 +11,117 @@ public class NodeModel extends javafx.scene.shape.Circle {
 
     private static double radius = 25;
     private static double mass = 5; //Might become non-static in the future
+    private double deltaTime = 0;
     private double centerX;
     private double centerY;
-    private double speedX = 0;
-    private double speedY = 0;
-
+    private double w = 0;
+    private double prevW = 0;
+    private double currentTime = 0;
+    private double alpha = 100;
     private double angle = 0;
+    private double correctionAngle = 0;
     private boolean nodeMoved = false;
-
-    private double vf = 0;
-    private double vi = 0;
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
     }
-
-    public static double getMass() {
-        return mass;
-    }
-
-    public void updateNode(double deltaTime) {
-        // F_x = m*a_x
-        // a_x = F_x/m
-        // a_x = (v_f_x - v_i_x) / t (v_i_x: this.speed) 
-        // v_f = v_i_x + a_x*t  t-> animation Timer time diff;
-        //same thing for y component
-
-//   speed = 0;
-        //public void updateNode(double deltaTime) {
-//        // F_x = m*a_x
-//        // a_x = F_x/m
-//        // a_x = (v_f_x - v_i_x) / t (v_i_x: this.speed) 
-//        // v_f = v_i_x + a_x*t  t-> animation Timer time diff;
-//        //same thing for y component
-//
-//        double accelerationOnX = body.getFinalForce().getX() / mass;
-//        double accelerationOnY = body.getFinalForce().getY() / mass;
-//
-//        this.speedX =+ accelerationOnX * deltaTime;
-//        this.speedY =+ accelerationOnY * deltaTime;
-//        
-//
-//    }
-//    public Vector2D getFinalForce() {
-//        Vector2D finalForce = new Vector2D(0, 0);
-//
-//        for (int i = 0; i < forces.size(); i++) {
-//            finalForce.add(forces.get(i));
-//        }
-//
-//        return finalForce;
-//
-//    }
-//    public void updateForce() {
-//        forces.add(getFinalForce().opposite());
-//    }
-    }
-
-    public void setForce(double force, double time, BasicModel basicModel) {
-
-        Vector2D linkVec = new Vector2D();
-        Vector2D nodeVec = new Vector2D(this.getRadius(), 0);
-        double linkLength = basicModel.getLinkMagnitude();
-        NodeModel node = basicModel.getNode(this);
+    
+    public void updateNode(BasicModel basicModel) {
         NodeModel otherNode = basicModel.getOtherNode(this);
-
-        if (node == basicModel.getNextNode()) {
-
-            linkVec = new Vector2D(this.getCenterX() - otherNode.getCenterX(), this.getCenterY() - otherNode.getCenterY());
-
-            if (otherNode.nodeMoved) {
-                //angle = otherNode.angle - 180;
+        double linkLength = basicModel.getLinkMagnitude();
+        //alpha -= (prevW) / (getDeltaTime(currentTime)/1e9);
+        alpha -= 10;
+        angle = w + alpha;
+        //currentTime = System.nanoTime();
+        this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
+        this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
+    }
+    
+    public void setForce(double force, double time, BasicModel basicModel) {
+        
+        NodeModel thisNode = basicModel.getNode(this);
+        NodeModel otherNode = basicModel.getOtherNode(this);
+        double linkLength = basicModel.getLinkMagnitude();
+        
+        deltaTime = getDeltaTime(currentTime);
+        
+        if (otherNode.nodeMoved) {
+            if (otherNode.correctionAngle > this.correctionAngle ) {
+                correctionAngle = (otherNode.angle + otherNode.correctionAngle) - 180 - angle;
+                otherNode.nodeMoved = false;
+            }else {
+                correctionAngle = (otherNode.angle + otherNode.correctionAngle) + 180 - angle;
                 otherNode.nodeMoved = false;
             }
-
-        } else if (node == basicModel.getPrevNode()) {
-
-            linkVec = new Vector2D(otherNode.getCenterX() - this.getCenterX(), otherNode.getCenterY() - this.getCenterY());
-
-            if (otherNode.nodeMoved) {
-                //angle = otherNode.angle + 180;
-                otherNode.nodeMoved = false;
-            }
-
         }
+        
+        double a = force / mass; // F = ma
+        System.out.println("a: " + a);
+        double v = Math.sqrt(Math.abs(a*linkLength)); // a = v^2/r
+        System.out.println("v: " + v);
+        
+        if (w > 0) {
+            if (v/linkLength > prevW) {
+                alpha += (v/linkLength - prevW) / (deltaTime/1e9);
+                System.out.println("alpha: " + alpha);
+                System.out.println("deltaTime: " + deltaTime/1e9);
+            }else {
+                alpha -= (prevW) / (deltaTime/1e9);
+                System.out.println("alpha: " + alpha);
+                System.out.println("deltaTime: " + deltaTime/1e9);
+            }
+        }
+        
+        if (force > 0) {
+            w += v/linkLength;
+        }else {
+            w -= v/linkLength;
+        }
+        
+        prevW = v/linkLength;
+        
+        System.out.println("w: " + w);
+        
+        currentTime = System.nanoTime();
+        
+        angle = w + alpha;
+        
+        // TODO : set angle and correction angle to 0 after a full 360 turn
+        
+        this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
+        this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
 
-        double angleBetween = Math.toDegrees(linkVec.getAngleBetween(nodeVec));
-        System.out.println("Angle Between: " + angleBetween);
-        //double force_x = force * Math.cos(angleBetween);
-        //double force = force * Math.sin(angleBetween);
-        double a = force / mass;
-        //double a_y = force_y/mass;
-
-        //double magnitude = force.calculateMagnitude();
-        //Vector2D nodeVec = new Vector2D (this.getRadius(), 0);
-        //double angle = force.getAngleBetween(nodeVec);
-        //this.setCenterX(getCenterX() - magnitude * Math.sin(Math.toRadians(angle)));
-        //this.setCenterY(getCenterY() - magnitude * Math.sin(Math.toRadians(angle)));
-        //        vf_x = vi_x + a_x*time;
-        //        vf_y = vi_y + a_y*time;
-        vf = vi + a * time;
-        //vf_y = vi_y + a_y * time;
-
-        double theta = Math.acos(vf / linkLength);
-        //double theta_y = Math.asin(vf_y/linkLength);
-
-        angle += theta; //+ angle;
-        //angle_y += theta_y + 1; //+ angle;
-
-        this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle)));
-        this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle)));
-
-        vi = vf;
-        //vi_y = vf_y;
-
-        //angle = angle_x;
         nodeMoved = true;
-
+        
+    }
+    
+    public double getDeltaTime(double currentTime) {
+        return System.nanoTime() - currentTime;
     }
 
     public boolean equals(NodeModel model) {
         return (model.getCenterX() == centerX) && (model.getCenterY() == centerY);
     }
+    
+    public static double getMass() {
+        return mass;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+
+    public double getAngle() {
+        return angle + correctionAngle;
+    }
+
+    public void setCorrectionAngle(double correctionAngle) {
+        this.correctionAngle = correctionAngle;
+    }
+
+    public double getAlpha() {
+        return alpha;
+    }
+    
+    
 }
