@@ -63,7 +63,7 @@ public class SimulationController {
 
     @FXML
     private TitledPane physicGraphPane;
-    
+
     @FXML
     private Button btn_BackToEditor;
 
@@ -100,6 +100,13 @@ public class SimulationController {
 
         @Override
         public void start() {
+            updateSpeed.setName("Best Walker");
+            updatePos.setName("Best Walker");
+            updateKE.setName("Best Walker");
+            updateGeneration.setName("Generation Of Walkers");
+            chart_Physics1.setCreateSymbols(false);
+            chart_Physics1.setCreateSymbols(false);
+            chart_Physics1.setCreateSymbols(false);
             chart_Physics1.getData().add(updateSpeed);
             chart_Physics3.getData().add(updatePos);
             chart_Physics2.getData().add(updateKE);
@@ -170,7 +177,8 @@ public class SimulationController {
             if (currentInterval >= interval) {
 
                 System.out.println("finished " + i++);
-                bestWalker.setFitnessScore((int) (100 * lastXbestWalker * pxlToMeterConst));
+                bestWalker.setFitnessScore(bestWalker.getFitnessScore() + (int) (100 * lastXbestWalker * pxlToMeterConst));
+                System.out.println(bestWalker.getFitnessScore());
                 settingNextGeneration(bestWalker, updateGeneration);
                 startedTime = now;
                 updateSpeed.getData().clear();
@@ -271,12 +279,22 @@ public class SimulationController {
             simulationPane.getChildren().remove(neuralDisplay);
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
-            System.out.println("new show");
+
         } else {
-            System.out.println("new");
+
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
         }
+        neuralDisplay.setOnMouseDragged(e -> {
+            System.out.println(simulationPane.getWidth() - NeuralDisplay.getWIDTH() / 2);
+            System.out.println(e.getSceneX());
+            if ((e.getSceneX() < simulationPane.getLayoutX() + simulationPane.getWidth() - NeuralDisplay.getWIDTH() / 2)
+                    && (e.getSceneY() < simulationPane.getLayoutY() + simulationPane.getHeight() - NeuralDisplay.getHEIGHT() / 2)) {
+                neuralDisplay.setLayoutX(e.getSceneX());
+                neuralDisplay.setLayoutY(e.getSceneY());
+            }
+
+        });
 
     }
 
