@@ -53,9 +53,9 @@ public class EditorController {
     private Stage primaryStage;
     private Walker walker = new Walker();
     private MyWalker seriWalker;
-    
+
     // delete str when done
-    String str = "";
+    byte[] b_Array;
 
     @FXML
     private Button btn_Clear;
@@ -187,7 +187,7 @@ public class EditorController {
 
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
-        seriWalker = (MyWalker)deSerializeObjectFromString(str);
+        seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
         walker = loadModel(seriWalker);
         System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
     }
@@ -216,9 +216,8 @@ public class EditorController {
     @FXML
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
-        String str = serialize(seriWalker);
+        b_Array = serialize(seriWalker);
         System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
-        System.out.println(str);
     }
 
     // Switches to the simulation scene
@@ -411,24 +410,20 @@ public class EditorController {
     /*
     * REF:https://www.baeldung.com/java-serial-version-uid
      */
-    public String serialize(MyWalker serializableWalker) throws IOException {
+    public byte[] serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(serializableWalker);
         oos.close();
-        
-        System.out.println("byte: " + baos.toByteArray());
-        return Base64.getEncoder().encodeToString(baos.toByteArray());
+        return baos.toByteArray();
     }
 
     /*
     * REF:https://www.baeldung.com/java-serial-version-uid
      */
-    public static Object deSerializeObjectFromString(String s) throws IOException, ClassNotFoundException {
-
-        byte[] data = Base64.getDecoder().decode(s);
-        System.out.println("data: " + data);
-        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+    public static Object deSerializeObjectFromString(byte[] b_Array) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream b = new ByteArrayInputStream(b_Array);
+        ObjectInputStream ois = new ObjectInputStream(b);
         Object o = ois.readObject();
         ois.close();
         return o;
