@@ -1,18 +1,14 @@
 package edu.vanier.core;
 
 import edu.vanier.map.Walker;
-import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -27,9 +23,11 @@ public class NeuralDisplay extends Pane {
     //to be set according to UI
     private static final int PANE_PADDING = 20;
      //to be set according to UI
-    private static double xLayout = 0;
+    private static double xLayout = 1000;
     //to be set according to UI
     private static double yLayout = 0;
+
+    
     
     
 
@@ -75,6 +73,13 @@ public class NeuralDisplay extends Pane {
     public static void setyLayout(double yLayout) {
         NeuralDisplay.yLayout = yLayout;
     }
+    
+    public static double getWIDTH(){
+    return NeuralDisplay.WIDTH;
+    }
+    public static double getHEIGHT() {
+        return NeuralDisplay.HEIGHT;
+    }
 
     private void generateNeurons() {
         int numberOfLayers = activations.length;
@@ -89,6 +94,7 @@ public class NeuralDisplay extends Pane {
 
                 Label value = new Label();
                 value.setId("neuronNet");
+                value.setStyle("-fx-text-fill: white;");
                 DoubleProperty prop = new SimpleDoubleProperty(activations[i][j]);
 
                 value.textProperty().bind(prop.asString("%.2f"));
@@ -149,9 +155,10 @@ public class NeuralDisplay extends Pane {
      *
      * @return
      */
-    public Walker getDisplayedCar() {
+    public Walker getDisplayedWalker() {
         return this.displayedWalker;
     }
-
+    
+   
     
 }

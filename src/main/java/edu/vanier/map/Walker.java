@@ -143,9 +143,8 @@ public class Walker implements Serializable{
     }
 
     public static double multiplyVectors(double[] a, double[] b) {
-        System.out.println(a.length);
-        System.out.println(b.length);
-        System.out.println("");
+        
+        
         if (a.length != b.length) {
             throw new IllegalArgumentException("Input vectors must have the same length");
         }
