@@ -66,6 +66,4 @@ public class MyWalker implements Serializable{
     public void setFitnessScore(int fitnessScore) {
         this.fitnessScore = fitnessScore;
     }
-    
-    
 }

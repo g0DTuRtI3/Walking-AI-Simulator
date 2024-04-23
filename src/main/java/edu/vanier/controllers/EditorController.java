@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Base64;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -406,10 +405,7 @@ public class EditorController {
 
         return load;
     }
-
-    /*
-    * REF:https://www.baeldung.com/java-serial-version-uid
-     */
+    
     public byte[] serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -417,10 +413,7 @@ public class EditorController {
         oos.close();
         return baos.toByteArray();
     }
-
-    /*
-    * REF:https://www.baeldung.com/java-serial-version-uid
-     */
+    
     public static Object deSerializeObjectFromString(byte[] b_Array) throws IOException, ClassNotFoundException {
         ByteArrayInputStream b = new ByteArrayInputStream(b_Array);
         ObjectInputStream ois = new ObjectInputStream(b);
