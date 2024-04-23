@@ -20,7 +20,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
     private double w = 0;
     private double prevW = 0;
     private double currentTime = 0;
-    private double alpha = 100;
+    private double alpha = 0;
     private double angle = 0;
     private double correctionAngle = 0;
     private boolean nodeMoved = false;

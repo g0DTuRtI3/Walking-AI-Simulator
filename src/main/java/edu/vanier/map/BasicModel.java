@@ -93,7 +93,6 @@ public class BasicModel implements Serializable{
             updateLink();
             nextForce = 0;
         }else {
-            System.out.println("Force next is 0");
             if (nextNode.getAlpha() > 0) {
                 nextNode.updateNode(basicModel);
             }
