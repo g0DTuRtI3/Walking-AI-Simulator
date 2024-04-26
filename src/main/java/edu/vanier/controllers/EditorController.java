@@ -1,5 +1,6 @@
 package edu.vanier.controllers;
 
+import edu.vanier.database.SqliteDB;
 import edu.vanier.map.*;
 import edu.vanier.serialization.MyBasicModel;
 import edu.vanier.serialization.MyLine;
@@ -52,6 +53,7 @@ public class EditorController {
     private Stage primaryStage;
     private Walker walker = new Walker();
     private MyWalker seriWalker;
+    private SqliteDB database = new SqliteDB();
 
     // delete str when done
     byte[] b_Array;
@@ -216,6 +218,8 @@ public class EditorController {
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
         b_Array = serialize(seriWalker);
+        database.addModel(b_Array, "JoeMAMA");
+        
         System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
     }
 

@@ -22,9 +22,9 @@ public abstract class DBConnectionProvider {
      * a relative path.
      * @return an opened connection to an SQLite database.
      */
-    public Connection getConnection(String databaseName) {
+    public Connection getConnection(){
         try {
-            String db_location = DBConnectionProvider.class.getResource("/data/" + databaseName).toExternalForm();
+            String db_location = DBConnectionProvider.class.getResource("/data/database.db").toExternalForm();
             Class.forName("org.sqlite.JDBC");
             Connection dbConnection = DriverManager.getConnection("jdbc:sqlite:" + db_location);
             return dbConnection;
