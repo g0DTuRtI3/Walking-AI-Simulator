@@ -21,7 +21,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <Pane fx:id="simulationPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
+      <Pane fx:id="simulationPane" focusTraversable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
          <children>
             <Text fx:id="txt_Countdown" layoutX="14.0" layoutY="119.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="211.59375">
                <font>
@@ -86,7 +86,7 @@
                     <content>
                       <AnchorPane>
                            <children>
-                              <ScrollPane prefHeight="448.0" prefWidth="375.0">
+                              <ScrollPane focusTraversable="false" prefHeight="448.0" prefWidth="375.0">
                                  <content>
                                     <VBox fx:id="physicalGraphVBox" prefHeight="645.0" prefWidth="352.0">
                                        <children>
