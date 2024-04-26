@@ -20,7 +20,7 @@ public class SqliteDB extends DBConnectionProvider {
     public SqliteDB() {
     }
 
-    public void addModel(byte[] b_Array, String modelName){
+    public void addModel(byte[] b_Array, String modelName) {
         String query = String.format("INSERT INTO %s (%s,%s) VALUES(?,?)", TABLE, COL_NAME, COL_WALKER);
         try (Connection dbConnection = getConnection(); PreparedStatement pstmt = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             //-- 1) Set parameters and insert the new item.
@@ -36,6 +36,18 @@ public class SqliteDB extends DBConnectionProvider {
                 generatedKey = resultSet.getInt(1);
             }
             System.out.println("New model ID: " + generatedKey);
+        } catch (SQLException e) {
+            System.out.println("An error has occured with the message: " + e);
+        }
+    }
+
+    public void deleteSpecies(byte[] b_Array) {
+        String query = String.format("DELETE FROM %s WHERE Walker = ? ", TABLE);
+        try (Connection dbConnection = getConnection(); PreparedStatement pstmt = dbConnection.prepareStatement(query)) {
+            // set parameters
+            pstmt.setBytes(1, b_Array);
+            pstmt.executeUpdate();
+            System.out.println("The selected item has been removed from there DB...");
         } catch (SQLException e) {
             System.out.println("An error has occured with the message: " + e);
         }
