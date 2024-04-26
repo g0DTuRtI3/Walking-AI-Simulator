@@ -20,7 +20,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -56,6 +59,12 @@ public class SimulationController {
     private Pane simulationPane;
 
     @FXML
+    private TitledPane networkPane;
+
+    @FXML
+    private TitledPane physicGraphPane;
+
+    @FXML
     private Button btn_BackToEditor;
 
     @FXML
@@ -81,7 +90,8 @@ public class SimulationController {
 
     @FXML
     private Text txt_IsTraining;
-
+    @FXML
+    private VBox physicalGraphVBox;
     private int[] layers = {4, 8, 2};
     private long previousTime = -1;
 
@@ -90,6 +100,13 @@ public class SimulationController {
 
         @Override
         public void start() {
+            updateSpeed.setName("Best Walker");
+            updatePos.setName("Best Walker");
+            updateKE.setName("Best Walker");
+            updateGeneration.setName("Generation Of Walkers");
+            chart_Physics1.setCreateSymbols(false);
+            chart_Physics1.setCreateSymbols(false);
+            chart_Physics1.setCreateSymbols(false);
             chart_Physics1.getData().add(updateSpeed);
             chart_Physics3.getData().add(updatePos);
             chart_Physics2.getData().add(updateKE);
@@ -120,12 +137,13 @@ public class SimulationController {
             double bestDistance = 0;
             for (Walker walk : walkers) {
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
-                //moveWalker();
+                moveWalker();
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
                 if (walk.getPosition() > bestDistance) {
                     bestWalker = walk;
                     bestDistance = walk.getPosition();
                     bestWalker.setFitnessScore(bestWalker.getFitnessScore() + 1);
+                    walk.setOpacity(1);
                 }
 
 //                for (BasicModel model : walk.getBasicModels()) {
@@ -159,7 +177,8 @@ public class SimulationController {
             if (currentInterval >= interval) {
 
                 System.out.println("finished " + i++);
-                bestWalker.setFitnessScore((int) (100 * lastXbestWalker * pxlToMeterConst));
+                bestWalker.setFitnessScore(bestWalker.getFitnessScore() + (int) (100 * lastXbestWalker * pxlToMeterConst));
+                System.out.println(bestWalker.getFitnessScore());
                 settingNextGeneration(bestWalker, updateGeneration);
                 startedTime = now;
                 updateSpeed.getData().clear();
@@ -168,6 +187,29 @@ public class SimulationController {
 
             }
             previousTime = now;
+        }
+
+        public void settingNextGeneration(Walker best, Series<String, Number> updateGeneration) {
+            lastXbestWalker = 0;
+            System.err.println("Generation " + txt_Generation.getText() + " finished");
+
+            updateGeneration.getData().add(new XYChart.Data<>(txt_Generation.getText(), best.getFitnessScore()));
+
+            txt_Generation.setText(String.format("%d", Integer.parseInt(txt_Generation.getText()) + 1));
+            for (Walker w : walkers) {
+
+                w.setFitnessScore(0);
+                w.setTranslateX(800);
+                w.setTranslateY(700);
+
+                if (w == best) {
+                    continue;
+                }
+                w.setBrain(best.getBrain().clone());
+
+                w.getBrain().mutate();
+
+            }
         }
 
         @Override
@@ -214,44 +256,15 @@ public class SimulationController {
         }
     }
 
-    public void settingNextGeneration(Walker best, Series<String, Number> updateGeneration) {
-        System.err.println("Generation " + this.txt_Generation.getText() + " finished");
-
-        updateGeneration.getData().add(new XYChart.Data<>(this.txt_Generation.getText(), best.getFitnessScore()));
-
-        this.txt_Generation.setText(String.format("%d", Integer.parseInt(this.txt_Generation.getText()) + 1));
-        for (Walker w : walkers) {
-
-            w.setFitnessScore(0);
-            w.setTranslateX(800);
-            w.setTranslateY(700);
-
-            if (w == best) {
-                continue;
-            }
-            w.setBrain(best.getBrain().clone());
-
-            w.getBrain().mutate();
-
-        }
-    }
-
     private void moveWalker() {
 
-
         for (Walker w : walkers) {
-            HashSet<NodeModel> nodes = new HashSet<>();
-            for (BasicModel bm : w.getBasicModels()) {
-                nodes.add(bm.getNextNode());
-                nodes.add(bm.getPrevNode());
-                w.updateWalker();
-                System.out.println(w.getBrain());
-            }
+            HashSet<NodeModel> nodes = w.getAllNodes();
+
             double[] forcesOnNodes = new double[nodes.size()];
-            for (int i = 0; i < w.getBasicModels().size(); i++) {
+            for (int i = 0; i < w.getAllNodes().size(); i++) {
 
                 //put all force on every node in every []
-
                 forcesOnNodes[i] = 10 * Math.random();
 
             }
@@ -274,19 +287,27 @@ public class SimulationController {
             simulationPane.getChildren().remove(neuralDisplay);
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
-            System.out.println("new show");
+
         } else {
-            System.out.println("new");
+
             neuralDisplay = new NeuralDisplay(walker);
             simulationPane.getChildren().add(neuralDisplay);
         }
+        neuralDisplay.setOnMouseDragged(e -> {
+            System.out.println(simulationPane.getWidth() - NeuralDisplay.getWIDTH() / 2);
+            System.out.println(e.getSceneX());
+            if ((e.getSceneX() < simulationPane.getLayoutX() + simulationPane.getWidth() - NeuralDisplay.getWIDTH() / 2)
+                    && (e.getSceneY() < simulationPane.getLayoutY() + simulationPane.getHeight() - NeuralDisplay.getHEIGHT() / 2)) {
+                neuralDisplay.setLayoutX(e.getSceneX());
+                neuralDisplay.setLayoutY(e.getSceneY());
+            }
+
+        });
 
     }
 
     @FXML
     void initialize() {
-        PerspectiveCamera camera = new PerspectiveCamera(true);
-        simulationPane.getChildren().add(camera);
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
@@ -315,7 +336,7 @@ public class SimulationController {
             }*/
             simulationPane.getChildren().addAll(w.getAllLinks());
             simulationPane.getChildren().addAll(w.getAllNodes());
-
+            w.setOpacity(0.5);
         }
         timer.start();
     }

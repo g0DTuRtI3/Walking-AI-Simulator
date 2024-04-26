@@ -5,6 +5,7 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -46,9 +47,9 @@
       </Pane>
    </center>
    <right>
-      <HBox alignment="TOP_CENTER" prefHeight="739.0" prefWidth="250.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="physicalGraphHBox" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="360.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="780.0" prefWidth="265.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" prefHeight="855.0" prefWidth="360.0" spacing="10.0">
                <children>
                   <VBox alignment="TOP_CENTER" prefWidth="100.0">
                      <children>
@@ -81,48 +82,56 @@
                         <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
                      </children>
                   </HBox>
-                  <TitledPane animated="false" focusTraversable="false" prefHeight="481.0" prefWidth="250.0" text="Physics Graphs">
+                  <TitledPane fx:id="physicGraphPane" animated="false" focusTraversable="false" prefHeight="481.0" prefWidth="294.0" text="Physics Graphs">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <AnchorPane>
                            <children>
-                              <LineChart fx:id="chart_Physics1" animated="false" layoutX="24.0" layoutY="6.0" prefHeight="128.0" prefWidth="234.0" title="velocity vs time" AnchorPane.rightAnchor="0.0">
-                                <xAxis>
-                                  <NumberAxis label="time(s)" side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                  <NumberAxis label="velocity(m/s)" side="LEFT" />
-                                </yAxis>
-                              </LineChart>
-                              <LineChart fx:id="chart_Physics2" layoutX="4.0" layoutY="141.0" prefHeight="128.0" prefWidth="234.0" title="Kinetic Energy vs Time">
-                                 <xAxis>
-                                    <NumberAxis label="time (s)" side="BOTTOM" />
-                                 </xAxis>
-                                 <yAxis>
-                                    <NumberAxis label="K_e(J)" side="LEFT" />
-                                 </yAxis>
-                              </LineChart>
-                              <LineChart fx:id="chart_Physics3" layoutX="7.0" layoutY="275.0" prefHeight="128.0" prefWidth="234.0" title="Position vs Time">
-                                 <xAxis>
-                                    <NumberAxis label="time (s)" side="BOTTOM" />
-                                 </xAxis>
-                                 <yAxis>
-                                    <NumberAxis label="Position (m)" side="LEFT" />
-                                 </yAxis>
-                              </LineChart>
+                              <ScrollPane prefHeight="448.0" prefWidth="375.0">
+                                 <content>
+                                    <VBox fx:id="physicalGraphVBox" prefHeight="645.0" prefWidth="352.0">
+                                       <children>
+                                          <LineChart fx:id="chart_Physics1" animated="false" title="Velocity According to Time">
+                                            <xAxis>
+                                              <NumberAxis label="time(s)" side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis label="velocity(m/s)" side="LEFT" />
+                                            </yAxis>
+                                          </LineChart>
+                                          <LineChart fx:id="chart_Physics2" title="Kinetic Energy According to Time">
+                                             <xAxis>
+                                                <NumberAxis label="time (s)" side="BOTTOM" />
+                                             </xAxis>
+                                             <yAxis>
+                                                <NumberAxis label="K_e(J)" side="LEFT" />
+                                             </yAxis>
+                                          </LineChart>
+                                          <LineChart fx:id="chart_Physics3" title="Position vs Time">
+                                             <xAxis>
+                                                <NumberAxis label="time (s)" side="BOTTOM" />
+                                             </xAxis>
+                                             <yAxis>
+                                                <NumberAxis label="Position (m)" side="LEFT" />
+                                             </yAxis>
+                                          </LineChart>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </AnchorPane>
                     </content>
                   </TitledPane>
-                  <TitledPane animated="false" focusTraversable="false" text="Network Graph">
+                  <TitledPane fx:id="networkPane" animated="false" focusTraversable="false" text="Network Graph">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0">
                            <children>
-                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" prefHeight="128.0" prefWidth="234.0" title="Learning Rate Per Generation">
+                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" prefHeight="275.0" prefWidth="379.0" title="Best fitness Per Generation">
                                  <xAxis>
                                     <CategoryAxis label="Generation" side="BOTTOM" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis label="learning rate" side="LEFT" />
+                                    <NumberAxis label="fitness Score" side="LEFT" />
                                  </yAxis>
                               </LineChart>
                            </children>

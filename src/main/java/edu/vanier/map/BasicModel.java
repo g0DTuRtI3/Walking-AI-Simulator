@@ -16,6 +16,8 @@ public class BasicModel {
     private NodeModel nextNode;
     private Line link = new Line();
     private Color color;
+    private double previousForce = 0;
+    private double nextForce = 0;
 
     public BasicModel(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
         this.link.setStartX(prevNode.getCenterX());
@@ -26,6 +28,11 @@ public class BasicModel {
         this.link.setStroke(colorOfLine);
         this.prevNode = prevNode;
         this.nextNode = nextNode;
+        if (prevNode.getCenterX() < nextNode.getCenterX()) {
+            prevNode.setCorrectionAngle(180);
+        }else {
+            nextNode.setCorrectionAngle(180);
+        }
         this.color = colorOfLine;
     }
 
@@ -84,17 +91,27 @@ public class BasicModel {
     }
 
     public void updateNextNode(BasicModel basicModel, double force, double time) {
-
-        nextNode.setForce(force, time, basicModel);
-        updateLink();
-
+        if (force != 0) {
+            nextNode.setForce(force, time, basicModel);
+            updateLink();
+            nextForce = 0;
+        }else {
+            if (nextNode.getAlpha() > 0) {
+                nextNode.updateNode(basicModel);
+            }
+        }
     }
 
     public void updatePreviousNode(BasicModel basicModel, double force, double time) {
-
-        prevNode.setForce(force, time, basicModel);
-        updateLink();
-
+        if (force != 0) {
+            prevNode.setForce(force, time, basicModel);
+            updateLink();
+            previousForce = 0;
+        }else {
+            if (prevNode.getAlpha() > 0) {
+                prevNode.updateNode(basicModel);
+            }
+        }
     }
 
     public NodeModel getNode(NodeModel nodeModel) {
@@ -118,5 +135,20 @@ public class BasicModel {
     public double getLinkMagnitude() {
         return Math.sqrt(Math.pow((link.getStartX() - link.getEndX()), 2) + Math.pow((link.getStartY() - link.getEndY()), 2));
     }
+    
+    public void setPreviousForce(double previousForce) {
+        this.previousForce = previousForce;
+    }
 
+    public void setNextForce(double nextForce) {
+        this.nextForce = nextForce;
+    }
+
+    public double getPreviousForce() {
+        return previousForce;
+    }
+
+    public double getNextForce() {
+        return nextForce;
+    }
 }

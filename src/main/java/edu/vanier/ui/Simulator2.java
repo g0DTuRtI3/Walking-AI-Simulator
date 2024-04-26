@@ -7,15 +7,12 @@ package edu.vanier.ui;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
 import edu.vanier.map.Walker;
-import edu.vanier.physics.Vector2D;
-import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -31,10 +28,11 @@ public class Simulator2 extends Application{
     Walker walker = new Walker(basicModel);
     
     Rectangle ground = new Rectangle(0, 400, 500, 400);
-    private boolean moveRightNode = true;
+    private boolean moveNextNode = true;
     
-    double rightForce = 30;
-    double leftForce = 10;
+    double rightForce = 100;
+    double leftForce = 100;
+    double tempForce = 100;
     
     private AnimationTimer timer;
     private long previousTime = -1;
@@ -44,7 +42,8 @@ public class Simulator2 extends Application{
         timer = new AnimationTimer() {
             
             public void handle(long currentTime) {
-                elapsedTime = (currentTime - previousTime)/1000000000.0;
+                elapsedTime = (currentTime - previousTime)/1e9;
+                //System.out.println(elapsedTime);
                 update(elapsedTime);
                 previousTime = currentTime;
             }
@@ -72,7 +71,6 @@ public class Simulator2 extends Application{
         ground.setFill(Color.GREEN);
         Pane root = new Pane();
         Scene scene = new Scene(root, 500, 500);
-        
         root.getChildren().addAll(basicModel.getPrevNode(), basicModel.getNextNode(), basicModel.getLink());
         
         primaryStage.setScene(scene);
@@ -82,30 +80,48 @@ public class Simulator2 extends Application{
         scene.setOnKeyPressed((KeyEvent event) -> {
             switch (event.getCode()) {
                 case A:
-                    if (moveRightNode) {
-                        walker.moveNext(basicModel, -rightForce, elapsedTime);
+                    if (moveNextNode) {
+                        basicModel.setNextForce(-rightForce);
+                        //walker.moveNext(basicModel, -rightForce, elapsedTime);
                     }else {
-                        walker.movePrevious(basicModel, -rightForce, elapsedTime);
+                        basicModel.setPreviousForce(-rightForce);
+                        //walker.movePrevious(basicModel, -rightForce, elapsedTime);
                     }
                     break;
                 case D:
-                    if (moveRightNode) {
-                        walker.moveNext(basicModel, leftForce, elapsedTime);
+                    if (moveNextNode) {
+                        basicModel.setNextForce(leftForce);
+                        //walker.moveNext(basicModel, leftForce, elapsedTime);
                     }else {
-                        walker.movePrevious(basicModel, leftForce, elapsedTime);
+                        basicModel.setPreviousForce(leftForce);
+                        //walker.movePrevious(basicModel, leftForce, elapsedTime);
                     }
                     break;
+                case F:
+                    tempForce += 100;
+                    basicModel.setNextForce(tempForce);
+                    break;
                 case LEFT:
-                    moveRightNode = false;
+                    moveNextNode = false;
                     break;
                 case RIGHT:
-                    moveRightNode = true;
+                    moveNextNode = true;
                     break;
             }
         });
     }
     
     public void update(double elapsedTime) {
+        
+        walker.setElapsedTime(elapsedTime);
+        walker.updateWalker();
+        //System.out.println(basicModel.getPrevNode().getAngle());
+        //System.out.println(basicModel.getNextNode().getAngle());
+        // Debug
+//        System.out.println(basicModel.getPrevNode().getCenterX());
+//        System.out.println(basicModel.getPrevNode().getCenterY());
+//        System.out.println(basicModel.getNextNode().getCenterX());
+//        System.out.println(basicModel.getNextNode().getCenterY());
         
         //System.out.println(elapsedTime);
         
@@ -146,4 +162,6 @@ public class Simulator2 extends Application{
 //        }
 //        elapsedTime += 0.016;
     }
+    
+    
 }

@@ -1,8 +1,6 @@
 package edu.vanier.ui;
 
 import edu.vanier.controllers.EditorController;
-import edu.vanier.controllers.MainAppController;
-import edu.vanier.controllers.SimulationController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +36,7 @@ public class MainApp extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setMaximized(false);
-            primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
             // We just need to bring the main window to front.
             primaryStage.setAlwaysOnTop(true);
             primaryStage.setTitle("Model Editor");

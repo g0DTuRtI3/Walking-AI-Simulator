@@ -22,14 +22,14 @@ import javafx.scene.shape.Line;
  *
  * @author 2248826
  */
-public class Walker implements Serializable{
+public class Walker implements Serializable {
 
     private ArrayList<BasicModel> basicModels = new ArrayList<>();
     private NeuralNetwork brain;
     private static float learningRate = 0.3f;
     private int fitnessScore;
     private double trainedTime = 0;
-    
+
 //    public void serialize(Object walker, String file) throws IOException{
 //        MyWalker serializeWalker = new MyWalker();
 //        serializeWalker.setBrain(brain);
@@ -47,14 +47,14 @@ public class Walker implements Serializable{
 //        
 //        serializeWalker.setBasicModels(serializeBasicModels);
 //    }
-    
-    public Object deserialize(String file) throws IOException, ClassNotFoundException{
+    public Object deserialize(String file) throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(file);
         ObjectInputStream ois = new ObjectInputStream(fis);
         Object obj = ois.readObject();
         ois.close();
         return obj;
-    } 
+    }
+    private double elapsedTime = 0;
 
     public Walker() {
 
@@ -78,10 +78,6 @@ public class Walker implements Serializable{
         return returnedLinks;
     }
 
-    public Walker(ArrayList<BasicModel> basicModels) {
-        this.basicModels.addAll(basicModels);
-    }
-
     public Walker(BasicModel basicModel) {
         addBasicModel(basicModel);
     }
@@ -98,8 +94,8 @@ public class Walker implements Serializable{
             allLayersList.add(nbNeurons);
         }
 
-        allLayersList.addFirst(linksOfWalker.size());
-        allLayersList.addLast(linksOfWalker.size());
+        allLayersList.addFirst(this.getAllNodes().size());
+        allLayersList.addLast(this.getAllNodes().size());
 
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -132,23 +128,25 @@ public class Walker implements Serializable{
 
     public void movePrevious(BasicModel basicModel, double force, double time) {
         //basicModel.getPrevNode().setForce(basicModel, force, time, basicModel.getNextNode());
-        basicModel.updateNextNode(basicModel, force, time);
+        basicModel.updatePreviousNode(basicModel, force, time);
     }
 
     public void moveNext(BasicModel basicModel, double force, double time) {
         //basicModel.getNextNode().setForce(basicModel, force, time, basicModel.getPrevNode());
-        basicModel.updatePreviousNode(basicModel, force, time);
+        basicModel.updateNextNode(basicModel, force, time);
     }
 
     public void updateWalker() {
         for (BasicModel basicModel : basicModels) {
+            basicModel.updateNextNode(basicModel, basicModel.getNextForce(), elapsedTime);
+            basicModel.updatePreviousNode(basicModel, basicModel.getPreviousForce(), elapsedTime);
             basicModel.updateLink();
         }
     }
 
     public static double multiplyVectors(double[] a, double[] b) {
-        
-       if (a.length != b.length) {
+
+        if (a.length != b.length) {
             throw new IllegalArgumentException("Input vectors must have the same length");
         }
 
@@ -196,14 +194,7 @@ public class Walker implements Serializable{
     }
 
     public double getMass() {
-        double mass = 0;
-        Map<NodeModel, Double> nodeMap = new HashMap<>();
-        for (BasicModel bm : this.basicModels) {
-            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
-            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
-        }
-
-        return nodeMap.keySet().size() * NodeModel.getMass();
+        return this.getAllNodes().size() * NodeModel.getMass();
     }
 
     public ArrayList<BasicModel> getBasicModels() {
@@ -230,7 +221,7 @@ public class Walker implements Serializable{
     public void setTrainedTime(double trainedTime) {
         this.trainedTime = trainedTime;
     }
-    
+
     public void setBasicModels(ArrayList<BasicModel> basicModels) {
         this.basicModels = basicModels;
     }
@@ -239,10 +230,24 @@ public class Walker implements Serializable{
         ArrayList<BasicModel> returnedBasicModels = new ArrayList<>();
         for (BasicModel bm : this.basicModels) {
             BasicModel newBasicModel = new BasicModel(new NodeModel(bm.getPrevNode().getCenterX(), bm.getPrevNode().getCenterY(), bm.getPrevNode().getColor()),
-                     new NodeModel(bm.getNextNode().getCenterX(), bm.getNextNode().getCenterY(), bm.getNextNode().getColor()), bm.getColor());
+                    new NodeModel(bm.getNextNode().getCenterX(), bm.getNextNode().getCenterY(), bm.getNextNode().getColor()), bm.getColor());
             returnedBasicModels.add(newBasicModel);
         }
         return returnedBasicModels;
+    }
+
+    public void setOpacity(double percent) {
+        this.getAllLinks().forEach(link -> link.setOpacity(percent));
+        this.getAllNodes().forEach(node -> node.setOpacity(percent));
+
+    }
+
+    public double getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(double elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
 }
