@@ -24,6 +24,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
     private double angle = 0;
     private double correctionAngle = 0;
     private boolean nodeMoved = false;
+    private double speedY = 0;
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
@@ -33,6 +34,14 @@ public class NodeModel extends javafx.scene.shape.Circle {
 
     public Color getColor(){
         return this.color;
+    }
+
+    public void setSpeedY(double speedY) {
+        this.speedY = speedY;
+    }
+
+    public double getSpeedY() {
+        return speedY;
     }
 
 
