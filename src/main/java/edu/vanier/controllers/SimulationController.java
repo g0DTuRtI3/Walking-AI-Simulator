@@ -10,6 +10,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
@@ -21,9 +22,16 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import static javafx.scene.input.KeyCode.LEFT;
+import static javafx.scene.input.KeyCode.RIGHT;
+import static javafx.scene.input.KeyCode.UP;
+import static javafx.scene.input.KeyCode.DOWN;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -37,8 +45,12 @@ public class SimulationController {
 
     public int interval;
 
-    public static final double initialXPos = 45.0;
-    public static final double initialYPos = 499.0;
+    public Line ground = new Line(0, 0, 0, 0);
+
+    public Group panGroup = new Group();
+
+    public static final double GRAVITY = 9.8;
+
     public AnimationTimer time = new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -92,9 +104,9 @@ public class SimulationController {
     private Text txt_IsTraining;
     @FXML
     private VBox physicalGraphVBox;
+
     private int[] layers = {4, 8, 2};
     private long previousTime = -1;
-
     AnimationTimer timer = new AnimationTimer() {
         float startedTime = -1;
 
@@ -126,9 +138,11 @@ public class SimulationController {
         private Series<Number, Number> updatePos = new Series<>();
         private Series<Number, Number> updateKE = new Series<>();
         private Series<String, Number> updateGeneration = new Series<>();
+        private double speedY = 0;
 
         @Override
         public void handle(long now) {
+
             countdownUpdate(now);
 
             double elapsedTime = (now - previousTime) / nanoTOSecond;
@@ -140,12 +154,24 @@ public class SimulationController {
                 moveWalker();
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
                 if (walk.getPosition() > bestDistance) {
+                    if (bestWalker != walk && bestWalker != null) {
+                        bestWalker.setOpacity(0.5);
+                    }
                     bestWalker = walk;
                     bestDistance = walk.getPosition();
                     bestWalker.setFitnessScore(bestWalker.getFitnessScore() + 1);
                     walk.setOpacity(1);
                 }
+                for (NodeModel node : walk.getAllNodes()) {
+                    if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
+                        node.setSpeedY(0);
 
+                    } else {
+                        node.setSpeedY(node.getSpeedY() + GRAVITY * elapsedTime);
+                    }
+                    node.setCenterY(node.getCenterY() + (node.getSpeedY()) * elapsedTime);
+
+                }
 //                for (BasicModel model : walk.getBasicModels()) {
 //                    if (model.getPrevNode().getCenterX() >= model.getPrevNode().getCenterX()) {
 //                        if (model.getPrevNode().getCenterX() >= bestDistance) {
@@ -178,7 +204,7 @@ public class SimulationController {
 
                 System.out.println("finished " + i++);
                 bestWalker.setFitnessScore(bestWalker.getFitnessScore() + (int) (100 * lastXbestWalker * pxlToMeterConst));
-                System.out.println(bestWalker.getFitnessScore());
+
                 settingNextGeneration(bestWalker, updateGeneration);
                 startedTime = now;
                 updateSpeed.getData().clear();
@@ -196,6 +222,11 @@ public class SimulationController {
             updateGeneration.getData().add(new XYChart.Data<>(txt_Generation.getText(), best.getFitnessScore()));
 
             txt_Generation.setText(String.format("%d", Integer.parseInt(txt_Generation.getText()) + 1));
+            for (Walker w : walkers) {
+                if (best.getFitnessScore() < w.getFitnessScore()) {
+                    best = w;
+                }
+            }
             for (Walker w : walkers) {
 
                 w.setFitnessScore(0);
@@ -294,8 +325,7 @@ public class SimulationController {
             simulationPane.getChildren().add(neuralDisplay);
         }
         neuralDisplay.setOnMouseDragged(e -> {
-            System.out.println(simulationPane.getWidth() - NeuralDisplay.getWIDTH() / 2);
-            System.out.println(e.getSceneX());
+
             if ((e.getSceneX() < simulationPane.getLayoutX() + simulationPane.getWidth() - NeuralDisplay.getWIDTH() / 2)
                     && (e.getSceneY() < simulationPane.getLayoutY() + simulationPane.getHeight() - NeuralDisplay.getHEIGHT() / 2)) {
                 neuralDisplay.setLayoutX(e.getSceneX());
@@ -308,12 +338,18 @@ public class SimulationController {
 
     @FXML
     void initialize() {
+        ground.setStartX(-100000);
+        ground.setEndX(100000);
+        ground.setStartY(800);
+        ground.setEndY(800);
+
+        ground.setStrokeWidth(15);
+
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
         for (Walker w : walkers) {
-            w.setTranslateX(initialXPos);
-            w.setTranslateY(initialYPos);
+            
 
             tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
             /*for (BasicModel b : w.getBasicModels()) {
@@ -334,10 +370,32 @@ public class SimulationController {
                     simulationPane.getChildren().addAll(b.getLink());
                 }
             }*/
-            simulationPane.getChildren().addAll(w.getAllLinks());
-            simulationPane.getChildren().addAll(w.getAllNodes());
+
+            panGroup.getChildren().addAll(w.getAllLinks());
+            panGroup.getChildren().addAll(w.getAllNodes());
+
             w.setOpacity(0.5);
         }
+        panGroup.getChildren().add(ground);
+        simulationPane.getChildren().add(panGroup);
+        simulationPane.setOnKeyPressed((event) -> {
+
+            switch (event.getCode()) {
+
+                case LEFT -> {
+                    panGroup.setLayoutX(panGroup.getLayoutX() + 10);
+                }
+                case UP -> {
+                    panGroup.setLayoutY(panGroup.getLayoutY() + 10);
+                }
+                case DOWN -> {
+                    panGroup.setLayoutY(panGroup.getLayoutY() - 10);
+                }
+                case RIGHT ->
+                    panGroup.setLayoutX(panGroup.getLayoutX() - 10);
+            }
+
+        });
         timer.start();
     }
 

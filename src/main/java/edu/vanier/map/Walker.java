@@ -137,6 +137,7 @@ public class Walker implements Serializable {
     }
 
     public void updateWalker() {
+        
         for (BasicModel basicModel : basicModels) {
             basicModel.updateNextNode(basicModel, basicModel.getNextForce(), elapsedTime);
             basicModel.updatePreviousNode(basicModel, basicModel.getPreviousForce(), elapsedTime);

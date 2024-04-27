@@ -23,6 +23,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
     private double angle = 0;
     private double correctionAngle = 0;
     private boolean nodeMoved = false;
+    private double speedY = 0;
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
@@ -36,6 +37,19 @@ public class NodeModel extends javafx.scene.shape.Circle {
         // v_f = v_i_x + a_x*t  t-> animation Timer time diff;
         //same thing for y component
     }
+
+
+    public void setSpeedY(double speedY) {
+        this.speedY = speedY;
+    }
+
+    public double getSpeedY() {
+        return speedY;
+    }
+
+
+
+    
 
     public void updateNode(BasicModel basicModel) {
         NodeModel otherNode = basicModel.getOtherNode(this);

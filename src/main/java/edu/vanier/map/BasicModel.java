@@ -68,9 +68,10 @@ public class BasicModel {
     }
 
     public double getRadAngle() {
-        System.out.println("in rad angle");
-        System.out.println(nextNode.getCenterX());
-        double adjacent = nextNode.getCenterX() - prevNode.getCenterX();
+
+        
+        double adjacent = nextNode.getCenterX()- prevNode.getCenterX();
+
         double opposite = nextNode.getCenterY() - nextNode.getCenterY();
         double angleRad;
         try {
