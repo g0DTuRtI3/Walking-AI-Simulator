@@ -26,6 +26,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -52,6 +53,7 @@ public class EditorController {
     private NodeModel nextNode;
     private Stage primaryStage;
     private Walker walker = new Walker();
+
     private MyWalker seriWalker;
     private SqliteDB database = new SqliteDB();
 
@@ -207,7 +209,7 @@ public class EditorController {
         } else if (isCircleMode) {
             addCircle(event);
             // in link mode: add links between circles
-        } else if (isLinkMode) {
+        } else if (isLinkMode && isLinkConnected(event)) {
             addLink(event);
         } else {
             System.out.println("pane on mouse clicked error");
@@ -218,8 +220,9 @@ public class EditorController {
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
         b_Array = serialize(seriWalker);
+        //what is this I hope we will change it in the future...
         database.addModel(b_Array, "JoeMAMA");
-        
+
         System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
     }
 
@@ -323,8 +326,8 @@ public class EditorController {
                 return;
             }
 
-            nextNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
-            prevNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
+            prevNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
+            nextNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
 
             BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
 
@@ -409,7 +412,7 @@ public class EditorController {
 
         return load;
     }
-    
+
     public byte[] serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -417,7 +420,7 @@ public class EditorController {
         oos.close();
         return baos.toByteArray();
     }
-    
+
     public static Object deSerializeObjectFromString(byte[] b_Array) throws IOException, ClassNotFoundException {
         ByteArrayInputStream b = new ByteArrayInputStream(b_Array);
         ObjectInputStream ois = new ObjectInputStream(b);
@@ -439,4 +442,19 @@ public class EditorController {
 //            node.setLayoutY(e.getSceneY() - mouseY);
 //        });
 //    }
+    private boolean isLinkConnected(MouseEvent event) {
+        try{
+        if (walker.getBasicModels().isEmpty() || circle1 != null) {
+            return (walker.getBasicModels().isEmpty()) || circle1 != null;
+        } else {
+
+            
+
+            return (((Circle) event.getTarget()).getCenterX() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterX()
+                    && ((Circle) event.getTarget()).getCenterY() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterY());}
+        } catch(Exception ex){
+        return false;
+        }
+
+    }
 }
