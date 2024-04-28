@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -19,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <Pane fx:id="simulationPane" focusTraversable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
          <children>
@@ -82,15 +83,15 @@
                         <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
                      </children>
                   </HBox>
-                  <TitledPane fx:id="physicGraphPane" animated="false" focusTraversable="false" prefHeight="481.0" prefWidth="294.0" text="Physics Graphs">
+                  <TitledPane fx:id="physicGraphPane" focusTraversable="false" prefHeight="481.0" prefWidth="294.0" text="Physics Graphs">
                     <content>
                       <AnchorPane>
                            <children>
                               <ScrollPane focusTraversable="false" prefHeight="448.0" prefWidth="375.0">
                                  <content>
-                                    <VBox fx:id="physicalGraphVBox" prefHeight="645.0" prefWidth="352.0">
+                                    <VBox fx:id="physicalGraphVBox" alignment="TOP_CENTER" prefHeight="645.0" prefWidth="352.0">
                                        <children>
-                                          <LineChart fx:id="chart_Physics1" animated="false" title="Velocity According to Time">
+                                          <LineChart fx:id="chart_Physics1" animated="false" axisSortingPolicy="NONE" createSymbols="false" legendVisible="false" title="Velocity According to Time">
                                             <xAxis>
                                               <NumberAxis label="time(s)" side="BOTTOM" />
                                             </xAxis>
@@ -98,7 +99,7 @@
                                               <NumberAxis label="velocity(m/s)" side="LEFT" />
                                             </yAxis>
                                           </LineChart>
-                                          <LineChart fx:id="chart_Physics2" title="Kinetic Energy According to Time">
+                                          <LineChart fx:id="chart_Physics2" animated="false" axisSortingPolicy="NONE" createSymbols="false" legendVisible="false" title="Kinetic Energy According to Time">
                                              <xAxis>
                                                 <NumberAxis label="time (s)" side="BOTTOM" />
                                              </xAxis>
@@ -106,7 +107,7 @@
                                                 <NumberAxis label="K_e(J)" side="LEFT" />
                                              </yAxis>
                                           </LineChart>
-                                          <LineChart fx:id="chart_Physics3" title="Position vs Time">
+                                          <LineChart fx:id="chart_Physics3" animated="false" axisSortingPolicy="NONE" legendVisible="false" title="Position vs Time">
                                              <xAxis>
                                                 <NumberAxis label="time (s)" side="BOTTOM" />
                                              </xAxis>
@@ -115,6 +116,9 @@
                                              </yAxis>
                                           </LineChart>
                                        </children>
+                                       <cursor>
+                                          <Cursor fx:constant="CROSSHAIR" />
+                                       </cursor>
                                     </VBox>
                                  </content>
                               </ScrollPane>
@@ -126,7 +130,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0">
                            <children>
-                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" prefHeight="275.0" prefWidth="379.0" title="Best fitness Per Generation">
+                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" legendVisible="false" prefHeight="275.0" prefWidth="379.0" title="Best fitness Per Generation">
                                  <xAxis>
                                     <CategoryAxis label="Generation" side="BOTTOM" />
                                  </xAxis>

@@ -103,23 +103,17 @@ public class Walker implements Serializable {
 
     }
 
-    public void setTranslateX(double finalX) {
-        Map<NodeModel, Double> nodeMap = new HashMap<>();
-        for (BasicModel bm : this.basicModels) {
-            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
-            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
-        }
-        //nodeMap.keySet().stream().forEach();
+    public void setInitialXY(double[][] xyPositionsPerNode) {
+        ArrayList<NodeModel> allNodes = new ArrayList<>(this.getAllNodes());
 
-    }
-
-    public void setTranslateY(double finalY) {
-        Map<NodeModel, Double> nodeMap = new HashMap<>();
-        for (BasicModel bm : this.basicModels) {
-            nodeMap.put(bm.getNextNode(), bm.getNextNode().getCenterX());
-            nodeMap.put(bm.getPrevNode(), bm.getPrevNode().getCenterX());
+        for (int i = 0; i < allNodes.size(); i++) {
+            allNodes.get(i).setCenterX(xyPositionsPerNode[i][0]);
+            allNodes.get(i).setCenterY(xyPositionsPerNode[i][1]);
         }
-        //nodeMap.keySet().stream().forEach();
+        for (BasicModel bm : this.getBasicModels()) {
+            bm.updateLink();
+        }
+
     }
 
     public void addBasicModel(BasicModel basicModel) {
@@ -137,7 +131,7 @@ public class Walker implements Serializable {
     }
 
     public void updateWalker() {
-        
+
         for (BasicModel basicModel : basicModels) {
             basicModel.updateNextNode(basicModel, basicModel.getNextForce(), elapsedTime);
             basicModel.updatePreviousNode(basicModel, basicModel.getPreviousForce(), elapsedTime);

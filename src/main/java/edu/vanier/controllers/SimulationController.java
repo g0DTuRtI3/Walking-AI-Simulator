@@ -5,6 +5,7 @@ import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
 import edu.vanier.map.Walker;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
@@ -133,7 +134,7 @@ public class SimulationController {
         private double currentInterval = 0;
         private final double nanoTOSecond = 1000000000.0;
         private int i = 0;
-        private final double pxlToMeterConst = 1 / 100;
+        private final double pxlToMeterConst = 1 / 100.0;
         private Series<Number, Number> updateSpeed = new Series<>();
         private Series<Number, Number> updatePos = new Series<>();
         private Series<Number, Number> updateKE = new Series<>();
@@ -150,28 +151,32 @@ public class SimulationController {
 
             double bestDistance = 0;
             for (Walker walk : walkers) {
+                for (NodeModel node : walk.getAllNodes()) {
+                    if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
+                        node.setSpeedY(0);
+
+                    } else {
+                        node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
+
+                    }
+                    node.setCenterY(node.getCenterY() + (node.getSpeedY()) * elapsedTime);
+                    node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
+
+                }
+                //moveWalker(elapsedTime);
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
-                moveWalker();
+
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
                 if (walk.getPosition() > bestDistance) {
                     if (bestWalker != walk && bestWalker != null) {
-                        bestWalker.setOpacity(0.5);
+                        bestWalker.setOpacity(0.9);
                     }
                     bestWalker = walk;
                     bestDistance = walk.getPosition();
                     bestWalker.setFitnessScore(bestWalker.getFitnessScore() + 1);
                     walk.setOpacity(1);
                 }
-                for (NodeModel node : walk.getAllNodes()) {
-                    if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
-                        node.setSpeedY(0);
 
-                    } else {
-                        node.setSpeedY(node.getSpeedY() + GRAVITY * elapsedTime);
-                    }
-                    node.setCenterY(node.getCenterY() + (node.getSpeedY()) * elapsedTime);
-
-                }
 //                for (BasicModel model : walk.getBasicModels()) {
 //                    if (model.getPrevNode().getCenterX() >= model.getPrevNode().getCenterX()) {
 //                        if (model.getPrevNode().getCenterX() >= bestDistance) {
@@ -191,11 +196,13 @@ public class SimulationController {
             if (bestWalker != null) {
 
                 double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
+                System.out.println(instantSpeed);
+
                 updateSpeed.getData().add(new XYChart.Data<>(currentInterval, instantSpeed));
 
                 updatePos.getData().add(new XYChart.Data<>(currentInterval, bestDistance * pxlToMeterConst));
 
-                double KE = 1 / 2 * bestWalker.getMass() * Math.pow(instantSpeed, 2);
+                double KE = 1 / 2.0 * bestWalker.getMass() * Math.pow(instantSpeed, 2);
                 updateKE.getData().add(new XYChart.Data<>(currentInterval, KE));
 
             }
@@ -230,9 +237,7 @@ public class SimulationController {
             for (Walker w : walkers) {
 
                 w.setFitnessScore(0);
-                w.setTranslateX(800);
-                w.setTranslateY(700);
-
+                w.setInitialXY(initialXYPositions);
                 if (w == best) {
                     continue;
                 }
@@ -259,13 +264,21 @@ public class SimulationController {
     private double xtranslate;
     private double ytranslate;
 
+    private double[][] initialXYPositions;
+
     public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate, double xtranslate, double ytranslate) {
         this.interval = interval;
         this.primaryStage = primaryStage;
         this.xtranslate = xtranslate;
         this.ytranslate = ytranslate;
         walkers = new Walker[nbModel];
+        initialXYPositions = new double[walker.getAllNodes().size()][2];
+        ArrayList<NodeModel> allNodes = new ArrayList<>(walker.getAllNodes());
+        for (int i = 0; i < allNodes.size(); i++) {
+            initialXYPositions[i][0] = allNodes.get(i).getCenterX();
+            initialXYPositions[i][1] = allNodes.get(i).getCenterY();
 
+        }
         for (int i = 0; i < nbModel; i++) {
             Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers);
             walkerI.learningRate(learningRate);
@@ -287,22 +300,31 @@ public class SimulationController {
         }
     }
 
-    private void moveWalker() {
+    private void moveWalker(double dtime) {
 
         for (Walker w : walkers) {
-            HashSet<NodeModel> nodes = w.getAllNodes();
+            ArrayList<NodeModel> nodes = new ArrayList<>(w.getAllNodes());
 
-            double[] forcesOnNodes = new double[nodes.size()];
-            for (int i = 0; i < w.getAllNodes().size(); i++) {
+            double[] motionOnNodes = new double[nodes.size()];
+            for (int i = 0; i < nodes.size(); i++) {
 
                 //put all force on every node in every []
-                forcesOnNodes[i] = 10 * Math.random();
+                motionOnNodes[i] = nodes.get(i).getSpeedX();
 
             }
             //all forces that walker will apply on every Node
-            double[] predictions = w.getBrain().predict(forcesOnNodes);
+            double[] predictions = w.getBrain().predict(motionOnNodes);
 
             // make walker move here e.g. w.update(predictions); 
+            for (int i = 0; i < w.getBasicModels().size(); i++) {
+
+                //put all force on every node in every []
+                for (int j = 0; j < w.getBasicModels().size(); j++) {
+                    w.getBasicModels().get(j).updateNextNode(w.getBasicModels().get(i), predictions[j], dtime);
+                    w.getBasicModels().get(j).updatePreviousNode(w.getBasicModels().get(i), predictions[j], dtime);
+                }
+
+            }
         }
     }
 
@@ -343,13 +365,12 @@ public class SimulationController {
         ground.setStartY(800);
         ground.setEndY(800);
 
-        ground.setStrokeWidth(15);
+        ground.setStrokeWidth(100);
 
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
         for (Walker w : walkers) {
-            
 
             tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
             /*for (BasicModel b : w.getBasicModels()) {
