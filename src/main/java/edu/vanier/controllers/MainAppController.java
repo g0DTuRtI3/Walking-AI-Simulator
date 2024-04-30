@@ -32,8 +32,20 @@ public class MainAppController {
     }
 
     @FXML
-    void aboutUsOnAction(ActionEvent event) {
+    void aboutUsOnAction(ActionEvent event) throws IOException {
+        FXMLLoader aboutUsLoader = new FXMLLoader(getClass().getResource("/fxml/AboutUs_Layout.fxml"));
+        aboutUsLoader.setController(new AboutUsController(primaryStage));
+        Pane root = aboutUsLoader.load();
 
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("AboutUs");
+        primaryStage.show();
     }
 
     @FXML
@@ -49,7 +61,7 @@ public class MainAppController {
         primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
-        primaryStage.setTitle("Model Editor");
+        primaryStage.setTitle("Settings");
         primaryStage.show();
     }
 

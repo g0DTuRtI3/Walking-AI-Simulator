@@ -152,8 +152,11 @@ public class SimulationController {
             double bestDistance = 0;
             for (Walker walk : walkers) {
                 for (NodeModel node : walk.getAllNodes()) {
-                    if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
-                        node.setSpeedY(0);
+                    //if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
+                    if (node.intersects(ground.getBoundsInParent())) {
+                        
+                        node.setSpeedY(1);
+                        
 
                     } else {
                         node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
@@ -163,7 +166,7 @@ public class SimulationController {
                     node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
 
                 }
-                //moveWalker(elapsedTime);
+                moveWalker(elapsedTime);
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
 
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));

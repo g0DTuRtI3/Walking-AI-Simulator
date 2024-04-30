@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" text="This application was made by Youssef Ben Mouny, Zeyu Huang and Gabriel Sabrian. This project features basic forces such as gravity and artificial intelligence behavior to physical basic environments. .........." BorderPane.alignment="CENTER" />
+   </center>
+   <right>
+      <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonOnAction" text="Back" textFill="#7e0ecc" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Bell MT Bold" size="26.0" />
+         </font>
+      </Button>
+   </right>
+</BorderPane>
