@@ -1,6 +1,7 @@
 package edu.vanier.ui;
 
 import edu.vanier.controllers.EditorController;
+import edu.vanier.controllers.MainAppController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,8 +29,8 @@ public class MainApp extends Application {
             logger.info("Bootstrapping the application...");
             //-- 1) Load the scene graph from the specified FXML file and 
             // associate it with its FXML controller.
-            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
-            mainAppLoader.setController(new EditorController(primaryStage));
+            FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
+            mainAppLoader.setController(new MainAppController(primaryStage));
             Pane root = mainAppLoader.load();
 
             //-- 2) Create and set the scene to the stage.
@@ -39,7 +40,7 @@ public class MainApp extends Application {
             primaryStage.setResizable(true);
             // We just need to bring the main window to front.
             primaryStage.setAlwaysOnTop(true);
-            primaryStage.setTitle("Model Editor");
+            primaryStage.setTitle("Walking AI Simulator");
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
         } catch (IOException ex) {
