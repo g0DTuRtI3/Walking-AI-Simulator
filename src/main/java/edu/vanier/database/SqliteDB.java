@@ -33,8 +33,8 @@ public class SqliteDB extends DBConnectionProvider {
         return conn;
     }
     
-     public void readModel() {
-        String sql = "SELECT * FROM data";
+     public byte[] readModel(String modelId) {
+        String sql = "SELECT * FROM data WHERE Id = "+modelId;
 
         try (Connection conn = this.connect();
              Statement stmt  = conn.createStatement();
@@ -45,10 +45,12 @@ public class SqliteDB extends DBConnectionProvider {
                 System.out.println(rs.getInt("Id") +  "\t" + 
                                    rs.getString("Name") + "\t" +
                                    rs.getBytes("Walker"));
+                return rs.getBytes("Walker");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return null;
     }
     
 

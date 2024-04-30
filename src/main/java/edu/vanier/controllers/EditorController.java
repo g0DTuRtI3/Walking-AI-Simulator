@@ -188,6 +188,8 @@ public class EditorController {
 
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
+        SqliteDB db = new SqliteDB();
+        b_Array = db.readModel("17");
         seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
         walker = loadModel(seriWalker);
         System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
