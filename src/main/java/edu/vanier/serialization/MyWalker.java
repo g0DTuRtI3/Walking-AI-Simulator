@@ -18,6 +18,7 @@ public class MyWalker implements Serializable{
     private NeuralNetwork brain;
     private static float learningRate = 0.3f;
     private int fitnessScore;
+    private int id;
     
     public void serialize(Object walker, String file) throws IOException{
         FileOutputStream fos = new FileOutputStream(file);
@@ -47,6 +48,10 @@ public class MyWalker implements Serializable{
         return learningRate;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getFitnessScore() {
         return fitnessScore;
     }
@@ -65,5 +70,9 @@ public class MyWalker implements Serializable{
 
     public void setFitnessScore(int fitnessScore) {
         this.fitnessScore = fitnessScore;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

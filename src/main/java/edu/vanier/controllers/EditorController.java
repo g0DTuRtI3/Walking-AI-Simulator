@@ -370,6 +370,7 @@ public class EditorController {
         MyWalker serializeWalker = new MyWalker();
         serializeWalker.setBrain(walker.getBrain());
         serializeWalker.setFitnessScore(walker.getFitnessScore());
+        serializeWalker.setId(walker.getId());
 
         ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
         for (BasicModel basicModel : walker.getBasicModels()) {
@@ -392,6 +393,8 @@ public class EditorController {
 
         load.setBrain(serializedWalker.getBrain());
         load.setFitnessScore(serializedWalker.getFitnessScore());
+        load.setId(serializedWalker.getId());
+        
         ArrayList<BasicModel> basicModels = new ArrayList<>();
 
         for (MyBasicModel myBasicModel : serializedWalker.getBasicModels()) {

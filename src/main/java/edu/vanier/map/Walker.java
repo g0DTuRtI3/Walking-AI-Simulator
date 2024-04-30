@@ -28,6 +28,7 @@ public class Walker implements Serializable {
     private NeuralNetwork brain;
     private static float learningRate = 0.3f;
     private int fitnessScore;
+    private int id;
     private double trainedTime = 0;
 
 //    public void serialize(Object walker, String file) throws IOException{
@@ -250,4 +251,11 @@ public class Walker implements Serializable {
         this.elapsedTime = elapsedTime;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
