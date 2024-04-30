@@ -196,7 +196,7 @@ public class SimulationController {
             if (bestWalker != null) {
 
                 double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
-                System.out.println(instantSpeed);
+                
 
                 updateSpeed.getData().add(new XYChart.Data<>(currentInterval, instantSpeed));
 
