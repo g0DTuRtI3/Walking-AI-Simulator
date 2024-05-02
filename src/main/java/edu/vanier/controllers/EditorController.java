@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
@@ -62,6 +64,9 @@ public class EditorController {
 
     @FXML
     private Button btn_Clear;
+
+    @FXML
+    private ComboBox<String> environmentComboBox;
 
     @FXML
     private Button btn_Start;
@@ -121,6 +126,7 @@ public class EditorController {
 
     @FXML
     void initialize() {
+        this.environmentComboBox.setItems(FXCollections.observableArrayList("Earth", "Moon"));
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
 
@@ -160,6 +166,24 @@ public class EditorController {
     }
 
     @FXML
+    void backButtonOnAction(ActionEvent event) throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
+        mainAppLoader.setController(new MainAppController(primaryStage));
+        Pane root = mainAppLoader.load();
+
+        //-- 2) Create and set the scene to the stage.
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Walking AI Simulator");
+        primaryStage.show();
+        primaryStage.setAlwaysOnTop(false);
+    }
+
+    @FXML
     void circleColorPickerOnAction(ActionEvent event) {
         circleColor = circleColorPicker.getValue();
     }
@@ -186,6 +210,14 @@ public class EditorController {
             isLinkMode = false;
             selected();
         }
+    }
+
+    public static String environment;
+
+    @FXML
+    void environmentSelected(ActionEvent event) {
+        environment = this.environmentComboBox.getSelectionModel().getSelectedItem();
+        System.out.println(environment);
     }
 
     @FXML
@@ -443,17 +475,16 @@ public class EditorController {
 //        });
 //    }
     private boolean isLinkConnected(MouseEvent event) {
-        try{
-        if (walker.getBasicModels().isEmpty() || circle1 != null) {
-            return (walker.getBasicModels().isEmpty()) || circle1 != null;
-        } else {
+        try {
+            if (walker.getBasicModels().isEmpty() || circle1 != null) {
+                return (walker.getBasicModels().isEmpty()) || circle1 != null;
+            } else {
 
-            
-
-            return (((Circle) event.getTarget()).getCenterX() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterX()
-                    && ((Circle) event.getTarget()).getCenterY() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterY());}
-        } catch(Exception ex){
-        return false;
+                return (((Circle) event.getTarget()).getCenterX() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterX()
+                        && ((Circle) event.getTarget()).getCenterY() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterY());
+            }
+        } catch (Exception ex) {
+            return false;
         }
 
     }

@@ -1,5 +1,6 @@
 package edu.vanier.controllers;
 
+import static edu.vanier.controllers.EditorController.environment;
 import edu.vanier.core.NeuralDisplay;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
@@ -31,7 +32,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -48,9 +51,11 @@ public class SimulationController {
 
     public Line ground = new Line(0, 0, 0, 0);
 
+    public Rectangle belowGround = new Rectangle(0, 0, 0, 0);
+
     public Group panGroup = new Group();
 
-    public static final double GRAVITY = 9.8;
+    public static double GRAVITY = 9.8;
 
     public AnimationTimer time = new AnimationTimer() {
         @Override
@@ -152,8 +157,10 @@ public class SimulationController {
             double bestDistance = 0;
             for (Walker walk : walkers) {
                 for (NodeModel node : walk.getAllNodes()) {
-                    if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
-                        node.setSpeedY(0);
+                    //if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
+                    if (node.intersects(ground.getBoundsInParent())) {
+
+                        node.setSpeedY(1);
 
                     } else {
                         node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
@@ -163,7 +170,7 @@ public class SimulationController {
                     node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
 
                 }
-                //moveWalker(elapsedTime);
+                moveWalker(elapsedTime);
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
 
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
@@ -360,12 +367,19 @@ public class SimulationController {
 
     @FXML
     void initialize() {
+        determineEnvironment();
         ground.setStartX(-100000);
         ground.setEndX(100000);
         ground.setStartY(800);
         ground.setEndY(800);
 
-        ground.setStrokeWidth(100);
+        ground.setStrokeWidth(5);
+        belowGround.setX(ground.getStartX());
+        belowGround.setY(ground.getStartY());
+        belowGround.setHeight(10000000);
+        belowGround.setWidth(ground.getEndX() - ground.getStartX());
+
+        belowGround.setFill(Color.GREEN);
 
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
@@ -397,7 +411,7 @@ public class SimulationController {
 
             w.setOpacity(0.5);
         }
-        panGroup.getChildren().add(ground);
+        panGroup.getChildren().addAll(belowGround, ground);
         simulationPane.getChildren().add(panGroup);
         simulationPane.setOnKeyPressed((event) -> {
 
@@ -417,6 +431,7 @@ public class SimulationController {
             }
 
         });
+
         timer.start();
     }
 
@@ -434,6 +449,23 @@ public class SimulationController {
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Model Editor");
         primaryStage.show();
+    }
+
+    private void determineEnvironment() {
+        switch (EditorController.environment) {
+            case "Earth":
+                this.simulationPane.setId("Earth");
+                System.out.println("Earth");
+                SimulationController.GRAVITY = 9.8;
+            case "Moon":
+                this.simulationPane.setId("Moon");
+                SimulationController.GRAVITY = 1.6;
+                System.out.println("Moon");
+            default:
+                this.simulationPane.setId("");
+                SimulationController.GRAVITY = 9.8;
+        }
+
     }
 
 }

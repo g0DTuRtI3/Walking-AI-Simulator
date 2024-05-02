@@ -1,0 +1,133 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 1 mai 2024, 18 h 00 min 56 s
+    Author     : YOUSSEF
+*/
+
+#title{
+    -fx-font-size: 70pt;
+}
+.root {
+    -fx-background-color: linear-gradient(to left, lightgreen , green);
+
+
+}
+.label {
+    -fx-text-fill: black;
+    
+    -fx-font-weight: bold;
+
+}
+
+
+.titled-pane:focused
+{
+    -fx-text-fill: yellow;
+}
+
+
+
+.titled-pane:focused > .title
+{
+    -fx-color: red;
+}
+
+.titled-pane > .title > .arrow-button
+{
+    -fx-background-color: blue;
+    
+    -fx-background-radius: 5;
+   
+}
+
+.titled-pane > .title > .arrow-button .arrow
+{
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.25em 0.3125em 0.25em 0.3125em; /* 3 3.75 3 3.75 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.titled-pane:collapsed > .title > .arrow-button .arrow
+{
+    -fx-rotate: -90;
+}
+
+.titled-pane > *.content
+{
+    -fx-background-color: linear-gradient(aliceblue, lightslategray);
+    
+}
+
+.titled-pane:focused > .title > .arrow-button .arrow
+{
+    -fx-background-color: yellow;
+}
+
+
+
+.button {
+    -fx-background-color: linear-gradient(to right, red , blue);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 15;
+    -fx-font-size: 10pt; 
+    
+    
+
+}
+.text-field {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-font-family: cursive;
+    -fx-font-size: 15pt;
+
+}
+
+
+.slider .thumb {
+    -fx-background-color: white; /* Color of the thumb */
+    -fx-background-radius: 10; 
+}
+.slider .label {
+    -fx-text-fill: blue; 
+}
+#redSlider .track{
+
+    -fx-background-color: red; /* Color of the thumb */
+    -fx-background-radius: 0; /* Make the thumb square (remove rounded corners) */
+
+}
+#greenSlider .track{
+
+    -fx-background-color: green;
+
+
+}
+#blueSlider .track{
+
+    -fx-background-color: lightblue;
+    -fx-background-radius: 0;
+
+}
+
+.slider .track {
+    -fx-background-color: black;
+}
+.menu-bar {
+    -fx-background-color: black;
+}
+.menu-bar .label {
+    -fx-background-color: black;
+    -fx-font-size: 14.0 pt;
+    -fx-font-family: "math";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10.0px;
+
+}
