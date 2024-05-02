@@ -10,7 +10,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane id="menuBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="915.0" stylesheets="@../styling/mainMenuStyleSheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
@@ -96,9 +96,9 @@
       </VBox>
    </center>
    <top>
-      <ImageView fitHeight="317.0" fitWidth="617.0" pickOnBounds="true" BorderPane.alignment="CENTER">
+      <ImageView fitHeight="607.0" fitWidth="799.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../images/LogoWalkingAI.png" />
+            <Image url="@../styling/images/LogoWalkingAI.png" />
          </image>
       </ImageView>
    </top>

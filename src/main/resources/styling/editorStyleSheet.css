@@ -11,22 +11,72 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 70pt;
 }
 .root {
-    -fx-background-color: dimgrey;
-    -fx-font-size: 10pt;
+    -fx-background-color: linear-gradient(to left, lightgreen , green);
+
 
 }
 .label {
-    -fx-text-fill: white;
-    -fx-font-size: 14pt;
+    -fx-text-fill: black;
+    
     -fx-font-weight: bold;
 
 }
+
+
+.titled-pane:focused
+{
+    -fx-text-fill: yellow;
+}
+
+
+
+.titled-pane:focused > .title
+{
+    -fx-color: red;
+}
+
+.titled-pane > .title > .arrow-button
+{
+    -fx-background-color: blue;
+    
+    -fx-background-radius: 5;
+   
+}
+
+.titled-pane > .title > .arrow-button .arrow
+{
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.25em 0.3125em 0.25em 0.3125em; /* 3 3.75 3 3.75 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.titled-pane:collapsed > .title > .arrow-button .arrow
+{
+    -fx-rotate: -90;
+}
+
+.titled-pane > *.content
+{
+    -fx-background-color: linear-gradient(aliceblue, lightslategray);
+    
+}
+
+.titled-pane:focused > .title > .arrow-button .arrow
+{
+    -fx-background-color: yellow;
+}
+
+
+
 .button {
     -fx-background-color: linear-gradient(to right, red , blue);
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-border-radius: 15;
-    -fx-background-radius: 20;
+    -fx-font-size: 10pt; 
+    
+    
 
 }
 .text-field {
@@ -42,10 +92,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .slider .thumb {
     -fx-background-color: white; /* Color of the thumb */
-    -fx-background-radius: 0; /* Make the thumb square (remove rounded corners) */
+    -fx-background-radius: 10; 
 }
 .slider .label {
-    -fx-text-fill: red; /* Change this to your desired color */
+    -fx-text-fill: blue; 
 }
 #redSlider .track{
 
@@ -55,19 +105,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 #greenSlider .track{
 
-    -fx-background-color: green; 
-    
+    -fx-background-color: green;
+
 
 }
 #blueSlider .track{
 
-    -fx-background-color: lightblue; 
-    -fx-background-radius: 0; 
+    -fx-background-color: lightblue;
+    -fx-background-radius: 0;
 
 }
 
 .slider .track {
-    -fx-background-color: black; 
+    -fx-background-color: black;
 }
 .menu-bar {
     -fx-background-color: black;

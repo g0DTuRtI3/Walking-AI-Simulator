@@ -1,5 +1,6 @@
 package edu.vanier.controllers;
 
+import static edu.vanier.controllers.EditorController.environment;
 import edu.vanier.core.NeuralDisplay;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
@@ -49,12 +50,12 @@ public class SimulationController {
     public int interval;
 
     public Line ground = new Line(0, 0, 0, 0);
-    
-    public Rectangle belowGround = new Rectangle(0,0,0,0);
+
+    public Rectangle belowGround = new Rectangle(0, 0, 0, 0);
 
     public Group panGroup = new Group();
 
-    public static final double GRAVITY = 9.8;
+    public static double GRAVITY = 9.8;
 
     public AnimationTimer time = new AnimationTimer() {
         @Override
@@ -366,6 +367,7 @@ public class SimulationController {
 
     @FXML
     void initialize() {
+        determineEnvironment();
         ground.setStartX(-100000);
         ground.setEndX(100000);
         ground.setStartY(800);
@@ -376,7 +378,7 @@ public class SimulationController {
         belowGround.setY(ground.getStartY());
         belowGround.setHeight(10000000);
         belowGround.setWidth(ground.getEndX() - ground.getStartX());
-        
+
         belowGround.setFill(Color.GREEN);
 
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
@@ -409,7 +411,7 @@ public class SimulationController {
 
             w.setOpacity(0.5);
         }
-        panGroup.getChildren().addAll(belowGround,ground);
+        panGroup.getChildren().addAll(belowGround, ground);
         simulationPane.getChildren().add(panGroup);
         simulationPane.setOnKeyPressed((event) -> {
 
@@ -429,7 +431,7 @@ public class SimulationController {
             }
 
         });
-        
+
         timer.start();
     }
 
@@ -447,6 +449,23 @@ public class SimulationController {
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Model Editor");
         primaryStage.show();
+    }
+
+    private void determineEnvironment() {
+        switch (EditorController.environment) {
+            case "Earth":
+                this.simulationPane.setId("Earth");
+                System.out.println("Earth");
+                SimulationController.GRAVITY = 9.8;
+            case "Moon":
+                this.simulationPane.setId("Moon");
+                SimulationController.GRAVITY = 1.6;
+                System.out.println("Moon");
+            default:
+                this.simulationPane.setId("");
+                SimulationController.GRAVITY = 9.8;
+        }
+
     }
 
 }

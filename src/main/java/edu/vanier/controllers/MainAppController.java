@@ -35,12 +35,13 @@ public class MainAppController {
 
     @FXML
     void initialize() {
-        Media media = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
-        player = new MediaPlayer(media);
-        player.setAutoPlay(true);
-        player.setCycleCount(MediaPlayer.INDEFINITE);
-        
-        
+        if (player == null) {
+            Media media = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
+            player = new MediaPlayer(media);
+            player.setAutoPlay(true);
+            player.setCycleCount(MediaPlayer.INDEFINITE);
+        }
+
     }
 
     @FXML
@@ -86,7 +87,7 @@ public class MainAppController {
 
         Scene scene = new Scene(root);
         System.out.println(getClass());
-        //cene.getStylesheets().add(getClass().getResource(cssEditorPath).toExternalForm());
+
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
