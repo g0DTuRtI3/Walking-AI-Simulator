@@ -31,7 +31,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -47,6 +49,8 @@ public class SimulationController {
     public int interval;
 
     public Line ground = new Line(0, 0, 0, 0);
+    
+    public Rectangle belowGround = new Rectangle(0,0,0,0);
 
     public Group panGroup = new Group();
 
@@ -154,9 +158,8 @@ public class SimulationController {
                 for (NodeModel node : walk.getAllNodes()) {
                     //if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
                     if (node.intersects(ground.getBoundsInParent())) {
-                        
+
                         node.setSpeedY(1);
-                        
 
                     } else {
                         node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
@@ -368,7 +371,13 @@ public class SimulationController {
         ground.setStartY(800);
         ground.setEndY(800);
 
-        ground.setStrokeWidth(100);
+        ground.setStrokeWidth(5);
+        belowGround.setX(ground.getStartX());
+        belowGround.setY(ground.getStartY());
+        belowGround.setHeight(10000000);
+        belowGround.setWidth(ground.getEndX() - ground.getStartX());
+        
+        belowGround.setFill(Color.GREEN);
 
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
@@ -400,7 +409,7 @@ public class SimulationController {
 
             w.setOpacity(0.5);
         }
-        panGroup.getChildren().add(ground);
+        panGroup.getChildren().addAll(belowGround,ground);
         simulationPane.getChildren().add(panGroup);
         simulationPane.setOnKeyPressed((event) -> {
 
@@ -420,6 +429,7 @@ public class SimulationController {
             }
 
         });
+        
         timer.start();
     }
 

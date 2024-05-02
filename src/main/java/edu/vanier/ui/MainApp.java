@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 public class MainApp extends Application {
 
     private final static Logger logger = LoggerFactory.getLogger(MainApp.class);
+    private final String cssEditorPath = "";
 
     @Override
     public void start(Stage primaryStage) {
@@ -35,6 +36,9 @@ public class MainApp extends Application {
 
             //-- 2) Create and set the scene to the stage.
             Scene scene = new Scene(root);
+            scene.getStylesheets().add("-fx-background-image: url(\"src/main/resources/images/menuBackground.jpg\");");
+            scene.getStylesheets().add(cssEditorPath);
+            System.out.println(scene.getStylesheets());
             primaryStage.setScene(scene);
             primaryStage.setMaximized(true);
             primaryStage.setResizable(true);
@@ -46,7 +50,7 @@ public class MainApp extends Application {
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }
-        
+
 //        //For the Final build
 //        try {
 //            logger.info("Bootstrapping the application...");
