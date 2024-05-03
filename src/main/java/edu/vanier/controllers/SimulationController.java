@@ -86,7 +86,7 @@ public class SimulationController {
     private Button btn_BackToEditor;
 
     @FXML
-    private LineChart<String, Number> chart_Network;
+    private LineChart<Number, Number> chart_Network;
 
     @FXML
     private LineChart<Number, Number> chart_Physics1;
@@ -143,7 +143,7 @@ public class SimulationController {
         private Series<Number, Number> updateSpeed = new Series<>();
         private Series<Number, Number> updatePos = new Series<>();
         private Series<Number, Number> updateKE = new Series<>();
-        private Series<String, Number> updateGeneration = new Series<>();
+        private Series<Number, Number> updateGeneration = new Series<>();
         private double speedY = 0;
 
         @Override
@@ -203,7 +203,6 @@ public class SimulationController {
             if (bestWalker != null) {
 
                 double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
-                System.out.println(instantSpeed);
 
                 updateSpeed.getData().add(new XYChart.Data<>(currentInterval, instantSpeed));
 
@@ -229,11 +228,11 @@ public class SimulationController {
             previousTime = now;
         }
 
-        public void settingNextGeneration(Walker best, Series<String, Number> updateGeneration) {
+        public void settingNextGeneration(Walker best, Series<Number, Number> updateGeneration) {
             lastXbestWalker = 0;
             System.err.println("Generation " + txt_Generation.getText() + " finished");
 
-            updateGeneration.getData().add(new XYChart.Data<>(txt_Generation.getText(), best.getFitnessScore()));
+            updateGeneration.getData().add(new XYChart.Data<>(Integer.parseInt(txt_Generation.getText()), best.getFitnessScore()));
 
             txt_Generation.setText(String.format("%d", Integer.parseInt(txt_Generation.getText()) + 1));
             for (Walker w : walkers) {
@@ -379,8 +378,7 @@ public class SimulationController {
         belowGround.setHeight(10000000);
         belowGround.setWidth(ground.getEndX() - ground.getStartX());
 
-        belowGround.setFill(Color.GREEN);
-
+        
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
 
@@ -451,21 +449,28 @@ public class SimulationController {
         primaryStage.show();
     }
 
-    private void determineEnvironment() {
+    private void determineEnvironment() {    
         switch (EditorController.environment) {
-            case "Earth":
+            case "Earth" -> {
                 this.simulationPane.setId("Earth");
-                System.out.println("Earth");
+                MainAppController.naturePlayer.play();
+                MainAppController.defaultPlayer.stop();
+                
+                this.belowGround.setFill(Color.GREEN);
+                
                 SimulationController.GRAVITY = 9.8;
-            case "Moon":
+            }
+            case "Moon" -> {
                 this.simulationPane.setId("Moon");
+                this.belowGround.setFill(Color.LIGHTGRAY);
                 SimulationController.GRAVITY = 1.6;
-                System.out.println("Moon");
-            default:
-                this.simulationPane.setId("");
+            }
+            default -> {
+                this.panGroup.setId("");
+                this.belowGround.setFill(Color.LIGHTGREEN);
                 SimulationController.GRAVITY = 9.8;
+            }
         }
-
     }
 
 }

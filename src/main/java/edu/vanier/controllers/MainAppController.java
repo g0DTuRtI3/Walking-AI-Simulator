@@ -16,7 +16,9 @@ public class MainAppController {
 
     private final String cssEditorPath = "editorStyleSheet.css";
     File f = new File(cssEditorPath);
-    static MediaPlayer player;
+    static MediaPlayer defaultPlayer;
+    static MediaPlayer naturePlayer;
+    
 
     Stage primaryStage;
 
@@ -35,11 +37,14 @@ public class MainAppController {
 
     @FXML
     void initialize() {
-        if (player == null) {
-            Media media = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
-            player = new MediaPlayer(media);
-            player.setAutoPlay(true);
-            player.setCycleCount(MediaPlayer.INDEFINITE);
+        if (defaultPlayer == null) {
+            Media defaultMedia = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
+            Media natureMedia = new Media(getClass().getResource("/music/natureMusic.mp3").toExternalForm());
+            defaultPlayer = new MediaPlayer(defaultMedia);
+            naturePlayer = new MediaPlayer(natureMedia);
+            naturePlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            defaultPlayer.setAutoPlay(true);
+            defaultPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
 
     }
@@ -98,7 +103,7 @@ public class MainAppController {
         primaryStage.show();
     }
 
-    static public MediaPlayer getPlayer() {
-        return player;
+    static public MediaPlayer getDefaultPlayer() {
+        return defaultPlayer;
     }
 }

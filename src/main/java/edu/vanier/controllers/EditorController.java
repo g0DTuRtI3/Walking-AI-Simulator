@@ -212,12 +212,12 @@ public class EditorController {
         }
     }
 
-    public static String environment;
+    public static String environment = "";
 
     @FXML
     void environmentSelected(ActionEvent event) {
         environment = this.environmentComboBox.getSelectionModel().getSelectedItem();
-        System.out.println(environment);
+        
     }
 
     @FXML

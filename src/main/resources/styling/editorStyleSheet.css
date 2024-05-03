@@ -11,13 +11,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 70pt;
 }
 .root {
-    -fx-background-color: linear-gradient(to left, lightgreen , green);
-
+    -fx-background-color: linear-gradient(to left, IndianRed , darkred);
+}
+.pane{
+    -fx-background-color: LightGoldenRodYellow;
 
 }
 .label {
     -fx-text-fill: black;
-    
+
     -fx-font-weight: bold;
 
 }
@@ -37,10 +39,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .titled-pane > .title > .arrow-button
 {
-    -fx-background-color: blue;
-    
+    -fx-background-color: black;
+
     -fx-background-radius: 5;
-   
+
 }
 
 .titled-pane > .title > .arrow-button .arrow
@@ -59,7 +61,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .titled-pane > *.content
 {
     -fx-background-color: linear-gradient(aliceblue, lightslategray);
-    
+
 }
 
 .titled-pane:focused > .title > .arrow-button .arrow
@@ -70,13 +72,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 
 .button {
-    -fx-background-color: linear-gradient(to right, red , blue);
-    -fx-text-fill: white;
+    -fx-background-color: CadetBlue;
+    -fx-text-fill: black;
     -fx-font-weight: bold;
     -fx-border-radius: 15;
-    -fx-font-size: 10pt; 
-    
-    
+    -fx-font-size: 10pt;
+
+
 
 }
 .text-field {
@@ -92,10 +94,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .slider .thumb {
     -fx-background-color: white; /* Color of the thumb */
-    -fx-background-radius: 10; 
+    -fx-background-radius: 10;
 }
 .slider .label {
-    -fx-text-fill: blue; 
+    -fx-text-fill: blue;
 }
 #redSlider .track{
 

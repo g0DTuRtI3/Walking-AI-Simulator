@@ -82,19 +82,19 @@ public class NodeModel extends javafx.scene.shape.Circle {
         }
 
         double a = force / mass; // F = ma
-        System.out.println("a: " + a);
+        //System.out.println("a: " + a);
         double v = Math.sqrt(Math.abs(a * linkLength)); // a = v^2/r
-        System.out.println("v: " + v);
+        //System.out.println("v: " + v);
 
         if (w > 0) {
             if (v / linkLength > prevW) {
                 alpha += (v / linkLength - prevW) / (deltaTime / 1e9);
-                System.out.println("alpha: " + alpha);
-                System.out.println("deltaTime: " + deltaTime / 1e9);
+                //System.out.println("alpha: " + alpha);
+                //System.out.println("deltaTime: " + deltaTime / 1e9);
             } else {
                 alpha -= (prevW) / (deltaTime / 1e9);
-                System.out.println("alpha: " + alpha);
-                System.out.println("deltaTime: " + deltaTime / 1e9);
+               // System.out.println("alpha: " + alpha);
+                //System.out.println("deltaTime: " + deltaTime / 1e9);
             }
         }
 
@@ -106,7 +106,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
 
         prevW = v / linkLength;
 
-        System.out.println("w: " + w);
+        //System.out.println("w: " + w);
 
         currentTime = System.nanoTime();
 
