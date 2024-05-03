@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="817.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="72.0" prefWidth="247.0" text="Start">
+               <font>
+                  <Font name="Broadway" size="40.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.8862559241706162" endY="1.0" proportional="false" startX="0.8151658767772512">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006711409395973154">
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.04528914764523506" green="0.01656920090317726" blue="0.44736841320991516" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+            <Button fx:id="settingButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="72.0" prefWidth="247.0" text="Settings" textOverrun="CLIP">
+               <font>
+                  <Font name="Broadway" size="40.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.8862559241706162" endY="1.0" proportional="false" startX="0.8151658767772512">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006711409395973154">
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.04528914764523506" green="0.01656920090317726" blue="0.44736841320991516" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+            <Button fx:id="aboutUsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="72.0" prefWidth="247.0" text="About Us" textAlignment="CENTER">
+               <font>
+                  <Font name="Broadway" size="40.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.8862559241706162" endY="1.0" proportional="false" startX="0.8151658767772512">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006711409395973154">
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.04528914764523506" green="0.01656920090317726" blue="0.44736841320991516" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <ImageView fitHeight="344.0" fitWidth="566.0" pickOnBounds="true" BorderPane.alignment="CENTER">
+         <image>
+            <Image url="@../images/LogoWalkingAI.png" />
+         </image>
+      </ImageView>
+   </top>
+</BorderPane>

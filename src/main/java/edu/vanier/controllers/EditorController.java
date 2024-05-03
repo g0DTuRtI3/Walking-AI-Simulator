@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
@@ -28,6 +30,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -55,6 +58,7 @@ public class EditorController {
     private String modelName;
     private Stage primaryStage;
     private Walker walker = new Walker();
+
     private MyWalker seriWalker;
     private SqliteDB database = new SqliteDB();
 
@@ -63,6 +67,9 @@ public class EditorController {
 
     @FXML
     private Button btn_Clear;
+
+    @FXML
+    private ComboBox<String> environmentComboBox;
 
     @FXML
     private Button btn_Start;
@@ -132,6 +139,7 @@ public class EditorController {
 
     @FXML
     void initialize() {
+        this.environmentComboBox.setItems(FXCollections.observableArrayList("Earth", "Moon"));
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
 
@@ -158,7 +166,7 @@ public class EditorController {
 
         //Print all saved models
         database.printAllModel();
-        
+
         load("happypotato");
     }
 
@@ -173,6 +181,24 @@ public class EditorController {
             isCircleMode = false;
             selected();
         }
+    }
+
+    @FXML
+    void backButtonOnAction(ActionEvent event) throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
+        mainAppLoader.setController(new MainAppController(primaryStage));
+        Pane root = mainAppLoader.load();
+
+        //-- 2) Create and set the scene to the stage.
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Walking AI Simulator");
+        primaryStage.show();
+        primaryStage.setAlwaysOnTop(false);
     }
 
     @FXML
@@ -202,6 +228,14 @@ public class EditorController {
             isLinkMode = false;
             selected();
         }
+    }
+
+    public static String environment;
+
+    @FXML
+    void environmentSelected(ActionEvent event) {
+        environment = this.environmentComboBox.getSelectionModel().getSelectedItem();
+        System.out.println(environment);
     }
 
     @FXML
@@ -234,7 +268,7 @@ public class EditorController {
         } else if (isCircleMode) {
             addCircle(event);
             // in link mode: add links between circles
-        } else if (isLinkMode) {
+        } else if (isLinkMode && isLinkConnected(event)) {
             addLink(event);
         } else {
             System.out.println("pane on mouse clicked error");
@@ -372,8 +406,8 @@ public class EditorController {
                 return;
             }
 
-            nextNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
-            prevNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
+            prevNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
+            nextNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
 
             BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
 
@@ -498,7 +532,7 @@ public class EditorController {
             System.out.println(seriWalker);
         }
     }
-    
+
     public void load(String name) {
         SqliteDB db = new SqliteDB();
         System.out.println(modelName);
@@ -514,6 +548,20 @@ public class EditorController {
         } catch (Exception e) {
             System.out.println("Walker Null: " + e);
             System.out.println(seriWalker);
+        }
+    }
+
+    private boolean isLinkConnected(MouseEvent event) {
+        try {
+            if (walker.getBasicModels().isEmpty() || circle1 != null) {
+                return (walker.getBasicModels().isEmpty()) || circle1 != null;
+            } else {
+
+                return (((Circle) event.getTarget()).getCenterX() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterX()
+                        && ((Circle) event.getTarget()).getCenterY() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterY());
+            }
+        } catch (Exception ex) {
+            return false;
         }
     }
 }

@@ -1,0 +1,21 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 1 mai 2024, 17 h 55 min 21 s
+    Author     : YOUSSEF
+*/
+
+#Moon{
+    -fx-background-image: url("images/spaceBackground.gif");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 2000 1200;
+    -fx-background-position: center center;
+}
+#Earth{
+    -fx-background-image: url("images/WalkBackgroundEnvironment.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 2000 1200;
+    -fx-background-position: center center;
+}

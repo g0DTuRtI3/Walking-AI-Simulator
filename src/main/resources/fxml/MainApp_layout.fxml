@@ -1,56 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <HBox alignment="CENTER" prefHeight="202.0" prefWidth="600.0">
-               <children>
-                  <TextArea disable="true" prefHeight="202.0" prefWidth="360.0" text="Temp Text For The Title" wrapText="true" />
-               </children>
-            </HBox>
-         </children>
-      </Pane>
-   </top>
+<BorderPane id="menuBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="915.0" stylesheets="@../styling/mainMenuStyleSheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" maxHeight="50.0" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button fx:id="btn_Simulation" focusTraversable="false" mnemonicParsing="false" onAction="#simulationOnAction" text="Simulation">
-                     <font>
-                        <Font name="Comic Sans MS" size="30.0" />
-                     </font>
-                  </Button>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" maxHeight="50.0" prefHeight="100.0" prefWidth="50.0" spacing="30.0">
-               <children>
-                  <Button fx:id="btn_AboutUs" focusTraversable="false" mnemonicParsing="false" onAction="#aboutUsOnAction" text="About Us">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btn_Setting" focusTraversable="false" mnemonicParsing="false" onAction="#settingOnAction" text="Settings">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Button>
-               </children>
-            </HBox>
+            <Button fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startButtonOnAction" prefHeight="72.0" prefWidth="247.0" text="Start">
+               <font>
+                  <Font name="Broadway" size="40.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.8862559241706162" endY="1.0" proportional="false" startX="0.8151658767772512">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006711409395973154">
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.04528914764523506" green="0.01656920090317726" blue="0.44736841320991516" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+            <Button fx:id="settingButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#settingOnAction" prefHeight="72.0" prefWidth="247.0" text="Settings" textOverrun="CLIP">
+               <font>
+                  <Font name="Broadway" size="40.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.8862559241706162" endY="1.0" proportional="false" startX="0.8151658767772512">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006711409395973154">
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.04528914764523506" green="0.01656920090317726" blue="0.44736841320991516" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+            <Button fx:id="aboutUsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#aboutUsOnAction" prefHeight="72.0" prefWidth="247.0" text="About Us" textAlignment="CENTER">
+               <font>
+                  <Font name="Broadway" size="40.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.8862559241706162" endY="1.0" proportional="false" startX="0.8151658767772512">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.006711409395973154">
+                           <color>
+                              <Color red="0.9473684430122375" green="0.061403509229421616" blue="0.061403509229421616" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.04528914764523506" green="0.01656920090317726" blue="0.44736841320991516" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
          </children>
-         <BorderPane.margin>
-            <Insets bottom="100.0" />
-         </BorderPane.margin>
       </VBox>
    </center>
+   <top>
+      <ImageView fitHeight="607.0" fitWidth="799.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+         <image>
+            <Image url="@../styling/images/LogoWalkingAI.png" />
+         </image>
+      </ImageView>
+   </top>
 </BorderPane>
