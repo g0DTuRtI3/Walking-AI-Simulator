@@ -33,36 +33,20 @@ public class loadController {
                     System.out.println("Load controller name :" + selectedModel);
                     returnToEditor(selectedModel);
                 } catch (IOException ex) {
-                    Logger.getLogger(loadController.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(ex);
                 }
             }
         });
     }
-    
+
     public loadController(Stage stage) {
         primaryStage = stage;
     }
 
-//    public void returnToEditor(String modelName) throws IOException {
-//        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
-//        mainAppLoader.setController(new EditorController(primaryStage, modelName));
-//        Pane root = mainAppLoader.load();
-//
-//        Scene scene = new Scene(root);
-//        primaryStage.setScene(scene);
-//        primaryStage.setMaximized(false);
-//        primaryStage.setMaximized(true);
-//        // We just need to bring the main window to front.
-//        primaryStage.setAlwaysOnTop(true);
-//        primaryStage.setTitle("Editor");
-//        primaryStage.show();
-//    }
-    
     public void returnToEditor(String selectedModel) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
-        EditorController controller = new EditorController(primaryStage);
+        EditorController controller = new EditorController(primaryStage, selectedModel);
         mainAppLoader.setController(controller);
-        controller.load(selectedModel);
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);

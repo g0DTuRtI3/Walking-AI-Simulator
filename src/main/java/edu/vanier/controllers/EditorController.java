@@ -134,7 +134,6 @@ public class EditorController {
     public EditorController(Stage primaryStage, String modelName) throws IOException {
         this.primaryStage = primaryStage;
         this.modelName = modelName;
-        load();
     }
 
     @FXML
@@ -165,9 +164,12 @@ public class EditorController {
         });
 
         //Print all saved models
-        database.printAllModel();
+//        database.printAllModel();
 
-        load("happypotato");
+        // Loads the models if it called
+        if (modelName != null) {
+            load(modelName);
+        }
     }
 
     @FXML
@@ -471,10 +473,6 @@ public class EditorController {
     }
 
     private Walker loadModel(MyWalker serializedWalker) {
-        if (this.editorPane == null) {
-            System.out.println("null pane");
-            return null;
-        }
         clearPane();
 
         Walker load = new Walker();
@@ -535,7 +533,11 @@ public class EditorController {
 
     public void load(String name) {
         SqliteDB db = new SqliteDB();
-        System.out.println(modelName);
+
+        if (modelName != null) {
+            System.out.println(modelName);
+        }
+
         b_Array = db.readModel(name);
 
         try {
@@ -543,12 +545,15 @@ public class EditorController {
         } catch (Exception e) {
             System.out.println(e);
         }
-        try {
-            walker = loadModel(seriWalker);
-        } catch (Exception e) {
-            System.out.println("Walker Null: " + e);
-            System.out.println(seriWalker);
-        }
+//        try {
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        walker = loadModel(seriWalker);
+//        } catch (Exception e) {
+//            System.out.println("Walker Null: " + e);
+        System.out.println("printing serial walker: " + seriWalker);
+//        }
     }
 
     private boolean isLinkConnected(MouseEvent event) {
