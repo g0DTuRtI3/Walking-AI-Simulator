@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * @author Zeyu Huang
@@ -32,27 +33,67 @@ public class SqliteDB extends DBConnectionProvider {
         }
         return conn;
     }
-    
-     public byte[] readModel(String modelId) {
-        String sql = "SELECT * FROM data WHERE Id = "+modelId;
 
-        try (Connection conn = this.connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
-            
+    public ArrayList<String> readModelName() {
+        String sql = "SELECT * FROM data";
+
+        try (Connection conn = this.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             // loop through the result set
+            ArrayList<String> name_List = new ArrayList<>();
             while (rs.next()) {
-                System.out.println(rs.getInt("Id") +  "\t" + 
-                                   rs.getString("Name") + "\t" +
-                                   rs.getBytes("Walker"));
+                name_List.add(rs.getString("Name"));
+            }
+            return name_List;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+//    public byte[] readModel(String modelName) {
+//        String sql = "SELECT * FROM data WHERE Name = " + modelName;
+//
+//        try (Connection conn = this.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+//            // loop through the result set
+//            System.out.println(rs.getInt("Id") + "\t" + rs.getString("Name"));
+//            return rs.getBytes("Walker");
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//            System.out.println("Oh no not found !");
+//        }
+//        return null;
+//    }
+    
+    public byte[] readModel(String modelName) {
+        String sql = "SELECT Walker FROM data WHERE Name = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, modelName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
                 return rs.getBytes("Walker");
+            } else {
+                System.out.println("Model not found: " + modelName);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return null;
     }
-    
+
+    public void printAllModel() {
+        String sql = "SELECT * FROM data";
+
+        try (Connection conn = this.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
+            // loop through the result set
+            while (rs.next()) {
+                System.out.println(rs.getInt("Id") + "\t" + rs.getString("Name"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     //Fpublic void insertModel(String name) {
     public void addModel(byte[] b_Array, String modelName) {
@@ -66,6 +107,7 @@ public class SqliteDB extends DBConnectionProvider {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("model added");
     }
 
     /*

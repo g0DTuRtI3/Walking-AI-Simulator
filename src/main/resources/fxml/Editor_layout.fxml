@@ -10,6 +10,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -46,6 +47,12 @@
             <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Model Name" />
+                  <TextField fx:id="tf_ModelName" focusTraversable="false" promptText="Name of the Model" />
+               </children>
+            </VBox>
             <VBox prefWidth="100.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:" />

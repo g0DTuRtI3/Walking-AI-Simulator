@@ -16,12 +16,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -50,6 +52,7 @@ public class EditorController {
     private Color ogColor;
     private NodeModel prevNode;
     private NodeModel nextNode;
+    private String modelName;
     private Stage primaryStage;
     private Walker walker = new Walker();
     private MyWalker seriWalker;
@@ -112,9 +115,19 @@ public class EditorController {
     @FXML
     private Slider slider_NbModel;
 
+    @FXML
+    private TextField tf_ModelName;
+
     // Gets the Stage when called
     public EditorController(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    //Gets the name of the model selected and loads the model on the 
+    public EditorController(Stage primaryStage, String modelName) throws IOException {
+        this.primaryStage = primaryStage;
+        this.modelName = modelName;
+        load();
     }
 
     @FXML
@@ -142,6 +155,9 @@ public class EditorController {
             label_LearningRate.setText(String.format("%.2f", newValue.doubleValue()));
             learningRate = newValue.floatValue();
         });
+
+        //Print all saved models
+        database.printAllModel();
     }
 
     @FXML
@@ -188,11 +204,18 @@ public class EditorController {
 
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
-        SqliteDB db = new SqliteDB();
-        b_Array = db.readModel("17");
-        seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
-        walker = loadModel(seriWalker);
-        System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
+        loadModelSelector();
+
+//        SqliteDB db = new SqliteDB();
+//        System.out.println(modelName);
+//        b_Array = db.readModel(modelName);
+//
+//        try {
+//            seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        walker = loadModel(seriWalker);
     }
 
     @FXML
@@ -220,8 +243,15 @@ public class EditorController {
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
         b_Array = serialize(seriWalker);
-        database.addModel(b_Array, "JoeMAMA");
-        
+
+        if (tf_ModelName.getText().isBlank()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please Enter a Model Name");
+            alert.show();
+        } else {
+            database.addModel(b_Array, tf_ModelName.getText());
+        }
+
         System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
     }
 
@@ -242,6 +272,21 @@ public class EditorController {
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Simulation");
+        primaryStage.show();
+    }
+
+    private void loadModelSelector() throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/loadModelSelector_layout.fxml"));
+        mainAppLoader.setController(new loadController(primaryStage));
+        Pane root = mainAppLoader.load();
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Editor");
         primaryStage.show();
     }
 
@@ -390,13 +435,16 @@ public class EditorController {
     }
 
     private Walker loadModel(MyWalker serializedWalker) {
-        clearPane();
+        if (editorPane != null) {
+            clearPane();
+        }
+
         Walker load = new Walker();
 
         load.setBrain(serializedWalker.getBrain());
         load.setFitnessScore(serializedWalker.getFitnessScore());
         load.setId(serializedWalker.getId());
-        
+
         ArrayList<BasicModel> basicModels = new ArrayList<>();
 
         for (MyBasicModel myBasicModel : serializedWalker.getBasicModels()) {
@@ -414,7 +462,7 @@ public class EditorController {
 
         return load;
     }
-    
+
     public byte[] serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -422,7 +470,7 @@ public class EditorController {
         oos.close();
         return baos.toByteArray();
     }
-    
+
     public static Object deSerializeObjectFromString(byte[] b_Array) throws IOException, ClassNotFoundException {
         ByteArrayInputStream b = new ByteArrayInputStream(b_Array);
         ObjectInputStream ois = new ObjectInputStream(b);
@@ -431,17 +479,20 @@ public class EditorController {
         return o;
     }
 
-//    // A method that makes the shapes draggable
-//    private void dragObject(Node node) {
-//
-//        node.setOnMousePressed(e -> {
-//            mouseX = e.getSceneX();
-//            mouseY = e.getSceneY();
-//        });
-//
-//        node.setOnMouseDragged(e -> {
-//            node.setLayoutX(e.getSceneX() - mouseX);
-//            node.setLayoutY(e.getSceneY() - mouseY);
-//        });
-//    }
+    public void load() {
+        SqliteDB db = new SqliteDB();
+        System.out.println(modelName);
+        b_Array = db.readModel(modelName);
+
+        try {
+            seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            walker = loadModel(seriWalker);
+        } catch (Exception e) {
+            System.out.println("Walker Null: " + e);
+        }
+    }
 }
