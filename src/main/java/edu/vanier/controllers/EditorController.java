@@ -2,10 +2,7 @@ package edu.vanier.controllers;
 
 import edu.vanier.database.SqliteDB;
 import edu.vanier.map.*;
-import edu.vanier.serialization.MyBasicModel;
-import edu.vanier.serialization.MyLine;
-import edu.vanier.serialization.MyNodeModel;
-import edu.vanier.serialization.MyWalker;
+import edu.vanier.serialization.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,18 +16,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -38,41 +34,29 @@ public class EditorController {
 
     private final static int CIRCLE_RADIUS = 20;
     private final static int CIRCLE_SOCIAL_DISTANCING = 10;
+    private final Stage primaryStage;
+    private final SqliteDB database = new SqliteDB();
     private int nbModel = 10;
     private int interval = 10;
     private float learningRate = 0.3f;
-    private double mouseX;
-    private double mouseY;
-    private boolean isCircleMode;
-    private boolean isLinkMode;
-    private boolean isSelected;
+    private boolean isCircleMode, isLinkMode, isSelected;
     private boolean isDelMode = false;
-    private ArrayList<Circle> circle_list = new ArrayList<Circle>();
-    private Circle circle1 = null;
-    private Circle circle2 = null;
-    private Color circleColor;
-    private Color linkColor;
-    private Color ogColor;
-    private NodeModel prevNode;
-    private NodeModel nextNode;
+    private ArrayList<Circle> circle_list = new ArrayList<>();
+    private Circle circle1 = null, circle2 = null;
+    private Color circleColor, linkColor, ogColor;
+    private NodeModel prevNode, nextNode;
     private String modelName;
-    private Stage primaryStage;
     private Walker walker = new Walker();
-
     private MyWalker seriWalker;
-    private SqliteDB database = new SqliteDB();
 
     // delete str when done
     byte[] b_Array;
 
     @FXML
-    private Button btn_Clear;
-
-    @FXML
     private ComboBox<String> environmentComboBox;
-
+    
     @FXML
-    private Button btn_Start;
+    private CheckBox cb_DelMode;
 
     @FXML
     private ColorPicker circleColorPicker;
@@ -97,21 +81,6 @@ public class EditorController {
 
     @FXML
     private ColorPicker linkColorPicker;
-
-    @FXML
-    private MenuItem menuItem_About;
-
-    @FXML
-    private MenuItem menuItem_HowToUse;
-
-    @FXML
-    private MenuItem menuItem_Load;
-
-    @FXML
-    private MenuItem menuItem_Save;
-
-    @FXML
-    private RadioButton rb_DelMode;
 
     @FXML
     private Slider slider_Interval;
@@ -215,8 +184,10 @@ public class EditorController {
 
     @FXML
     void delModeOnAction(ActionEvent event) {
-        isDelMode = rb_DelMode.isSelected();
+//        isDelMode = rb_DelMode.isSelected();
         selected();
+        
+        
     }
 
     @FXML
@@ -243,17 +214,6 @@ public class EditorController {
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
         loadModelSelector();
-
-//        SqliteDB db = new SqliteDB();
-//        System.out.println(modelName);
-//        b_Array = db.readModel(modelName);
-//
-//        try {
-//            seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        walker = loadModel(seriWalker);
     }
 
     @FXML
@@ -280,6 +240,10 @@ public class EditorController {
     @FXML
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
+        if (seriWalker.getBasicModels().isEmpty()) {
+            System.out.println("Null walker");
+            return;
+        }
         b_Array = serialize(seriWalker);
 
         if (tf_ModelName.getText().isBlank()) {
@@ -545,15 +509,12 @@ public class EditorController {
         } catch (Exception e) {
             System.out.println(e);
         }
-//        try {
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
+        try {
         walker = loadModel(seriWalker);
-//        } catch (Exception e) {
-//            System.out.println("Walker Null: " + e);
+        } catch (Exception e) {
+            System.out.println("Walker Null: " + e);
         System.out.println("printing serial walker: " + seriWalker);
-//        }
+        }
     }
 
     private boolean isLinkConnected(MouseEvent event) {
@@ -568,5 +529,12 @@ public class EditorController {
         } catch (Exception ex) {
             return false;
         }
+    }
+    
+    private void deletionMode() {
+//        rb_DelMode.getProperties().addListener((observable) -> {
+//            label_NbModel.setText(Integer.toString(newValue.intValue()));
+//            nbModel = newValue.intValue();
+//        });
     }
 }

@@ -3,13 +3,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
@@ -24,20 +24,20 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../styling/editorStyleSheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../styling/editorStyleSheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="menuItem_Save" mnemonicParsing="false" onAction="#saveOnAction" text="Save" />
-                  <MenuItem fx:id="menuItem_Load" mnemonicParsing="false" onAction="#loadOnAction" text="Load" />
+              <MenuItem mnemonicParsing="false" onAction="#saveOnAction" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadOnAction" text="Load" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem fx:id="menuItem_About" mnemonicParsing="false" text="About" />
-                  <MenuItem fx:id="menuItem_HowToUse" mnemonicParsing="false" text="How To Use" />
+              <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" text="How To Use" />
             </items>
           </Menu>
         </menus>
@@ -125,8 +125,8 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-            <RadioButton fx:id="rb_DelMode" disable="true" mnemonicParsing="false" onAction="#delModeOnAction" prefHeight="39.0" prefWidth="106.0" text="Delete Mode" />
-            <Button fx:id="btn_Clear" focusTraversable="false" mnemonicParsing="false" onAction="#clearOnAction" prefHeight="70.0" prefWidth="110.0" text="Clear Editor" />
+            <CheckBox fx:id="cb_DelMode" focusTraversable="false" mnemonicParsing="false" onAction="#delModeOnAction" text="CheckBox" />
+            <Button focusTraversable="false" mnemonicParsing="false" onAction="#clearOnAction" prefHeight="70.0" prefWidth="110.0" text="Clear Editor" />
             <Button mnemonicParsing="false" onAction="#backButtonOnAction" prefHeight="70.0" prefWidth="110.0" text="Back" />
          </children>
          <padding>
@@ -144,7 +144,7 @@
          </BorderPane.margin></Pane>
    </center>
    <bottom>
-      <Button fx:id="btn_Start" focusTraversable="false" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="225.0" text="Start" BorderPane.alignment="CENTER">
+      <Button focusTraversable="false" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="225.0" text="Start" BorderPane.alignment="CENTER">
          <font>
             <Font size="17.0" />
          </font></Button>
