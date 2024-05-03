@@ -30,6 +30,7 @@ public class loadController {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 String selectedModel = modelList.getSelectionModel().getSelectedItem();
                 try {
+                    System.out.println("Load controller name :" + selectedModel);
                     returnToEditor(selectedModel);
                 } catch (IOException ex) {
                     Logger.getLogger(loadController.class.getName()).log(Level.SEVERE, null, ex);
@@ -42,9 +43,26 @@ public class loadController {
         primaryStage = stage;
     }
 
-    public void returnToEditor(String modelName) throws IOException {
+//    public void returnToEditor(String modelName) throws IOException {
+//        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
+//        mainAppLoader.setController(new EditorController(primaryStage, modelName));
+//        Pane root = mainAppLoader.load();
+//
+//        Scene scene = new Scene(root);
+//        primaryStage.setScene(scene);
+//        primaryStage.setMaximized(false);
+//        primaryStage.setMaximized(true);
+//        // We just need to bring the main window to front.
+//        primaryStage.setAlwaysOnTop(true);
+//        primaryStage.setTitle("Editor");
+//        primaryStage.show();
+//    }
+    
+    public void returnToEditor(String selectedModel) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
-        mainAppLoader.setController(new EditorController(primaryStage, modelName));
+        EditorController controller = new EditorController(primaryStage);
+        mainAppLoader.setController(controller);
+        controller.load(selectedModel);
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);

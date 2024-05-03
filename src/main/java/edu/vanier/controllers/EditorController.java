@@ -158,6 +158,8 @@ public class EditorController {
 
         //Print all saved models
         database.printAllModel();
+        
+        load("happypotato");
     }
 
     @FXML
@@ -435,17 +437,17 @@ public class EditorController {
     }
 
     private Walker loadModel(MyWalker serializedWalker) {
-        if (editorPane != null) {
-            clearPane();
+        if (this.editorPane == null) {
+            System.out.println("null pane");
+            return null;
         }
+        clearPane();
 
         Walker load = new Walker();
 
         load.setBrain(serializedWalker.getBrain());
         load.setFitnessScore(serializedWalker.getFitnessScore());
         load.setId(serializedWalker.getId());
-
-        ArrayList<BasicModel> basicModels = new ArrayList<>();
 
         for (MyBasicModel myBasicModel : serializedWalker.getBasicModels()) {
             NodeModel prevNode = new NodeModel(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), Color.web(myBasicModel.getPrevNode().getHexColor()));
@@ -493,6 +495,25 @@ public class EditorController {
             walker = loadModel(seriWalker);
         } catch (Exception e) {
             System.out.println("Walker Null: " + e);
+            System.out.println(seriWalker);
+        }
+    }
+    
+    public void load(String name) {
+        SqliteDB db = new SqliteDB();
+        System.out.println(modelName);
+        b_Array = db.readModel(name);
+
+        try {
+            seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            walker = loadModel(seriWalker);
+        } catch (Exception e) {
+            System.out.println("Walker Null: " + e);
+            System.out.println(seriWalker);
         }
     }
 }
