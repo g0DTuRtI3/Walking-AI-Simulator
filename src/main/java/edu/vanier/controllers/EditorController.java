@@ -21,6 +21,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -35,13 +36,17 @@ public class EditorController {
 
     private final static int CIRCLE_RADIUS = 20;
     private final static int CIRCLE_SOCIAL_DISTANCING = 10;
+    private final static String HOW_TO_USE_TEXT = "Insert the text for how to use";
+    private final static String ABOUT_TEXT = "Insert the text for about";
     private final Stage primaryStage;
     private final SqliteDB database = new SqliteDB();
+
     private int nbModel = 10;
     private int interval = 10;
     private float learningRate = 0.3f;
     private boolean isCircleMode, isLinkMode;
     private boolean isDelMode = false;
+
     private ArrayList<Circle> circle_list = new ArrayList<>();
     private Circle circle1 = null, circle2 = null;
     private Color circleColor, linkColor, ogColor;
@@ -54,9 +59,6 @@ public class EditorController {
     byte[] b_Array;
 
     @FXML
-    private ComboBox<String> environmentComboBox;
-
-    @FXML
     private CheckBox cb_DelMode;
 
     @FXML
@@ -67,6 +69,9 @@ public class EditorController {
 
     @FXML
     private Pane editorPane;
+
+    @FXML
+    private ComboBox<String> environmentComboBox;
 
     @FXML
     private Label label_Interval;
@@ -93,6 +98,9 @@ public class EditorController {
     private Slider slider_NbModel;
 
     @FXML
+    private TextArea ta_Info;
+
+    @FXML
     private TextField tf_ModelName;
 
     // Gets the Stage when called
@@ -113,7 +121,7 @@ public class EditorController {
 
     @FXML
     void initialize() {
-        this.environmentComboBox.setItems(FXCollections.observableArrayList("Earth", "Moon"));
+        environmentComboBox.setItems(FXCollections.observableArrayList("Earth", "Moon"));
         circleColor = circleColorPicker.getValue();
         linkColor = linkColorPicker.getValue();
 
@@ -148,6 +156,12 @@ public class EditorController {
     }
 
     @FXML
+    void aboutOnAction(ActionEvent event) {
+        ta_Info.setText(ABOUT_TEXT);
+        ta_Info.setVisible(true);
+    }
+
+    @FXML
     void backButtonOnAction(ActionEvent event) throws IOException {
         switchToMainMenu();
     }
@@ -177,7 +191,6 @@ public class EditorController {
 
     @FXML
     void delModeOnAction(ActionEvent event) {
-//        isDelMode = rb_DelMode.isSelected();
         isDelMode = cb_DelMode.isSelected();
         selected();
 
@@ -199,6 +212,17 @@ public class EditorController {
     @FXML
     void environmentSelected(ActionEvent event) {
         environment = this.environmentComboBox.getSelectionModel().getSelectedItem();
+    }
+
+    @FXML
+    void howToUseOnAction(ActionEvent event) {
+        ta_Info.setText(HOW_TO_USE_TEXT);
+        ta_Info.setVisible(true);
+    }
+
+    @FXML
+    void infoOnMouseClicked(MouseEvent event) {
+        ta_Info.setVisible(false);
     }
 
     @FXML
@@ -259,6 +283,13 @@ public class EditorController {
         if (environment == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please select the environmnet");
+            alert.show();
+            return false;
+        }
+
+        if (walker.getBasicModels().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please make a model");
             alert.show();
             return false;
         }
@@ -617,12 +648,11 @@ public class EditorController {
         //-- 2) Create and set the scene to the stage.
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Walking AI Simulator");
         primaryStage.show();
-        primaryStage.setAlwaysOnTop(false);
     }
 }

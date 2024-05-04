@@ -38,13 +38,12 @@ public class SettingsController {
         //-- 2) Create and set the scene to the stage.
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Walking AI Simulator");
         primaryStage.show();
-        primaryStage.setAlwaysOnTop(false);
         
     }
 }

@@ -36,12 +36,12 @@ public class MainAppController {
 
     @FXML
     void initialize() {
-        if (player == null) {
-            Media media = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
-            player = new MediaPlayer(media);
-            player.setAutoPlay(true);
-            player.setCycleCount(MediaPlayer.INDEFINITE);
-        }
+//        if (player == null) {
+//            Media media = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
+//            player = new MediaPlayer(media);
+//            player.setAutoPlay(true);
+//            player.setCycleCount(MediaPlayer.INDEFINITE);
+//        }
 
     }
 
