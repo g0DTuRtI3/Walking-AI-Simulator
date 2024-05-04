@@ -1,9 +1,9 @@
 package edu.vanier.controllers;
 
 import edu.vanier.core.NeuralDisplay;
-import edu.vanier.map.BasicModel;
-import edu.vanier.map.NodeModel;
-import edu.vanier.map.Walker;
+import edu.vanier.model.BasicModel;
+import edu.vanier.model.NodeModel;
+import edu.vanier.model.Walker;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
@@ -259,14 +259,14 @@ public class SimulationController {
                     //if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
                     if (node.intersects(ground.getBoundsInParent())) {
 
-                        node.setSpeedY(1);
+//                        node.setSpeedY(1);
 
                     } else {
-                        node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
+//                        node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
 
                     }
-                    node.setCenterY(node.getCenterY() + (node.getSpeedY()) * elapsedTime);
-                    node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
+//                    node.setCenterY(node.getCenterY() + (node.getSpeedY()) * elapsedTime);
+//                    node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
 
                 }
                 moveWalker(elapsedTime);
@@ -376,7 +376,7 @@ public class SimulationController {
             for (int i = 0; i < nodes.size(); i++) {
 
                 //put all force on every node in every []
-                motionOnNodes[i] = nodes.get(i).getSpeedX();
+//                motionOnNodes[i] = nodes.get(i).getSpeedX();
 
             }
             //all forces that walker will apply on every Node
@@ -387,8 +387,8 @@ public class SimulationController {
 
                 //put all force on every node in every []
                 for (int j = 0; j < w.getBasicModels().size(); j++) {
-                    w.getBasicModels().get(j).updateNextNode(w.getBasicModels().get(i), predictions[j], dtime);
-                    w.getBasicModels().get(j).updatePreviousNode(w.getBasicModels().get(i), predictions[j], dtime);
+//                    w.getBasicModels().get(j).updateNextNode(w.getBasicModels().get(i), predictions[j], dtime);
+//                    w.getBasicModels().get(j).updatePreviousNode(w.getBasicModels().get(i), predictions[j], dtime);
                 }
 
             }

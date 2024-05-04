@@ -1,10 +1,13 @@
 package edu.vanier.controllers;
 
 import edu.vanier.database.SqliteDB;
-import edu.vanier.map.*;
+import edu.vanier.model.*;
 import edu.vanier.serialization.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import edu.vanier.model.Walker;
+import edu.vanier.model.BasicModel;
+import edu.vanier.model.NodeModel;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
