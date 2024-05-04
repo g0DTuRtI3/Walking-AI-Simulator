@@ -153,6 +153,11 @@ public class EditorController {
             load(modelName);
             tf_ModelName.setText(modelName);
         }
+        
+        if (!walker.getBasicModels().isEmpty()) {
+            generateWalker(walker);
+            System.out.println("bombaclat");
+        }
     }
 
     @FXML
@@ -193,7 +198,6 @@ public class EditorController {
     void delModeOnAction(ActionEvent event) {
         isDelMode = cb_DelMode.isSelected();
         selected();
-
     }
 
     @FXML
@@ -255,7 +259,9 @@ public class EditorController {
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
         if (seriWalker.getBasicModels().isEmpty()) {
-            System.out.println("Null walker");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please create a model");
+            alert.show();
             return;
         }
         b_Array = serialize(seriWalker);
@@ -428,21 +434,6 @@ public class EditorController {
                     System.out.println("removed cicle & walker");
                 }
             }
-//        editorPane.getChildren().remove(delModel.getLink());
-//
-//        for (Node node : editorPane.getChildren()) {
-//            try {
-//                Circle deleteCircle = (Circle) node;
-//                System.out.println("yes");
-//                if (deleteCircle.getCenterX() == delModel.getNextNode().getCenterX() && deleteCircle.getCenterY() == delModel.getNextNode().getCenterY() || deleteCircle.getCenterX() == delModel.getPrevNode().getCenterX() && deleteCircle.getCenterY() == delModel.getPrevNode().getCenterY()) {
-//                    editorPane.getChildren().remove(node);
-//                }
-//            } catch (Exception e) {
-//                System.out.println("not circle");
-//            }
-//        }
-//
-//        walker.getBasicModels().remove(delModel);
             editorPaneDeletion(delModel);
             walker.getBasicModels().remove(delModel);
         } catch (Exception e) {
@@ -530,6 +521,7 @@ public class EditorController {
             Circle nextCircle = new Circle(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), CIRCLE_RADIUS, Color.web(basicModel.getNextNode().getHexColor()));
             editorPane.getChildren().addAll(loadModel.getLink(), prevCircle, nextCircle);
         }
+        System.out.println("generation complete");
     }
 
     public byte[] serialize(MyWalker serializableWalker) throws IOException {
@@ -599,13 +591,6 @@ public class EditorController {
         } catch (Exception ex) {
             return false;
         }
-    }
-
-    private void deletionMode() {
-//        rb_DelMode.getProperties().addListener((observable) -> {
-//            label_NbModel.setText(Integer.toString(newValue.intValue()));
-//            nbModel = newValue.intValue();
-//        });
     }
 
     private void switchToSimulation() throws IOException {
