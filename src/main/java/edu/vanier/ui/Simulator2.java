@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.ui;
 
-import edu.vanier.map.BasicModel;
-import edu.vanier.map.NodeModel;
-import edu.vanier.map.Walker;
+import edu.vanier.model.BasicModel;
+import edu.vanier.model.NodeModel;
+import edu.vanier.model.Walker;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -22,17 +18,18 @@ import javafx.stage.Stage;
  */
 public class Simulator2 extends Application{
     
-    NodeModel nextNode = new NodeModel(250.0+100, 375.0, Color.BLUE);
-    NodeModel previousNode = new NodeModel(50.0+100, 375.0, Color.BLUE);
+    NodeModel nextNode = new NodeModel(250.0+100, 375.0, Color.RED);
+    NodeModel previousNode = new NodeModel(50.0+100, 375.0, Color.RED);
     BasicModel basicModel = new BasicModel(previousNode, nextNode, Color.BLACK);
     Walker walker = new Walker(basicModel);
     
     Rectangle ground = new Rectangle(0, 400, 500, 400);
     private boolean moveNextNode = true;
     
-    double rightForce = 100;
-    double leftForce = 100;
+    double cClockwiseForce = 100;
+    double clockwiseForce = 100;
     double tempForce = 100;
+    double tempForce2 = 100;
     
     private AnimationTimer timer;
     private long previousTime = -1;
@@ -66,6 +63,9 @@ public class Simulator2 extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         
+        nextNode.setCurrentTime(System.nanoTime());
+        previousNode.setCurrentTime(System.nanoTime());
+        
         walker.addBasicModel(basicModel);
         
         ground.setFill(Color.GREEN);
@@ -81,19 +81,19 @@ public class Simulator2 extends Application{
             switch (event.getCode()) {
                 case A:
                     if (moveNextNode) {
-                        basicModel.setNextForce(-rightForce);
+                        basicModel.setNextForce(-cClockwiseForce);
                         //walker.moveNext(basicModel, -rightForce, elapsedTime);
                     }else {
-                        basicModel.setPreviousForce(-rightForce);
+                        basicModel.setPreviousForce(-cClockwiseForce);
                         //walker.movePrevious(basicModel, -rightForce, elapsedTime);
                     }
                     break;
                 case D:
                     if (moveNextNode) {
-                        basicModel.setNextForce(leftForce);
+                        basicModel.setNextForce(clockwiseForce);
                         //walker.moveNext(basicModel, leftForce, elapsedTime);
                     }else {
-                        basicModel.setPreviousForce(leftForce);
+                        basicModel.setPreviousForce(clockwiseForce);
                         //walker.movePrevious(basicModel, leftForce, elapsedTime);
                     }
                     break;
@@ -101,6 +101,10 @@ public class Simulator2 extends Application{
                     tempForce += 100;
                     basicModel.setNextForce(tempForce);
                     break;
+                case Q:
+                    tempForce2 -= 100;
+                    basicModel.setPreviousForce(tempForce2);
+                    
                 case LEFT:
                     moveNextNode = false;
                     break;
@@ -112,8 +116,6 @@ public class Simulator2 extends Application{
     }
     
     public void update(double elapsedTime) {
-        
-        walker.setElapsedTime(elapsedTime);
         walker.updateWalker();
         //System.out.println(basicModel.getPrevNode().getAngle());
         //System.out.println(basicModel.getNextNode().getAngle());

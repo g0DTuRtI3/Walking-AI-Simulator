@@ -1,4 +1,4 @@
-package edu.vanier.map;
+package edu.vanier.model;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -15,7 +15,7 @@ public class BasicModel {
     private final NodeModel nextNode;
     private final Line link = new Line();
     private Color color;
-    private double previousForce = 0;
+    private double prevForce = 0;
     private double nextForce = 0;
 
     public BasicModel(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
@@ -89,33 +89,42 @@ public class BasicModel {
 
         return angleRad;
     }
-
-    public void updateNextNode(BasicModel basicModel, double force, double time) {
+    
+    public void updateNextNode(double force) {
+        
         if (force != 0) {
-            nextNode.setForce(force, time, basicModel);
-            updateLink();
+            nextNode.setForce(force, this);
             nextForce = 0;
+            nextNode.setCurrentTime(System.nanoTime());
+            nextNode.setCurrentTime2(System.nanoTime());
+//            System.out.println("nextNodeMoved");
+//            System.out.println(nextNode);
         }else {
             if (nextNode.getAlpha() > 0) {
-                nextNode.updateNode(basicModel);
+                nextNode.updateNode(this);
             }
         }
     }
 
-    public void updatePreviousNode(BasicModel basicModel, double force, double time) {
+
+    
+    public void updatePreviousNode(double force) {
+        
         if (force != 0) {
-            prevNode.setForce(force, time, basicModel);
-            updateLink();
-            previousForce = 0;
+            prevNode.setForce(force, this);
+            prevForce = 0;
+            prevNode.setCurrentTime(System.nanoTime());
+            prevNode.setCurrentTime2(System.nanoTime());
+//            System.out.println("prevNodeMoved");
+//            System.out.println(prevNode);
         }else {
-            if (prevNode.getAlpha() > 0) {
-                prevNode.updateNode(basicModel);
-            }
+            prevNode.updateNode(this);
+            prevNode.setCurrentTime2(System.nanoTime());
         }
     }
     
     public void setPreviousForce(double previousForce) {
-        this.previousForce = previousForce;
+        this.prevForce = previousForce;
     }
 
     public void setNextForce(double nextForce) {
@@ -127,7 +136,7 @@ public class BasicModel {
     }
     
     public double getPreviousForce() {
-        return previousForce;
+        return prevForce;
     }
 
     public double getNextForce() {
@@ -150,4 +159,9 @@ public class BasicModel {
 
         return prevNode;
     }
+    
+    public double getDeltaTime(double currentTime) {
+        return System.nanoTime() - currentTime;
+    }
+    
 }
