@@ -1,8 +1,6 @@
 package edu.vanier.controllers;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,13 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
-import javafx.scene.input.DragEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class SettingsController {
 
     Stage primaryStage;
+    
     @FXML
     private Button backButton;
 
@@ -30,9 +28,7 @@ public class SettingsController {
         this.primaryStage = primaryStage;
 
     }
-
     
-
     @FXML
     void backButtonOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
@@ -51,7 +47,4 @@ public class SettingsController {
         primaryStage.setAlwaysOnTop(false);
         
     }
-
-   
-
 }

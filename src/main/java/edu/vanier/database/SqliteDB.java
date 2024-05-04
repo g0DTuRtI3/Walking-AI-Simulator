@@ -49,20 +49,6 @@ public class SqliteDB extends DBConnectionProvider {
         }
         return null;
     }
-
-//    public byte[] readModel(String modelName) {
-//        String sql = "SELECT * FROM data WHERE Name = " + modelName;
-//
-//        try (Connection conn = this.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-//            // loop through the result set
-//            System.out.println(rs.getInt("Id") + "\t" + rs.getString("Name"));
-//            return rs.getBytes("Walker");
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            System.out.println("Oh no not found !");
-//        }
-//        return null;
-//    }
     
     public byte[] readModel(String modelName) {
         String sql = "SELECT Walker FROM data WHERE Name = ?";

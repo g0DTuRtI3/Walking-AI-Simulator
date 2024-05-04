@@ -15,10 +15,11 @@ import javafx.stage.Stage;
 public class MainAppController {
 
     private final String cssEditorPath = "editorStyleSheet.css";
-    File f = new File(cssEditorPath);
-    static MediaPlayer player;
+    
+    private static MediaPlayer player;
 
-    Stage primaryStage;
+    private File f = new File(cssEditorPath);
+    private Stage primaryStage;
 
     @FXML
     private Button btn_AboutUs;

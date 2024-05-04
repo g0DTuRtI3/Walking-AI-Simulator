@@ -40,7 +40,7 @@ public class EditorController {
     private int nbModel = 10;
     private int interval = 10;
     private float learningRate = 0.3f;
-    private boolean isCircleMode, isLinkMode, isSelected;
+    private boolean isCircleMode, isLinkMode;
     private boolean isDelMode = false;
     private ArrayList<Circle> circle_list = new ArrayList<>();
     private Circle circle1 = null, circle2 = null;
@@ -99,7 +99,7 @@ public class EditorController {
     public EditorController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
-    
+
     public EditorController(Stage primaryStage, Walker walker) {
         this.primaryStage = primaryStage;
         this.walker = walker;
@@ -143,9 +143,10 @@ public class EditorController {
         // Loads the models if it called
         if (modelName != null) {
             load(modelName);
+            tf_ModelName.setText(modelName);
         }
     }
-    
+
     @FXML
     void backButtonOnAction(ActionEvent event) throws IOException {
         switchToMainMenu();
@@ -275,9 +276,11 @@ public class EditorController {
         if (isCircleMode) {
             editorCircle.setFill(Color.PURPLE);
             link.setFill(Color.DODGERBLUE);
+            cb_DelMode.setSelected(false);
         } else if (isLinkMode) {
             link.setFill(Color.PURPLE);
             editorCircle.setFill(Color.DODGERBLUE);
+            cb_DelMode.setSelected(false);
         } else {
             editorCircle.setFill(Color.DODGERBLUE);
             link.setFill(Color.DODGERBLUE);
@@ -383,16 +386,17 @@ public class EditorController {
     }
 
     private void removeCircle(MouseEvent event) {
-        Circle circle = (Circle) event.getTarget();
-        editorPane.getChildren().remove(circle);
+        try {
+            Circle circle = (Circle) event.getTarget();
+            editorPane.getChildren().remove(circle);
 
-        BasicModel delModel = null;
-        for (BasicModel basicModel : walker.getBasicModels()) {
-            if (basicModel.getNextNode().getCenterX() == circle.getCenterX()) {
-                delModel = basicModel;
-                System.out.println("removed cicle & walker");
+            BasicModel delModel = null;
+            for (BasicModel basicModel : walker.getBasicModels()) {
+                if (basicModel.getNextNode().getCenterX() == circle.getCenterX()) {
+                    delModel = basicModel;
+                    System.out.println("removed cicle & walker");
+                }
             }
-        }
 //        editorPane.getChildren().remove(delModel.getLink());
 //
 //        for (Node node : editorPane.getChildren()) {
@@ -408,11 +412,17 @@ public class EditorController {
 //        }
 //
 //        walker.getBasicModels().remove(delModel);
-        editorPaneDeletion(delModel);
-        walker.getBasicModels().remove(delModel);
+            editorPaneDeletion(delModel);
+            walker.getBasicModels().remove(delModel);
+        } catch (Exception e) {
+            System.out.println("clicked elsewere");
+        }
     }
 
     private void editorPaneDeletion(BasicModel delModel) {
+        if (delModel == null) {
+            return;
+        }
         editorPane.getChildren().remove(delModel.getLink());
         Node delNode = null;
         for (Node node : editorPane.getChildren()) {
@@ -477,7 +487,7 @@ public class EditorController {
 
         return load;
     }
-    
+
     private void generateWalker(Walker walker) {
         for (BasicModel basicModel : walker.getBasicModels()) {
             NodeModel prevNode = new NodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), Color.web(basicModel.getPrevNode().getHexColor()));
@@ -524,7 +534,6 @@ public class EditorController {
 //            System.out.println(seriWalker);
 //        }
 //    }
-
     public void load(String name) {
         SqliteDB db = new SqliteDB();
 
@@ -536,7 +545,7 @@ public class EditorController {
 
         try {
             seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
-        } catch (Exception e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println(e);
         }
         try {

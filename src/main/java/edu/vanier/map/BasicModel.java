@@ -1,6 +1,5 @@
 package edu.vanier.map;
 
-import java.io.Serializable;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -10,11 +9,11 @@ import javafx.scene.shape.Line;
  */
 public class BasicModel {
 
-    private static double strokeWidth = 10;
+    private static final double STROKEWIDTH = 10;
 
-    private NodeModel prevNode;
-    private NodeModel nextNode;
-    private Line link = new Line();
+    private final NodeModel prevNode;
+    private final NodeModel nextNode;
+    private final Line link = new Line();
     private Color color;
     private double previousForce = 0;
     private double nextForce = 0;
@@ -24,7 +23,7 @@ public class BasicModel {
         this.link.setStartY(prevNode.getCenterY());
         this.link.setEndX(nextNode.getCenterX());
         this.link.setEndY(nextNode.getCenterY());
-        this.link.setStrokeWidth(strokeWidth);
+        this.link.setStrokeWidth(STROKEWIDTH);
         this.link.setStroke(colorOfLine);
         this.prevNode = prevNode;
         this.nextNode = nextNode;
@@ -114,28 +113,6 @@ public class BasicModel {
             }
         }
     }
-
-    public NodeModel getNode(NodeModel nodeModel) {
-
-        if (nodeModel == nextNode) {
-            return nextNode;
-        }
-
-        return prevNode;
-    }
-
-    public NodeModel getOtherNode(NodeModel nodeModel) {
-
-        if (nodeModel == nextNode) {
-            return prevNode;
-        }
-
-        return nextNode;
-    }
-
-    public double getLinkMagnitude() {
-        return Math.sqrt(Math.pow((link.getStartX() - link.getEndX()), 2) + Math.pow((link.getStartY() - link.getEndY()), 2));
-    }
     
     public void setPreviousForce(double previousForce) {
         this.previousForce = previousForce;
@@ -145,11 +122,32 @@ public class BasicModel {
         this.nextForce = nextForce;
     }
 
+    public double getLinkMagnitude() {
+        return Math.sqrt(Math.pow((link.getStartX() - link.getEndX()), 2) + Math.pow((link.getStartY() - link.getEndY()), 2));
+    }
+    
     public double getPreviousForce() {
         return previousForce;
     }
 
     public double getNextForce() {
         return nextForce;
+    }
+    
+    public NodeModel getOtherNode(NodeModel nodeModel) {
+        if (nodeModel == nextNode) {
+            return prevNode;
+        }
+
+        return nextNode;
+    }
+    
+    public NodeModel getNode(NodeModel nodeModel) {
+
+        if (nodeModel == nextNode) {
+            return nextNode;
+        }
+
+        return prevNode;
     }
 }

@@ -1,24 +1,18 @@
 package edu.vanier.controllers;
 
-import static edu.vanier.controllers.EditorController.environment;
 import edu.vanier.core.NeuralDisplay;
 import edu.vanier.map.BasicModel;
 import edu.vanier.map.NodeModel;
 import edu.vanier.map.Walker;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.chart.Axis;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
@@ -28,14 +22,11 @@ import static javafx.scene.input.KeyCode.LEFT;
 import static javafx.scene.input.KeyCode.RIGHT;
 import static javafx.scene.input.KeyCode.UP;
 import static javafx.scene.input.KeyCode.DOWN;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -56,13 +47,13 @@ public class SimulationController {
     private int[] layers = {4, 8, 2};
     private double[][] initialXYPositions;
 
-    private String environment;
+    private final String environment;
     private NeuralDisplay neuralDisplay;
     private Series<Number, Number> updateSpeed = new Series<>();
     private Series<Number, Number> updatePos = new Series<>();
     private Series<Number, Number> updateKE = new Series<>();
     private Series<String, Number> updateGeneration = new Series<>();
-    private Stage primaryStage;
+    private final Stage primaryStage;
     private Walker bestWalker = null;
     private Walker[] walkers;
     private Line ground = new Line(0, 0, 0, 0);

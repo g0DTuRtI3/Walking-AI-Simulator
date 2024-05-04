@@ -8,12 +8,12 @@ import java.io.Serializable;
  */
 public class MyBasicModel implements Serializable{
 
-    private static double strokeWidth = 10;
+    private static final double STROKE_WIDTH = 10;
 
-    private MyNodeModel prevNode;
-    private MyNodeModel nextNode;
-    private MyLine link;
-    private String color;
+    private final MyNodeModel prevNode;
+    private final MyNodeModel nextNode;
+    private final MyLine link;
+    private final String color;
 
     public MyBasicModel(MyNodeModel prevNode, MyNodeModel nextNode, MyLine line, String color) {
         this.prevNode = prevNode;
@@ -23,7 +23,7 @@ public class MyBasicModel implements Serializable{
     }
 
     public static double getStrokeWidth() {
-        return strokeWidth;
+        return STROKE_WIDTH;
     }
 
     public MyNodeModel getPrevNode() {

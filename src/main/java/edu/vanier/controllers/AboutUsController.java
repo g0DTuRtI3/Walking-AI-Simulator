@@ -1,7 +1,5 @@
 package edu.vanier.controllers;
 
-
-import edu.vanier.controllers.MainAppController;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

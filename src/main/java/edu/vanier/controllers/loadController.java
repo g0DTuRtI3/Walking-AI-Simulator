@@ -2,9 +2,6 @@ package edu.vanier.controllers;
 
 import edu.vanier.database.SqliteDB;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +12,8 @@ import javafx.stage.Stage;
 
 public class loadController {
 
-    private SqliteDB database = new SqliteDB();
-    private Stage primaryStage;
+    private final SqliteDB database = new SqliteDB();
+    private final Stage primaryStage;
 
     @FXML
     private ListView<String> modelList;
@@ -25,16 +22,13 @@ public class loadController {
     void initialize() {
         modelList.getItems().addAll(database.readModelName());
 
-        modelList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                String selectedModel = modelList.getSelectionModel().getSelectedItem();
-                try {
-                    System.out.println("Load controller name :" + selectedModel);
-                    returnToEditor(selectedModel);
-                } catch (IOException ex) {
-                    System.out.println(ex);
-                }
+        modelList.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            String selectedModel = modelList.getSelectionModel().getSelectedItem();
+            try {
+                System.out.println("Load controller name :" + selectedModel);
+                returnToEditor(selectedModel);
+            } catch (IOException ex) {
+                System.out.println(ex);
             }
         });
     }
