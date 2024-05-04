@@ -30,9 +30,10 @@ public class Simulator2 extends Application{
     Rectangle ground = new Rectangle(0, 400, 500, 400);
     private boolean moveNextNode = true;
     
-    double rightForce = 100;
-    double leftForce = 100;
+    double cClockwiseForce = 100;
+    double clockwiseForce = 100;
     double tempForce = 100;
+    double tempForce2 = 100;
     
     private AnimationTimer timer;
     private long previousTime = -1;
@@ -66,6 +67,9 @@ public class Simulator2 extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         
+        nextNode.setCurrentTime(System.nanoTime());
+        previousNode.setCurrentTime(System.nanoTime());
+        
         walker.addBasicModel(basicModel);
         
         ground.setFill(Color.GREEN);
@@ -81,19 +85,19 @@ public class Simulator2 extends Application{
             switch (event.getCode()) {
                 case A:
                     if (moveNextNode) {
-                        basicModel.setNextForce(-rightForce);
+                        basicModel.setNextForce(-cClockwiseForce);
                         //walker.moveNext(basicModel, -rightForce, elapsedTime);
                     }else {
-                        basicModel.setPreviousForce(-rightForce);
+                        basicModel.setPreviousForce(-cClockwiseForce);
                         //walker.movePrevious(basicModel, -rightForce, elapsedTime);
                     }
                     break;
                 case D:
                     if (moveNextNode) {
-                        basicModel.setNextForce(leftForce);
+                        basicModel.setNextForce(clockwiseForce);
                         //walker.moveNext(basicModel, leftForce, elapsedTime);
                     }else {
-                        basicModel.setPreviousForce(leftForce);
+                        basicModel.setPreviousForce(clockwiseForce);
                         //walker.movePrevious(basicModel, leftForce, elapsedTime);
                     }
                     break;
@@ -101,6 +105,10 @@ public class Simulator2 extends Application{
                     tempForce += 100;
                     basicModel.setNextForce(tempForce);
                     break;
+                case Q:
+                    tempForce2 -= 100;
+                    basicModel.setPreviousForce(tempForce2);
+                    
                 case LEFT:
                     moveNextNode = false;
                     break;

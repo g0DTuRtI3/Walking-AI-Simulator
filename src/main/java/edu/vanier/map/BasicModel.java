@@ -16,7 +16,7 @@ public class BasicModel implements Serializable{
     private NodeModel nextNode;
     private Line link = new Line();
     private Color color;
-    private double previousForce = 0;
+    private double prevForce = 0;
     private double nextForce = 0;
 
     public BasicModel(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
@@ -87,30 +87,31 @@ public class BasicModel implements Serializable{
     }
     
     public void updateNextNode(BasicModel basicModel, double force, double time) {
-        
+
         if (force != 0) {
-            nextNode.setForce(force, time, basicModel);
-            updateLink();
+            nextNode.setForce(force, time, basicModel); //replace basicModel with this
             nextForce = 0;
+            nextNode.setCurrentTime(System.nanoTime());
+            nextNode.setCurrentTime2(System.nanoTime());
         }else {
-            System.out.println("Force next is 0");
-            if (nextNode.getAlpha() > 0) {
-                nextNode.updateNode(basicModel);
-            }
+            nextNode.updateNode(basicModel);
+            nextNode.setCurrentTime2(System.nanoTime());
         }
     }
     
     public void updatePreviousNode(BasicModel basicModel, double force, double time) {
         
         if (force != 0) {
-            prevNode.setForce(force, time, basicModel);
-            updateLink();
-            previousForce = 0;
+            prevNode.setForce(force, time, basicModel); //replace basicModel with this
+            prevForce = 0;
+            prevNode.setCurrentTime(System.nanoTime());
+            prevNode.setCurrentTime2(System.nanoTime());
         }else {
-            if (prevNode.getAlpha() > 0) {
-                prevNode.updateNode(basicModel);
-            }
+            prevNode.updateNode(basicModel);
+            prevNode.setCurrentTime2(System.nanoTime());
         }
+        
+
     }
     
     public NodeModel getNode(NodeModel nodeModel) {
@@ -136,7 +137,7 @@ public class BasicModel implements Serializable{
     }
 
     public void setPreviousForce(double previousForce) {
-        this.previousForce = previousForce;
+        this.prevForce = previousForce;
     }
 
     public void setNextForce(double nextForce) {
@@ -144,11 +145,15 @@ public class BasicModel implements Serializable{
     }
 
     public double getPreviousForce() {
-        return previousForce;
+        return prevForce;
     }
 
     public double getNextForce() {
         return nextForce;
+    }
+    
+    public double getDeltaTime(double currentTime) {
+        return System.nanoTime() - currentTime;
     }
     
 }
