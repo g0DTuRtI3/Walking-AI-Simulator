@@ -1,4 +1,4 @@
-package edu.vanier.map;
+package edu.vanier.model;
 
 import edu.vanier.core.NeuralNetwork;
 import edu.vanier.serialization.MyBasicModel;
@@ -54,8 +54,7 @@ public class Walker implements Serializable{
         Object obj = ois.readObject();
         ois.close();
         return obj;
-    } 
-    private double elapsedTime = 0;
+    }
 
 
     public Walker() {
@@ -130,18 +129,18 @@ public class Walker implements Serializable{
 
     public void movePrevious(BasicModel basicModel, double force, double time) {
         //basicModel.getPrevNode().setForce(basicModel, force, time, basicModel.getNextNode());
-        basicModel.updatePreviousNode(basicModel, force, time);
+        basicModel.updatePreviousNode(force);
     }
 
     public void moveNext(BasicModel basicModel, double force, double time) {
         //basicModel.getNextNode().setForce(basicModel, force, time, basicModel.getPrevNode());
-        basicModel.updateNextNode(basicModel, force, time);
+        basicModel.updateNextNode(force);
     }
 
     public void updateWalker() {
         for (BasicModel basicModel : basicModels) {
-            basicModel.updateNextNode(basicModel, basicModel.getNextForce(), elapsedTime);
-            basicModel.updatePreviousNode(basicModel, basicModel.getPreviousForce(), elapsedTime);
+            basicModel.updateNextNode(basicModel.getNextForce());
+            basicModel.updatePreviousNode(basicModel.getPreviousForce());
             basicModel.updateLink();
         }
     }
@@ -238,14 +237,6 @@ public class Walker implements Serializable{
         this.getAllLinks().forEach(link -> link.setOpacity(percent));
         this.getAllNodes().forEach(node -> node.setOpacity(percent));
         
-    }
-
-    public double getElapsedTime() {
-        return elapsedTime;
-    }
-
-    public void setElapsedTime(double elapsedTime) {
-        this.elapsedTime = elapsedTime;
     }
 
 }

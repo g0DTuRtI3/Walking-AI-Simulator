@@ -1,9 +1,9 @@
 package edu.vanier.controllers;
 
 import edu.vanier.core.NeuralDisplay;
-import edu.vanier.map.BasicModel;
-import edu.vanier.map.NodeModel;
-import edu.vanier.map.Walker;
+import edu.vanier.model.BasicModel;
+import edu.vanier.model.NodeModel;
+import edu.vanier.model.Walker;
 import java.io.IOException;
 import java.util.HashSet;
 import javafx.animation.AnimationTimer;

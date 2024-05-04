@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.ui;
 
-import edu.vanier.map.BasicModel;
-import edu.vanier.map.NodeModel;
-import edu.vanier.map.Walker;
+import edu.vanier.model.BasicModel;
+import edu.vanier.model.NodeModel;
+import edu.vanier.model.Walker;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -22,8 +18,8 @@ import javafx.stage.Stage;
  */
 public class Simulator2 extends Application{
     
-    NodeModel nextNode = new NodeModel(250.0+100, 375.0, Color.BLUE);
-    NodeModel previousNode = new NodeModel(50.0+100, 375.0, Color.BLUE);
+    NodeModel nextNode = new NodeModel(250.0+100, 375.0, Color.RED);
+    NodeModel previousNode = new NodeModel(50.0+100, 375.0, Color.RED);
     BasicModel basicModel = new BasicModel(previousNode, nextNode, Color.BLACK);
     Walker walker = new Walker(basicModel);
     
@@ -120,8 +116,6 @@ public class Simulator2 extends Application{
     }
     
     public void update(double elapsedTime) {
-        
-        walker.setElapsedTime(elapsedTime);
         walker.updateWalker();
         //System.out.println(basicModel.getPrevNode().getAngle());
         //System.out.println(basicModel.getNextNode().getAngle());

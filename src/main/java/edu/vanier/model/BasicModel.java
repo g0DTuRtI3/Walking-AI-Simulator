@@ -1,4 +1,4 @@
-package edu.vanier.map;
+package edu.vanier.model;
 
 import java.io.Serializable;
 import javafx.scene.paint.Color;
@@ -86,32 +86,34 @@ public class BasicModel implements Serializable{
         return angleRad;
     }
     
-    public void updateNextNode(BasicModel basicModel, double force, double time) {
+    public void updateNextNode(double force) {
 
         if (force != 0) {
-            nextNode.setForce(force, time, basicModel); //replace basicModel with this
+            nextNode.setForce(force, this);
             nextForce = 0;
             nextNode.setCurrentTime(System.nanoTime());
             nextNode.setCurrentTime2(System.nanoTime());
+//            System.out.println("nextNodeMoved");
+//            System.out.println(nextNode);
         }else {
-            nextNode.updateNode(basicModel);
+            nextNode.updateNode(this);
             nextNode.setCurrentTime2(System.nanoTime());
         }
     }
     
-    public void updatePreviousNode(BasicModel basicModel, double force, double time) {
+    public void updatePreviousNode(double force) {
         
         if (force != 0) {
-            prevNode.setForce(force, time, basicModel); //replace basicModel with this
+            prevNode.setForce(force, this);
             prevForce = 0;
             prevNode.setCurrentTime(System.nanoTime());
             prevNode.setCurrentTime2(System.nanoTime());
+//            System.out.println("prevNodeMoved");
+//            System.out.println(prevNode);
         }else {
-            prevNode.updateNode(basicModel);
+            prevNode.updateNode(this);
             prevNode.setCurrentTime2(System.nanoTime());
         }
-        
-
     }
     
     public NodeModel getNode(NodeModel nodeModel) {

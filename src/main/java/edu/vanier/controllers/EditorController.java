@@ -1,6 +1,8 @@
 package edu.vanier.controllers;
 
-import edu.vanier.map.*;
+import edu.vanier.model.Walker;
+import edu.vanier.model.BasicModel;
+import edu.vanier.model.NodeModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
