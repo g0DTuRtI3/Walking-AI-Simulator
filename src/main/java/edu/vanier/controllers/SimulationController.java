@@ -41,38 +41,34 @@ import javafx.stage.Stage;
 
 public class SimulationController {
 
-    Stage primaryStage;
+    private final double nanoTOSecond = 1000000000.0;
+    private final double pxlToMeterConst = 1 / 100.0;
 
-    public Walker[] walkers;
+    private int i = 0;
+    private int interval;
+    private double lastXbestWalker = 0;
+    private double currentInterval = 0;
+    private double speedY = 0;
+    private double xtranslate;
+    private double ytranslate;
+    private long previousTime = -1;
+    private static double GRAVITY = 9.8;
+    private int[] layers = {4, 8, 2};
+    private double[][] initialXYPositions;
 
-    public NeuralDisplay neuralDisplay;
+    private String environment;
+    private NeuralDisplay neuralDisplay;
+    private Series<Number, Number> updateSpeed = new Series<>();
+    private Series<Number, Number> updatePos = new Series<>();
+    private Series<Number, Number> updateKE = new Series<>();
+    private Series<String, Number> updateGeneration = new Series<>();
+    private Stage primaryStage;
+    private Walker bestWalker = null;
+    private Walker[] walkers;
+    private Line ground = new Line(0, 0, 0, 0);
+    private Rectangle belowGround = new Rectangle(0, 0, 0, 0);
+    private Group panGroup = new Group();
 
-    public int interval;
-
-    public Line ground = new Line(0, 0, 0, 0);
-
-    public Rectangle belowGround = new Rectangle(0, 0, 0, 0);
-
-    public Group panGroup = new Group();
-
-    public static double GRAVITY = 9.8;
-
-    public AnimationTimer time = new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-
-        }
-
-        @Override
-        public void start() {
-            super.start();
-        }
-
-        @Override
-        public void stop() {
-            super.stop();
-        }
-    };
     @FXML
     private Pane simulationPane;
 
@@ -109,10 +105,133 @@ public class SimulationController {
     @FXML
     private Text txt_IsTraining;
     @FXML
+
     private VBox physicalGraphVBox;
 
-    private int[] layers = {4, 8, 2};
-    private long previousTime = -1;
+    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate, double xtranslate, double ytranslate, String environment) {
+        this.interval = interval;
+        this.primaryStage = primaryStage;
+        this.xtranslate = xtranslate;
+        this.ytranslate = ytranslate;
+        this.environment = environment;
+        
+        walkers = new Walker[nbModel];
+        
+        initialXYPositions = new double[walker.getAllNodes().size()][2];
+        ArrayList<NodeModel> allNodes = new ArrayList<>(walker.getAllNodes());
+        for (int i = 0; i < allNodes.size(); i++) {
+            initialXYPositions[i][0] = allNodes.get(i).getCenterX();
+            initialXYPositions[i][1] = allNodes.get(i).getCenterY();
+
+        }
+        
+        for (int i = 0; i < nbModel; i++) {
+            Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers);
+            walkerI.learningRate(learningRate);
+            walkers[i] = walkerI;
+
+            for (BasicModel b : walkers[i].getBasicModels()) {
+
+                b.getLink().setOnMouseClicked(mouseE -> {
+                    showNeuralDisplay(walkerI);
+                });
+                b.getNextNode().setOnMouseClicked(mouseE -> {
+                    showNeuralDisplay(walkerI);
+                });
+                b.getPrevNode().setOnMouseClicked(mouseE -> {
+                    showNeuralDisplay(walkerI);
+                });
+            }
+
+        }
+    }
+    
+    @FXML
+    void initialize() {
+        determineEnvironment();
+        
+        ground.setStartX(-100000);
+        ground.setEndX(100000);
+        ground.setStartY(800);
+        ground.setEndY(800);
+        ground.setStrokeWidth(5);
+        
+        belowGround.setX(ground.getStartX());
+        belowGround.setY(ground.getStartY());
+        belowGround.setHeight(10000000);
+        belowGround.setWidth(ground.getEndX() - ground.getStartX());
+        belowGround.setFill(Color.GREEN);
+
+        double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
+        double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
+
+        for (Walker w : walkers) {
+
+            tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
+            /*for (BasicModel b : w.getBasicModels()) {
+
+                if (!simulationPane.getChildren().contains(b.getNextNode())) {
+                    simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
+                    b.getNextNode().setTranslateX(-realXTransition);
+                    b.getNextNode().setTranslateY(-realYTransition);
+                    b.getPrevNode().setTranslateX(-realXTransition);
+                    b.getPrevNode().setTranslateY(-realYTransition);
+
+                } else if (!simulationPane.getChildren().contains(b.getPrevNode())) {
+                    simulationPane.getChildren().addAll(b.getLink(), b.getPrevNode());
+
+                    b.getPrevNode().setTranslateX(-realXTransition);
+                    b.getPrevNode().setTranslateY(-realYTransition);
+                } else if (!simulationPane.getChildren().contains(b.getLink())) {
+                    simulationPane.getChildren().addAll(b.getLink());
+                }
+            }*/
+
+            panGroup.getChildren().addAll(w.getAllLinks());
+            panGroup.getChildren().addAll(w.getAllNodes());
+
+            w.setOpacity(0.5);
+        }
+        
+        panGroup.getChildren().addAll(belowGround, ground);
+        simulationPane.getChildren().add(panGroup);
+        simulationPane.setOnKeyPressed((event) -> {
+
+            switch (event.getCode()) {
+
+                case LEFT -> {
+                    panGroup.setLayoutX(panGroup.getLayoutX() + 10);
+                }
+                case UP -> {
+                    panGroup.setLayoutY(panGroup.getLayoutY() + 10);
+                }
+                case DOWN -> {
+                    panGroup.setLayoutY(panGroup.getLayoutY() - 10);
+                }
+                case RIGHT ->
+                    panGroup.setLayoutX(panGroup.getLayoutX() - 10);
+            }
+
+        });
+
+        timer.start();
+    }
+//        @Override
+//        public void handle(long now) {
+//
+//        }
+//
+//        @Override
+//        public void start() {
+//            super.start();
+//        }
+//
+//        @Override
+//        public void stop() {
+//            super.stop();
+//        }
+//    };
+
     AnimationTimer timer = new AnimationTimer() {
         float startedTime = -1;
 
@@ -134,17 +253,6 @@ public class SimulationController {
             startedTime = previousTime;
             super.start();
         }
-        private Walker bestWalker = null;
-        private double lastXbestWalker = 0;
-        private double currentInterval = 0;
-        private final double nanoTOSecond = 1000000000.0;
-        private int i = 0;
-        private final double pxlToMeterConst = 1 / 100.0;
-        private Series<Number, Number> updateSpeed = new Series<>();
-        private Series<Number, Number> updatePos = new Series<>();
-        private Series<Number, Number> updateKE = new Series<>();
-        private Series<String, Number> updateGeneration = new Series<>();
-        private double speedY = 0;
 
         @Override
         public void handle(long now) {
@@ -203,7 +311,6 @@ public class SimulationController {
             if (bestWalker != null) {
 
                 double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
-                
 
                 updateSpeed.getData().add(new XYChart.Data<>(currentInterval, instantSpeed));
 
@@ -268,44 +375,6 @@ public class SimulationController {
 
     };
 
-    private double xtranslate;
-    private double ytranslate;
-
-    private double[][] initialXYPositions;
-
-    public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate, double xtranslate, double ytranslate) {
-        this.interval = interval;
-        this.primaryStage = primaryStage;
-        this.xtranslate = xtranslate;
-        this.ytranslate = ytranslate;
-        walkers = new Walker[nbModel];
-        initialXYPositions = new double[walker.getAllNodes().size()][2];
-        ArrayList<NodeModel> allNodes = new ArrayList<>(walker.getAllNodes());
-        for (int i = 0; i < allNodes.size(); i++) {
-            initialXYPositions[i][0] = allNodes.get(i).getCenterX();
-            initialXYPositions[i][1] = allNodes.get(i).getCenterY();
-
-        }
-        for (int i = 0; i < nbModel; i++) {
-            Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers);
-            walkerI.learningRate(learningRate);
-            walkers[i] = walkerI;
-
-            for (BasicModel b : walkers[i].getBasicModels()) {
-
-                b.getLink().setOnMouseClicked(mouseE -> {
-                    showNeuralDisplay(walkerI);
-                });
-                b.getNextNode().setOnMouseClicked(mouseE -> {
-                    showNeuralDisplay(walkerI);
-                });
-                b.getPrevNode().setOnMouseClicked(mouseE -> {
-                    showNeuralDisplay(walkerI);
-                });
-            }
-
-        }
-    }
 
     private void moveWalker(double dtime) {
 
@@ -364,95 +433,14 @@ public class SimulationController {
         });
 
     }
-
-    @FXML
-    void initialize() {
-        determineEnvironment();
-        ground.setStartX(-100000);
-        ground.setEndX(100000);
-        ground.setStartY(800);
-        ground.setEndY(800);
-
-        ground.setStrokeWidth(5);
-        belowGround.setX(ground.getStartX());
-        belowGround.setY(ground.getStartY());
-        belowGround.setHeight(10000000);
-        belowGround.setWidth(ground.getEndX() - ground.getStartX());
-
-        belowGround.setFill(Color.GREEN);
-
-        double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
-        double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
-
-        for (Walker w : walkers) {
-
-            tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
-            /*for (BasicModel b : w.getBasicModels()) {
-
-                if (!simulationPane.getChildren().contains(b.getNextNode())) {
-                    simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
-                    b.getNextNode().setTranslateX(-realXTransition);
-                    b.getNextNode().setTranslateY(-realYTransition);
-                    b.getPrevNode().setTranslateX(-realXTransition);
-                    b.getPrevNode().setTranslateY(-realYTransition);
-
-                } else if (!simulationPane.getChildren().contains(b.getPrevNode())) {
-                    simulationPane.getChildren().addAll(b.getLink(), b.getPrevNode());
-
-                    b.getPrevNode().setTranslateX(-realXTransition);
-                    b.getPrevNode().setTranslateY(-realYTransition);
-                } else if (!simulationPane.getChildren().contains(b.getLink())) {
-                    simulationPane.getChildren().addAll(b.getLink());
-                }
-            }*/
-
-            panGroup.getChildren().addAll(w.getAllLinks());
-            panGroup.getChildren().addAll(w.getAllNodes());
-
-            w.setOpacity(0.5);
-        }
-        panGroup.getChildren().addAll(belowGround, ground);
-        simulationPane.getChildren().add(panGroup);
-        simulationPane.setOnKeyPressed((event) -> {
-
-            switch (event.getCode()) {
-
-                case LEFT -> {
-                    panGroup.setLayoutX(panGroup.getLayoutX() + 10);
-                }
-                case UP -> {
-                    panGroup.setLayoutY(panGroup.getLayoutY() + 10);
-                }
-                case DOWN -> {
-                    panGroup.setLayoutY(panGroup.getLayoutY() - 10);
-                }
-                case RIGHT ->
-                    panGroup.setLayoutX(panGroup.getLayoutX() - 10);
-            }
-
-        });
-
-        timer.start();
-    }
-
+    
     @FXML
     void backToEditorOnAction(ActionEvent event) throws IOException {
-        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
-        mainAppLoader.setController(new EditorController(primaryStage));
-        Pane root = mainAppLoader.load();
-
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setMaximized(false);
-        primaryStage.setMaximized(true);
-        // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
-        primaryStage.setTitle("Model Editor");
-        primaryStage.show();
+        switchToEditor();
     }
 
     private void determineEnvironment() {
-        switch (EditorController.environment) {
+        switch (environment) {
             case "Earth":
                 this.simulationPane.setId("Earth");
                 System.out.println("Earth");
@@ -468,4 +456,18 @@ public class SimulationController {
 
     }
 
+    private void switchToEditor() throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
+        mainAppLoader.setController(new EditorController(primaryStage, bestWalker));
+        Pane root = mainAppLoader.load();
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Model Editor");
+        primaryStage.show();
+    }
 }

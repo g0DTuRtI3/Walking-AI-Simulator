@@ -30,7 +30,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class EditorController {
-    
+
+    public static String environment;
+
     private final static int CIRCLE_RADIUS = 20;
     private final static int CIRCLE_SOCIAL_DISTANCING = 10;
     private final Stage primaryStage;
@@ -50,46 +52,46 @@ public class EditorController {
 
     // delete str when done
     byte[] b_Array;
-    
+
     @FXML
     private ComboBox<String> environmentComboBox;
-    
+
     @FXML
     private CheckBox cb_DelMode;
-    
+
     @FXML
     private ColorPicker circleColorPicker;
-    
+
     @FXML
     private Circle editorCircle;
-    
+
     @FXML
     private Pane editorPane;
-    
+
     @FXML
     private Label label_Interval;
-    
+
     @FXML
     private Label label_LearningRate;
-    
+
     @FXML
     private Label label_NbModel;
-    
+
     @FXML
     private Rectangle link;
-    
+
     @FXML
     private ColorPicker linkColorPicker;
-    
+
     @FXML
     private Slider slider_Interval;
-    
+
     @FXML
     private Slider slider_LearningRate;
-    
+
     @FXML
     private Slider slider_NbModel;
-    
+
     @FXML
     private TextField tf_ModelName;
 
@@ -97,13 +99,18 @@ public class EditorController {
     public EditorController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+    
+    public EditorController(Stage primaryStage, Walker walker) {
+        this.primaryStage = primaryStage;
+        this.walker = walker;
+    }
 
     //Gets the name of the model selected and loads the model on the 
     public EditorController(Stage primaryStage, String modelName) throws IOException {
         this.primaryStage = primaryStage;
         this.modelName = modelName;
     }
-    
+
     @FXML
     void initialize() {
         this.environmentComboBox.setItems(FXCollections.observableArrayList("Earth", "Moon"));
@@ -140,6 +147,11 @@ public class EditorController {
     }
     
     @FXML
+    void backButtonOnAction(ActionEvent event) throws IOException {
+        switchToMainMenu();
+    }
+
+    @FXML
     void circleOnMouseClicked(MouseEvent event) {
         if (!isCircleMode) {
             isCircleMode = true;
@@ -151,43 +163,25 @@ public class EditorController {
             selected();
         }
     }
-    
-    @FXML
-    void backButtonOnAction(ActionEvent event) throws IOException {
-        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
-        mainAppLoader.setController(new MainAppController(primaryStage));
-        Pane root = mainAppLoader.load();
 
-        //-- 2) Create and set the scene to the stage.
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
-        // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
-        primaryStage.setTitle("Walking AI Simulator");
-        primaryStage.show();
-        primaryStage.setAlwaysOnTop(false);
-    }
-    
     @FXML
     void circleColorPickerOnAction(ActionEvent event) {
         circleColor = circleColorPicker.getValue();
     }
-    
+
     @FXML
     void clearOnAction(ActionEvent event) {
         clearPane();
     }
-    
+
     @FXML
     void delModeOnAction(ActionEvent event) {
 //        isDelMode = rb_DelMode.isSelected();
         isDelMode = cb_DelMode.isSelected();
         selected();
-        
+
     }
-    
+
     @FXML
     void linkOnMouseClicked(MouseEvent event) {
         if (!isLinkMode) {
@@ -200,25 +194,22 @@ public class EditorController {
             selected();
         }
     }
-    
-    public static String environment;
-    
+
     @FXML
     void environmentSelected(ActionEvent event) {
         environment = this.environmentComboBox.getSelectionModel().getSelectedItem();
-        System.out.println(environment);
     }
-    
+
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
         loadModelSelector();
     }
-    
+
     @FXML
     void linkColorPickerOnAction(ActionEvent event) {
         linkColor = linkColorPicker.getValue();
     }
-    
+
     @FXML
     void paneOnMouseClicked(MouseEvent event) {
         if (isDelMode && isLinkConnected(event)) {
@@ -234,7 +225,7 @@ public class EditorController {
             System.out.println("pane on mouse clicked error");
         }
     }
-    
+
     @FXML
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
@@ -243,7 +234,7 @@ public class EditorController {
             return;
         }
         b_Array = serialize(seriWalker);
-        
+
         if (tf_ModelName.getText().isBlank()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please Enter a Model Name");
@@ -251,43 +242,26 @@ public class EditorController {
         } else {
             database.addModel(b_Array, tf_ModelName.getText());
         }
-        
+
         System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
     }
 
     // Switches to the simulation scene
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
-        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
-//        walker.serialize(walker, "yes");
-        double xtranslate = walker.getBasicModels().get(0).getPrevNode().getCenterX();
-        double ytranslate = walker.getBasicModels().get(0).getPrevNode().getCenterY();
-        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate, xtranslate, ytranslate));
-        Pane root = mainAppLoader.load();
-        
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setMaximized(false);
-        primaryStage.setMaximized(true);
-        // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
-        primaryStage.setTitle("Simulation");
-        primaryStage.show();
+        if (checkEnvironmemt()) {
+            switchToSimulation();
+        }
     }
-    
-    private void loadModelSelector() throws IOException {
-        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/loadModelSelector_layout.fxml"));
-        mainAppLoader.setController(new loadController(primaryStage));
-        Pane root = mainAppLoader.load();
-        
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setMaximized(false);
-        primaryStage.setMaximized(true);
-        // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
-        primaryStage.setTitle("Editor");
-        primaryStage.show();
+
+    private boolean checkEnvironmemt() {
+        if (environment == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please select the environmnet");
+            alert.show();
+            return false;
+        }
+        return true;
     }
 
     // changes the color of the editor display
@@ -297,7 +271,7 @@ public class EditorController {
             link.setFill(Color.GREY);
             return;
         }
-        
+
         if (isCircleMode) {
             editorCircle.setFill(Color.PURPLE);
             link.setFill(Color.DODGERBLUE);
@@ -313,10 +287,10 @@ public class EditorController {
     // Adds circle to the editor pane
     private void addCircle(MouseEvent event) {
         boolean isTouching = false;
-        
+
         if (event.getX() > CIRCLE_RADIUS && event.getY() > CIRCLE_RADIUS && event.getX() < (editorPane.getWidth() - CIRCLE_RADIUS) && event.getY() < (editorPane.getHeight() - CIRCLE_RADIUS)) {
             Circle circle = new Circle(event.getX(), event.getY(), CIRCLE_RADIUS, circleColor);
-            
+
             if (circle_list.isEmpty()) {
                 circle_list.add(circle);
                 editorPane.getChildren().add(circle);
@@ -327,7 +301,7 @@ public class EditorController {
                         break;
                     }
                 }
-                
+
                 if (!isTouching) {
                     circle_list.add(circle);
                     editorPane.getChildren().add(circle);
@@ -335,7 +309,7 @@ public class EditorController {
             }
         }
     }
-    
+
     private boolean isCircleTouching(Circle oldCircle, Circle newCircle) {
         boolean xTouching = false;
         int distance = CIRCLE_RADIUS * 2 + CIRCLE_SOCIAL_DISTANCING;
@@ -349,10 +323,10 @@ public class EditorController {
         }
         return false;
     }
-    
+
     private void addLink(MouseEvent event) {
         boolean isCreated = false;
-        
+
         if (circle1 == null) {
             try {
                 circle1 = (Circle) event.getTarget();
@@ -361,7 +335,7 @@ public class EditorController {
             } catch (Exception e) {
                 circle1 = null;
             }
-            
+
         } else {
             try {
                 circle2 = (Circle) event.getTarget();
@@ -369,16 +343,16 @@ public class EditorController {
                 System.out.println("clicked on other things");
                 return;
             }
-            
+
             prevNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
             nextNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
-            
+
             BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
-            
+
             for (BasicModel model : walker.getBasicModels()) {
                 if (model.getPrevNode().equals(prevNode) && model.getNextNode().equals(nextNode) || model.getPrevNode().equals(nextNode) && model.getNextNode().equals(prevNode)) {
                     isCreated = true;
-                    
+
                     if (!model.getColor().equals(linkColor)) {
                         editorPane.getChildren().remove(model.getLink());
                         editorPane.getChildren().addAll(basicModel.getLink());
@@ -387,7 +361,7 @@ public class EditorController {
                     break;
                 }
             }
-            
+
             if (!isCreated) {
                 walker.addBasicModel(basicModel);
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
@@ -396,22 +370,22 @@ public class EditorController {
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             }
             circle1.setFill(ogColor);
-            
+
             circle1 = null;
             circle2 = null;
         }
     }
-    
+
     private void clearPane() {
         editorPane.getChildren().clear();
         circle_list.clear();
         walker.getBasicModels().clear();
     }
-    
+
     private void removeCircle(MouseEvent event) {
         Circle circle = (Circle) event.getTarget();
         editorPane.getChildren().remove(circle);
-        
+
         BasicModel delModel = null;
         for (BasicModel basicModel : walker.getBasicModels()) {
             if (basicModel.getNextNode().getCenterX() == circle.getCenterX()) {
@@ -437,7 +411,7 @@ public class EditorController {
         editorPaneDeletion(delModel);
         walker.getBasicModels().remove(delModel);
     }
-    
+
     private void editorPaneDeletion(BasicModel delModel) {
         editorPane.getChildren().remove(delModel.getLink());
         Node delNode = null;
@@ -451,59 +425,72 @@ public class EditorController {
                 System.out.println("not circle");
             }
         }
-        
+
         if (delNode != null) {
             editorPane.getChildren().remove(delNode);
             editorPaneDeletion(delModel);
         }
     }
-    
+
     private MyWalker saveModel() {
         MyWalker serializeWalker = new MyWalker();
         serializeWalker.setBrain(walker.getBrain());
         serializeWalker.setFitnessScore(walker.getFitnessScore());
         serializeWalker.setId(walker.getId());
-        
+
         ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
         for (BasicModel basicModel : walker.getBasicModels()) {
             MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(2, 8));
             MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), basicModel.getNextNode().getFill().toString().substring(2, 8));
             MyLine serializeLine = new MyLine(basicModel.getLink().getStrokeWidth(), basicModel.getLink().getStartX(), basicModel.getLink().getStartY(), basicModel.getLink().getEndX(), basicModel.getLink().getEndY());
             MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, serializeLine, basicModel.getColor().toString().substring(2, 8));
-            
+
             serializeBasicModels.add(serializeModel);
         }
-        
+
         serializeWalker.setBasicModels(serializeBasicModels);
-        
+
         return serializeWalker;
     }
-    
+
     private Walker loadModel(MyWalker serializedWalker) {
         clearPane();
-        
+
         Walker load = new Walker();
-        
+
         load.setBrain(serializedWalker.getBrain());
         load.setFitnessScore(serializedWalker.getFitnessScore());
         load.setId(serializedWalker.getId());
-        
+
         for (MyBasicModel myBasicModel : serializedWalker.getBasicModels()) {
             NodeModel prevNode = new NodeModel(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), Color.web(myBasicModel.getPrevNode().getHexColor()));
             NodeModel nextNode = new NodeModel(myBasicModel.getNextNode().getCenterX(), myBasicModel.getNextNode().getCenterY(), Color.web(myBasicModel.getNextNode().getHexColor()));
             Color color = Color.web(myBasicModel.getColor());
             BasicModel loadModel = new BasicModel(prevNode, nextNode, color);
-            
+
             Circle prevCircle = new Circle(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), CIRCLE_RADIUS, Color.web(myBasicModel.getPrevNode().getHexColor()));
             Circle nextCircle = new Circle(myBasicModel.getNextNode().getCenterX(), myBasicModel.getNextNode().getCenterY(), CIRCLE_RADIUS, Color.web(myBasicModel.getNextNode().getHexColor()));
             editorPane.getChildren().addAll(loadModel.getLink(), prevCircle, nextCircle);
-            
+
             load.getBasicModels().add(loadModel);
         }
-        
+
         return load;
     }
     
+    private void generateWalker(Walker walker) {
+        for (BasicModel basicModel : walker.getBasicModels()) {
+            NodeModel prevNode = new NodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), Color.web(basicModel.getPrevNode().getHexColor()));
+            NodeModel nextNode = new NodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), Color.web(basicModel.getNextNode().getHexColor()));
+            Color color = basicModel.getColor();
+            BasicModel loadModel = new BasicModel(prevNode, nextNode, color);
+
+            Circle prevCircle = new Circle(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), CIRCLE_RADIUS, Color.web(basicModel.getPrevNode().getHexColor()));
+            Circle nextCircle = new Circle(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), CIRCLE_RADIUS, Color.web(basicModel.getNextNode().getHexColor()));
+            editorPane.getChildren().addAll(loadModel.getLink(), prevCircle, nextCircle);
+        }
+    }
+
     public byte[] serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -511,7 +498,7 @@ public class EditorController {
         oos.close();
         return baos.toByteArray();
     }
-    
+
     public static Object deSerializeObjectFromString(byte[] b_Array) throws IOException, ClassNotFoundException {
         ByteArrayInputStream b = new ByteArrayInputStream(b_Array);
         ObjectInputStream ois = new ObjectInputStream(b);
@@ -519,34 +506,34 @@ public class EditorController {
         ois.close();
         return o;
     }
-    
-    public void load() {
-        SqliteDB db = new SqliteDB();
-        System.out.println(modelName);
-        b_Array = db.readModel(modelName);
-        
-        try {
-            seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        try {
-            walker = loadModel(seriWalker);
-        } catch (Exception e) {
-            System.out.println("Walker Null: " + e);
-            System.out.println(seriWalker);
-        }
-    }
-    
+
+//    public void load() {
+//        SqliteDB db = new SqliteDB();
+//        System.out.println(modelName);
+//        b_Array = db.readModel(modelName);
+//
+//        try {
+//            seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        try {
+//            walker = loadModel(seriWalker);
+//        } catch (Exception e) {
+//            System.out.println("Walker Null: " + e);
+//            System.out.println(seriWalker);
+//        }
+//    }
+
     public void load(String name) {
         SqliteDB db = new SqliteDB();
-        
+
         if (modelName != null) {
             System.out.println(modelName);
         }
-        
+
         b_Array = db.readModel(name);
-        
+
         try {
             seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
         } catch (Exception e) {
@@ -559,13 +546,13 @@ public class EditorController {
             System.out.println("printing serial walker: " + seriWalker);
         }
     }
-    
+
     private boolean isLinkConnected(MouseEvent event) {
         try {
             if (walker.getBasicModels().isEmpty() || circle1 != null) {
                 return (walker.getBasicModels().isEmpty()) || circle1 != null;
             } else {
-                
+
                 return (((Circle) event.getTarget()).getCenterX() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterX()
                         && ((Circle) event.getTarget()).getCenterY() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterY());
             }
@@ -573,11 +560,60 @@ public class EditorController {
             return false;
         }
     }
-    
+
     private void deletionMode() {
 //        rb_DelMode.getProperties().addListener((observable) -> {
 //            label_NbModel.setText(Integer.toString(newValue.intValue()));
 //            nbModel = newValue.intValue();
 //        });
+    }
+
+    private void switchToSimulation() throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
+        double xtranslate = walker.getBasicModels().get(0).getPrevNode().getCenterX();
+        double ytranslate = walker.getBasicModels().get(0).getPrevNode().getCenterY();
+        mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate, xtranslate, ytranslate, environment));
+        Pane root = mainAppLoader.load();
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Simulation");
+        primaryStage.show();
+    }
+
+    private void loadModelSelector() throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/loadModelSelector_layout.fxml"));
+        mainAppLoader.setController(new loadController(primaryStage));
+        Pane root = mainAppLoader.load();
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Editor");
+        primaryStage.show();
+    }
+
+    private void switchToMainMenu() throws IOException {
+        FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
+        mainAppLoader.setController(new MainAppController(primaryStage));
+        Pane root = mainAppLoader.load();
+
+        //-- 2) Create and set the scene to the stage.
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(true);
+        // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setTitle("Walking AI Simulator");
+        primaryStage.show();
+        primaryStage.setAlwaysOnTop(false);
     }
 }
