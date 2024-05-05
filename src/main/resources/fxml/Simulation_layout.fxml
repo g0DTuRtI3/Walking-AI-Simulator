@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../styling/simulationStyling.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: orange;" stylesheets="@../styling/simulationStyling.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <Pane fx:id="simulationPane" focusTraversable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
          <children>
@@ -56,7 +56,7 @@
                      <children>
                         <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                            <font>
-                              <Font name="Cooper Black" size="19.0" />
+                              <Font name="Cooper Black" size="49.0" />
                            </font>
                            <fill>
                               <LinearGradient cycleMethod="REFLECT" endX="0.6208530805687205" endY="1.0">
@@ -74,13 +74,18 @@
                                  </stops>
                               </LinearGradient>
                            </fill></Text>
-                        <Text fx:id="txt_IsTraining" strokeType="OUTSIDE" strokeWidth="0.0" text="IsTraining :" />
                      </children>
                   </VBox>
                   <HBox alignment="TOP_CENTER" spacing="10.0">
                      <children>
-                        <Button fx:id="btn_BackToEditor" focusTraversable="false" mnemonicParsing="false" onAction="#backToEditorOnAction" text="Back To Editor" />
-                        <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="25.0" prefWidth="100.0" promptText="Time (s)" />
+                        <Button fx:id="btn_BackToEditor" focusTraversable="false" mnemonicParsing="false" onAction="#backToEditorOnAction" text="Back To Editor">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Button>
+                        <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="45.0" prefWidth="162.0" promptText="Time (s)">
+                           <font>
+                              <Font size="21.0" />
+                           </font></TextField>
                      </children>
                   </HBox>
                   <TitledPane fx:id="physicGraphPane" focusTraversable="false" prefHeight="481.0" prefWidth="294.0" text="Physics Graphs">
