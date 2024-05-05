@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
@@ -30,6 +29,11 @@ public class MainAppController {
     @FXML
     private Button btn_Simulation;
 
+    /**
+     * Called from Main app.
+     * 
+     * @param primaryStage 
+     */
     public MainAppController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }

@@ -16,12 +16,15 @@ import java.util.ArrayList;
 public class SqliteDB extends DBConnectionProvider {
 
     private final String TABLE = "data";
-    private final String COL_NAME = "Name";
-    private final String COL_WALKER = "Walker";
 
     public SqliteDB() {
     }
 
+    /**
+     * This method opens a connection to the database.
+     * 
+     * @return The connection
+     */
     private Connection connect() {
         // SQLite connection string
         String url = "jdbc:sqlite:src/main/resources/data/database.db";
@@ -34,6 +37,11 @@ public class SqliteDB extends DBConnectionProvider {
         return conn;
     }
 
+    /**
+     * This method gets the name of every walker in the database.
+     * 
+     * @return An ArrayList if the names.
+     */
     public ArrayList<String> readModelName() {
         String sql = "SELECT * FROM data";
 
@@ -50,6 +58,12 @@ public class SqliteDB extends DBConnectionProvider {
         return null;
     }
     
+    /**
+     * This method gets the byte array of the walker base on its name.
+     * 
+     * @param modelName The name of the walker
+     * @return The byte array of the walker.
+     */
     public byte[] readModel(String modelName) {
         String sql = "SELECT Walker FROM data WHERE Name = ?";
         try (Connection conn = this.connect();
@@ -67,6 +81,9 @@ public class SqliteDB extends DBConnectionProvider {
         return null;
     }
 
+    /**
+     * This method prints all the model that exist in the database.
+     */
     public void printAllModel() {
         String sql = "SELECT * FROM data";
 
@@ -81,44 +98,30 @@ public class SqliteDB extends DBConnectionProvider {
         }
     }
 
-    //Fpublic void insertModel(String name) {
+    /**
+     * This methods adds the byte array of the walker and its name into the database.
+     * 
+     * @param b_Array The byte array of the walker.
+     * @param modelName The name of the walker
+     */
     public void addModel(byte[] b_Array, String modelName) {
         String sql = "INSERT INTO data (Name, Walker) VALUES(?,?)";
 
         try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, modelName);
             pstmt.setBytes(2, b_Array);
-            //pstmt.setDouble(2, capacity);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         System.out.println("model added");
     }
-
-    /*
-    public void addModel(byte[] b_Array, String modelName) {
-        String query = String.format("INSERT INTO %s (%s,%s) VALUES(?,?)", TABLE, COL_NAME, COL_WALKER);
-        try (Connection dbConnection = getConnection(); PreparedStatement pstmt = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            //-- 1) Set parameters and insert the new item.
-            dbConnection.setAutoCommit(true);            
-            pstmt.setString(1, modelName);
-            pstmt.setBytes(2, b_Array);
-            int rowsAffected = pstmt.executeUpdate();
-            System.out.println(" Nbr. Row Affected: "+ rowsAffected);
-            System.out.println("Storing the data into the database");
-
-            //-- 2) Retrieve the lastly generate ID.
-            ResultSet resultSet = pstmt.getGeneratedKeys();
-            int generatedKey = 0;
-            if (resultSet.next()) {
-                generatedKey = resultSet.getInt(1);
-            }
-            System.out.println("New model ID: " + generatedKey);
-        } catch (SQLException e) {
-            System.out.println("An error has occured with the message: " + e);
-        }
-    }*/
+    
+    /**
+     * This method deletes a model from the database.
+     * 
+     * @param b_Array The byte array of the walker model.
+     */
     public void deleteModel(byte[] b_Array) {
         String query = String.format("DELETE FROM %s WHERE Walker = ? ", TABLE);
         try (Connection dbConnection = getConnection(); PreparedStatement pstmt = dbConnection.prepareStatement(query)) {

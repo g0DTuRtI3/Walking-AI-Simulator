@@ -106,22 +106,46 @@ public class EditorController {
     @FXML
     private TextField tf_ModelName;
 
-    // Gets the Stage when called
+    /**
+     * Called from the Main menu.
+     * 
+     * @param primaryStage 
+     */
     public EditorController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    /**
+     * Called from the simulation controller. It brings back the best walker the the editor.
+     * 
+     * @param primaryStage
+     * @param walker the best walker in the simulation
+     */
     public EditorController(Stage primaryStage, Walker walker) {
         this.primaryStage = primaryStage;
         this.walker = walker;
     }
 
+    /**
+     * Called from the load controller. It displays the name of the current walker.
+     * 
+     * @param primaryStage
+     * @param modelName the name of the model that the user selects
+     * @throws IOException 
+     */
     //Gets the name of the model selected and loads the model on the 
     public EditorController(Stage primaryStage, String modelName) throws IOException {
         this.primaryStage = primaryStage;
         this.modelName = modelName;
     }
 
+    /**
+     * Initializes the javaFX GUI. It sets the default value for the number of model, the learning rate and the interval.
+     * <p>
+     * If the model name has a value, it will load the walker model in the editorPane.
+     * <p>
+     * If the walker is not the default walker, it will load the walker.
+     */
     @FXML
     void initialize() {
         environmentComboBox.setItems(FXCollections.observableArrayList("Earth", "Moon"));
@@ -159,7 +183,6 @@ public class EditorController {
         
         if (!walker.getBasicModels().isEmpty()) {
             generateWalker(walker);
-            System.out.println("bombaclat");
         }
     }
 
@@ -288,6 +311,11 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method checks of the user has chosen an environment and made a model. If the user didn't, it will show an error alert.
+     * 
+     * @return false if the user omitted something and true otherwise
+     */
     private boolean checkEnvironmemt() {
         if (environment == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -305,7 +333,9 @@ public class EditorController {
         return true;
     }
 
-    // changes the color of the editor display
+    /**
+     * This method changes the color of the editor display.
+     */
     private void selected() {
         if (isDelMode) {
             editorCircle.setFill(Color.GREY);
@@ -327,7 +357,11 @@ public class EditorController {
         }
     }
 
-    // Adds circle to the editor pane
+    /**
+     * This method adds circles to the editor pane.
+     * 
+     * @param event The MouseEvent
+     */
     private void addCircle(MouseEvent event) {
         boolean isTouching = false;
 
@@ -353,6 +387,14 @@ public class EditorController {
         }
     }
 
+    /**
+     * This is a method to see if 2 circles are touching or are close to each other.
+     * 
+     * @param oldCircle The first circle
+     * @param newCircle The second circle
+     * 
+     * @return true if the second circle is too close and false otherwise.
+     */
     private boolean isCircleTouching(Circle oldCircle, Circle newCircle) {
         boolean xTouching = false;
         int distance = CIRCLE_RADIUS * 2 + CIRCLE_SOCIAL_DISTANCING;
@@ -367,6 +409,11 @@ public class EditorController {
         return false;
     }
 
+    /**
+     * This method add a link between 2 selected circle.
+     * 
+     * @param event The MouseEvent
+     */
     private void addLink(MouseEvent event) {
         boolean isCreated = false;
 
@@ -419,12 +466,20 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method clears the editor pane, the circle list and the walker.
+     */
     private void clearPane() {
         editorPane.getChildren().clear();
         circle_list.clear();
         walker.getBasicModels().clear();
     }
 
+    /**
+     * This method finds the walker associated with the selected circle and calls editorPaneDeletion(BasicModel delModel)
+     * 
+     * @param event The MouseEvent
+     */
     private void removeCircle(MouseEvent event) {
         try {
             Circle circle = (Circle) event.getTarget();
@@ -444,6 +499,9 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method removes the selected circle and the walker associated with it.
+     */
     private void editorPaneDeletion(BasicModel delModel) {
         if (delModel == null) {
             return;
@@ -467,6 +525,11 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method prepares the current walker to make it serializable . It creates MyWalker which is an object that doesn't have javaFX.
+     * 
+     * @return a serializable walker.
+     */
     private MyWalker saveModel() {
         MyWalker serializeWalker = new MyWalker();
         serializeWalker.setBrain(walker.getBrain());
@@ -488,6 +551,12 @@ public class EditorController {
         return serializeWalker;
     }
 
+    /**
+     * This method converts the serializable walker to a normal walker that contains javaFX elements.
+     * 
+     * @param serializedWalker The MyWalker that we want to convert
+     * @return The converted walker
+     */
     private Walker loadModel(MyWalker serializedWalker) {
         clearPane();
 
@@ -513,6 +582,11 @@ public class EditorController {
         return load;
     }
 
+    /**
+     * This method displays the walker in the editorPane.
+     * 
+     * @param walker The walker we want to display.
+     */
     private void generateWalker(Walker walker) {
         for (BasicModel basicModel : walker.getBasicModels()) {
             NodeModel prevNode = new NodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), Color.web(basicModel.getPrevNode().getHexColor()));
@@ -527,6 +601,14 @@ public class EditorController {
         System.out.println("generation complete");
     }
 
+    /**
+     * This method serializes MyWalker.
+     * 
+     * @param serializableWalker The serializable walker that we want to serialize.
+     * @return The byte array version of the Walker.
+     * 
+     * @throws IOException 
+     */
     public byte[] serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -535,6 +617,15 @@ public class EditorController {
         return baos.toByteArray();
     }
 
+    /**
+     * This method deserializes the byte array into an object.
+     * 
+     * @param b_Array The byte array containing a Walker.
+     * @return The walker Object
+     * 
+     * @throws IOException
+     * @throws ClassNotFoundException 
+     */
     public static Object deSerializeObjectFromString(byte[] b_Array) throws IOException, ClassNotFoundException {
         ByteArrayInputStream b = new ByteArrayInputStream(b_Array);
         ObjectInputStream ois = new ObjectInputStream(b);
@@ -560,6 +651,13 @@ public class EditorController {
 //            System.out.println(seriWalker);
 //        }
 //    }
+    
+    /**
+     * This method gets the byte array of the walker that correspond the the name parameter. 
+     * It deserializes that byte array and loads it into the editorPane.
+     * 
+     * @param name The name of the Walker.
+     */
     public void load(String name) {
         SqliteDB db = new SqliteDB();
 
@@ -582,6 +680,12 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method makes sure that the user only selects the last created circle.
+     * 
+     * @param event The MouseEvent
+     * @return true if the user selected the last circle and false otherwise.
+     */
     private boolean isLinkConnected(MouseEvent event) {
         try {
             if (walker.getBasicModels().isEmpty() || circle1 != null) {
@@ -596,6 +700,11 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method changes the current scene to the simulation scene.
+     * 
+     * @throws IOException 
+     */
     private void switchToSimulation() throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
         double xtranslate = walker.getBasicModels().get(0).getPrevNode().getCenterX();
@@ -613,6 +722,11 @@ public class EditorController {
         primaryStage.show();
     }
 
+    /**
+     * This method changes the current scene to the model selector.
+     * 
+     * @throws IOException 
+     */
     private void loadModelSelector() throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/loadModelSelector_layout.fxml"));
         mainAppLoader.setController(new loadController(primaryStage));
@@ -624,10 +738,15 @@ public class EditorController {
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
-        primaryStage.setTitle("Editor");
+        primaryStage.setTitle("Model Selector");
         primaryStage.show();
     }
 
+    /**
+     * This method changes the current scene to the Main Menu.
+     * 
+     * @throws IOException 
+     */
     private void switchToMainMenu() throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
         mainAppLoader.setController(new MainAppController(primaryStage));

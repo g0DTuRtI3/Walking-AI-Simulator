@@ -17,7 +17,14 @@ public class loadController {
 
     @FXML
     private ListView<String> modelList;
+    
+    public loadController(Stage stage) {
+        primaryStage = stage;
+    }
 
+    /**
+     * This method gets the name of the model that the user selects. It then calls returnToEditor(String selectedModel).
+     */
     @FXML
     void initialize() {
         modelList.getItems().addAll(database.readModelName());
@@ -33,10 +40,12 @@ public class loadController {
         });
     }
 
-    public loadController(Stage stage) {
-        primaryStage = stage;
-    }
-
+    /**
+     * The method switches the scene to the Editor.
+     * 
+     * @param selectedModel The name of the model that the user chose.
+     * @throws IOException 
+     */
     public void returnToEditor(String selectedModel) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
         EditorController controller = new EditorController(primaryStage, selectedModel);

@@ -1,11 +1,6 @@
 package edu.vanier.serialization;
 
 import edu.vanier.core.NeuralNetwork;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -19,22 +14,6 @@ public class MyWalker implements Serializable{
     private static float learningRate = 0.3f;
     private int fitnessScore;
     private int id;
-    
-    public void serialize(Object walker, String file) throws IOException{
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(walker);
-        
-        fos.close();
-    }
-    
-    public Object deserialize(String file) throws IOException, ClassNotFoundException{
-        FileInputStream fis = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        Object obj = ois.readObject();
-        ois.close();
-        return obj;
-    } 
 
     public ArrayList<MyBasicModel> getBasicModels() {
         return basicModels;
