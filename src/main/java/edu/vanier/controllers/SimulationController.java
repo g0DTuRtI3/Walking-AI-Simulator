@@ -317,7 +317,7 @@ public class SimulationController {
                 System.out.println("finished " + i++);
                 bestWalker.setFitnessScore(bestWalker.getFitnessScore() + (int) (100 * lastXbestWalker * pxlToMeterConst));
 
-                settingNextGeneration(bestWalker, updateGeneration);
+                settingNextGeneration(updateGeneration);
                 startedTime = now;
                 updateSpeed.getData().clear();
                 updatePos.getData().clear();
@@ -327,26 +327,26 @@ public class SimulationController {
             previousTime = now;
         }
 
-        public void settingNextGeneration(Walker best, Series<String, Number> updateGeneration) {
+        public void settingNextGeneration(Series<String, Number> updateGeneration) {
             lastXbestWalker = 0;
             System.err.println("Generation " + txt_Generation.getText() + " finished");
 
-            updateGeneration.getData().add(new XYChart.Data<>(txt_Generation.getText(), best.getFitnessScore()));
+            updateGeneration.getData().add(new XYChart.Data<>(txt_Generation.getText(), bestWalker.getFitnessScore()));
 
             txt_Generation.setText(String.format("%d", Integer.parseInt(txt_Generation.getText()) + 1));
             for (Walker w : walkers) {
-                if (best.getFitnessScore() < w.getFitnessScore()) {
-                    best = w;
+                if (bestWalker.getFitnessScore() < w.getFitnessScore()) {
+                    bestWalker = w;
                 }
             }
             for (Walker w : walkers) {
 
                 w.setFitnessScore(0);
                 w.setInitialXY(initialXYPositions);
-                if (w == best) {
+                if (w == bestWalker) {
                     continue;
                 }
-                w.setBrain(best.getBrain().clone());
+                w.setBrain(bestWalker.getBrain().clone());
 
                 w.getBrain().mutate();
 
