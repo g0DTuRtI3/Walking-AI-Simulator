@@ -21,10 +21,15 @@ public class DbDriver extends DBConnectionProvider {
     public static void main(String[] args) {
         System.out.println(" Test: inserting into the database....");
         DbDriver app = new DbDriver();
+        app.addModel("Hello", "test1");
+        app.readModel();
+        app.editModel("Hello", "suceess");
+        app.readModel();
+        
         //oi.addNewBruh("Youssef");
 
-        app.insertModel("Raw Materials");
-        app.readModel("10");
+//        app.insertModel("Raw Materials");
+//        app.readModel("10");
         //app.insert("Semifinished Goods", 4000);
         //app.insert("Finished Goods", 5000);
 
@@ -55,7 +60,7 @@ public class DbDriver extends DBConnectionProvider {
 
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:src/main/resources/data/database.db";
+        String url = "jdbc:sqlite:src/main/resources/data/sample.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -65,8 +70,8 @@ public class DbDriver extends DBConnectionProvider {
         return conn;
     }
 
-    public void readModel(String modelId) {
-        String sql = "SELECT * FROM data WHERE Id = " + modelId;
+    public void readModel() {
+        String sql = "SELECT * FROM test";
 
         try (Connection conn = this.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -74,48 +79,62 @@ public class DbDriver extends DBConnectionProvider {
             while (rs.next()) {
                 System.out.println(rs.getInt("Id") + "\t"
                         + rs.getString("Name") + "\t"
-                        + rs.getBytes("Walker"));
+                        + rs.getString("Walker"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-
-    public void insertModel(String name) {
-        String sql = "INSERT INTO data (Name) VALUES(?)";
-
-        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, name);
-            //pstmt.setDouble(2, capacity);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-//    public void insert(String name, double capacity) {
-//        String sql = "INSERT INTO warehouses(name,capacity) VALUES(?,?)";
+//
+//    public void insertModel(String name) {
+//        String sql = "INSERT INTO data (Name) VALUES(?)";
 //
 //        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 //            pstmt.setString(1, name);
-//            pstmt.setDouble(2, capacity);
+//            //pstmt.setDouble(2, capacity);
 //            pstmt.executeUpdate();
 //        } catch (SQLException e) {
 //            System.out.println(e.getMessage());
 //        }
 //    }
-//    public void addNewBruh(String modelName) {
-//        String query = "INSERT INTO person (name) VALUES(?);";
-//        try (Connection dbConnection = getConnection(); 
-//                PreparedStatement pstmt = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+    
+    public void editModel(String modelName, String renameWalker) {
+        String query = "UPDATE test SET Walker = ? WHERE Name = ?";
+        System.out.println(query);
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, renameWalker);
+            pstmt.setString(2, modelName);
+            pstmt.executeUpdate();
+            System.out.println("The selected item has been modified");
+        } catch (SQLException e) {
+            System.out.println("An error has occured with the message: " + e);
+        }
+    }
+    
+    public void addModel(String modelName, String walker) {
+        String sql = "INSERT INTO test (Name, Walker) VALUES(?,?)";
+
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, modelName);
+            pstmt.setString(2, walker);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("model added");
+    }
+
+//    public void addModel(byte[] b_Array, String modelName) {
+//        String query = String.format("INSERT INTO %s (%s,%s) VALUES(?,?)", TABLE, COL_NAME, COL_WALKER);
+//        try (Connection dbConnection = getConnection(); PreparedStatement pstmt = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 //            //-- 1) Set parameters and insert the new item.
-//            //dbConnection.setAutoCommit(true);
+//            dbConnection.setAutoCommit(true);
 //            pstmt.setString(1, modelName);
+//            pstmt.setBytes(2, b_Array);
 //            int rowsAffected = pstmt.executeUpdate();
-//            pstmt.clearParameters();
 //            System.out.println(" Nbr. Row Affected: " + rowsAffected);
 //            System.out.println("Storing the data into the database");
-//            //dbConnection.commit();
+//
 //            //-- 2) Retrieve the lastly generate ID.
 //            ResultSet resultSet = pstmt.getGeneratedKeys();
 //            int generatedKey = 0;
@@ -127,28 +146,5 @@ public class DbDriver extends DBConnectionProvider {
 //            System.out.println("An error has occured with the message: " + e);
 //        }
 //    }
-
-    public void addModel(byte[] b_Array, String modelName) {
-        String query = String.format("INSERT INTO %s (%s,%s) VALUES(?,?)", TABLE, COL_NAME, COL_WALKER);
-        try (Connection dbConnection = getConnection(); PreparedStatement pstmt = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            //-- 1) Set parameters and insert the new item.
-            dbConnection.setAutoCommit(true);
-            pstmt.setString(1, modelName);
-            pstmt.setBytes(2, b_Array);
-            int rowsAffected = pstmt.executeUpdate();
-            System.out.println(" Nbr. Row Affected: " + rowsAffected);
-            System.out.println("Storing the data into the database");
-
-            //-- 2) Retrieve the lastly generate ID.
-            ResultSet resultSet = pstmt.getGeneratedKeys();
-            int generatedKey = 0;
-            if (resultSet.next()) {
-                generatedKey = resultSet.getInt(1);
-            }
-            System.out.println("New model ID: " + generatedKey);
-        } catch (SQLException e) {
-            System.out.println("An error has occured with the message: " + e);
-        }
-    }
 
 }

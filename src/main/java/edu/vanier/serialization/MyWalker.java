@@ -9,11 +9,18 @@ import java.util.ArrayList;
  * @author Zeyu Huang
  */
 public class MyWalker implements Serializable{
+    private static float learningRate = 0.3f;
+    
     private ArrayList<MyBasicModel> basicModels = new ArrayList<>();
     private NeuralNetwork brain;
-    private static float learningRate = 0.3f;
     private int fitnessScore;
     private int id;
+
+    public MyWalker(NeuralNetwork brain, int fitnessScore, int id) {
+        this.brain = brain;
+        this.fitnessScore = fitnessScore;
+        this.id = id;
+    }
 
     public ArrayList<MyBasicModel> getBasicModels() {
         return basicModels;
@@ -39,19 +46,7 @@ public class MyWalker implements Serializable{
         this.basicModels = basicModels;
     }
 
-    public void setBrain(NeuralNetwork brain) {
-        this.brain = brain;
-    }
-
     public static void setLearningRate(float learningRate) {
         MyWalker.learningRate = learningRate;
-    }
-
-    public void setFitnessScore(int fitnessScore) {
-        this.fitnessScore = fitnessScore;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

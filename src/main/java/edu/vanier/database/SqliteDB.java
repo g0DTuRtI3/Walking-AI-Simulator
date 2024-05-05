@@ -51,6 +51,7 @@ public class SqliteDB extends DBConnectionProvider {
             while (rs.next()) {
                 name_List.add(rs.getString("Name"));
             }
+            System.out.println("read model name");
             return name_List;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -120,13 +121,13 @@ public class SqliteDB extends DBConnectionProvider {
     /**
      * This method deletes a model from the database.
      * 
-     * @param b_Array The byte array of the walker model.
+     * @param modelName The name of the walker model.
      */
-    public void deleteModel(byte[] b_Array) {
-        String query = String.format("DELETE FROM %s WHERE Walker = ? ", TABLE);
-        try (Connection dbConnection = getConnection(); PreparedStatement pstmt = dbConnection.prepareStatement(query)) {
+    public void deleteModel(String modelName) {
+        String query = String.format("DELETE FROM %s WHERE Name = ? ", TABLE);
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             // set parameters
-            pstmt.setBytes(1, b_Array);
+            pstmt.setString(1, modelName);
             pstmt.executeUpdate();
             System.out.println("The selected item has been removed from there DB...");
         } catch (SQLException e) {
@@ -134,7 +135,21 @@ public class SqliteDB extends DBConnectionProvider {
         }
     }
 
-    public void editModel(byte[] b_Array) {
-        String query = String.format("UPDATE %s SET Name = ?, Walker = ? WHERE id = %d", TABLE);
+    /**
+     * This method updates the walker of the chosen model
+     * 
+     * @param b_Array The new byte array of the walker
+     * @param modelName The name of the walker
+     */
+    public void editModel(byte[] b_Array, String modelName) {
+        String query = "UPDATE data SET Walker = ? WHERE Name = ?";
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setBytes(1, b_Array);
+            pstmt.setString(2, modelName);            
+            pstmt.executeUpdate();
+            System.out.println("The selected item has been modified");
+        } catch (SQLException e) {
+            System.out.println("An error has occured with the message: " + e);
+        }
     }
 }

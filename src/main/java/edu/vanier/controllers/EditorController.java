@@ -1,7 +1,6 @@
 package edu.vanier.controllers;
 
 import edu.vanier.database.SqliteDB;
-import edu.vanier.model.*;
 import edu.vanier.serialization.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -42,6 +43,7 @@ public class EditorController {
     private final static String HOW_TO_USE_TEXT = "Insert the text for how to use";
     private final static String ABOUT_TEXT = "Insert the text for about";
     private final Stage primaryStage;
+    private final ArrayList<Circle> circle_list = new ArrayList<>();
     private final SqliteDB database = new SqliteDB();
 
     private int nbModel = 10;
@@ -49,17 +51,14 @@ public class EditorController {
     private float learningRate = 0.3f;
     private boolean isCircleMode, isLinkMode;
     private boolean isDelMode = false;
+    private byte[] b_Array;
 
-    private ArrayList<Circle> circle_list = new ArrayList<>();
     private Circle circle1 = null, circle2 = null;
     private Color circleColor, linkColor, ogColor;
     private NodeModel prevNode, nextNode;
     private String modelName;
     private Walker walker = new Walker();
     private MyWalker seriWalker;
-
-    // delete str when done
-    byte[] b_Array;
 
     @FXML
     private CheckBox cb_DelMode;
@@ -106,43 +105,26 @@ public class EditorController {
     @FXML
     private TextField tf_ModelName;
 
-    /**
-     * Called from the Main menu.
-     * 
-     * @param primaryStage 
-     */
     public EditorController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    /**
-     * Called from the simulation controller. It brings back the best walker the the editor.
-     * 
-     * @param primaryStage
-     * @param walker the best walker in the simulation
-     */
     public EditorController(Stage primaryStage, Walker walker) {
         this.primaryStage = primaryStage;
         this.walker = walker;
     }
 
-    /**
-     * Called from the load controller. It displays the name of the current walker.
-     * 
-     * @param primaryStage
-     * @param modelName the name of the model that the user selects
-     * @throws IOException 
-     */
-    //Gets the name of the model selected and loads the model on the 
     public EditorController(Stage primaryStage, String modelName) throws IOException {
         this.primaryStage = primaryStage;
         this.modelName = modelName;
     }
 
     /**
-     * Initializes the javaFX GUI. It sets the default value for the number of model, the learning rate and the interval.
+     * Initializes the javaFX GUI. It sets the default value for the number of
+     * model, the learning rate and the interval.
      * <p>
-     * If the model name has a value, it will load the walker model in the editorPane.
+     * If the model name has a value, it will load the walker model in the
+     * editorPane.
      * <p>
      * If the walker is not the default walker, it will load the walker.
      */
@@ -174,13 +156,14 @@ public class EditorController {
         });
 
         //Print all saved models
-//        database.printAllModel();
+        database.printAllModel();
+
         // Loads the models if it called
         if (modelName != null) {
             load(modelName);
             tf_ModelName.setText(modelName);
         }
-        
+
         if (!walker.getBasicModels().isEmpty()) {
             generateWalker(walker);
         }
@@ -297,10 +280,29 @@ public class EditorController {
             alert.setContentText("Please Enter a Model Name");
             alert.show();
         } else {
-            database.addModel(b_Array, tf_ModelName.getText());
-        }
 
-        System.out.println(walker.getBasicModels().get(0).getNextNode().getCenterX());
+            if (database.readModelName().isEmpty()) {
+                database.addModel(b_Array, tf_ModelName.getText());
+            } else {
+                for (String string : database.readModelName()) {
+
+                    if (string.equals(tf_ModelName.getText())) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setContentText("This name already exist. Overwrite it?");
+
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.OK) {
+                            database.editModel(b_Array, string);
+                        } else {
+                            return;
+                        }
+
+                    } else {
+                        database.addModel(b_Array, tf_ModelName.getText());
+                    }
+                }
+            }
+        }
     }
 
     // Switches to the simulation scene
@@ -312,8 +314,9 @@ public class EditorController {
     }
 
     /**
-     * This method checks of the user has chosen an environment and made a model. If the user didn't, it will show an error alert.
-     * 
+     * This method checks of the user has chosen an environment and made a
+     * model. If the user didn't, it will show an error alert.
+     *
      * @return false if the user omitted something and true otherwise
      */
     private boolean checkEnvironmemt() {
@@ -359,7 +362,7 @@ public class EditorController {
 
     /**
      * This method adds circles to the editor pane.
-     * 
+     *
      * @param event The MouseEvent
      */
     private void addCircle(MouseEvent event) {
@@ -388,11 +391,12 @@ public class EditorController {
     }
 
     /**
-     * This is a method to see if 2 circles are touching or are close to each other.
-     * 
+     * This is a method to see if 2 circles are touching or are close to each
+     * other.
+     *
      * @param oldCircle The first circle
      * @param newCircle The second circle
-     * 
+     *
      * @return true if the second circle is too close and false otherwise.
      */
     private boolean isCircleTouching(Circle oldCircle, Circle newCircle) {
@@ -411,7 +415,7 @@ public class EditorController {
 
     /**
      * This method add a link between 2 selected circle.
-     * 
+     *
      * @param event The MouseEvent
      */
     private void addLink(MouseEvent event) {
@@ -476,8 +480,9 @@ public class EditorController {
     }
 
     /**
-     * This method finds the walker associated with the selected circle and calls editorPaneDeletion(BasicModel delModel)
-     * 
+     * This method finds the walker associated with the selected circle and
+     * calls editorPaneDeletion(BasicModel delModel)
+     *
      * @param event The MouseEvent
      */
     private void removeCircle(MouseEvent event) {
@@ -500,7 +505,8 @@ public class EditorController {
     }
 
     /**
-     * This method removes the selected circle and the walker associated with it.
+     * This method removes the selected circle and the walker associated with
+     * it.
      */
     private void editorPaneDeletion(BasicModel delModel) {
         if (delModel == null) {
@@ -526,15 +532,13 @@ public class EditorController {
     }
 
     /**
-     * This method prepares the current walker to make it serializable . It creates MyWalker which is an object that doesn't have javaFX.
-     * 
+     * This method prepares the current walker to make it serializable . It
+     * creates MyWalker which is an object that doesn't have javaFX.
+     *
      * @return a serializable walker.
      */
     private MyWalker saveModel() {
-        MyWalker serializeWalker = new MyWalker();
-        serializeWalker.setBrain(walker.getBrain());
-        serializeWalker.setFitnessScore(walker.getFitnessScore());
-        serializeWalker.setId(walker.getId());
+        MyWalker serializeWalker = new MyWalker(walker.getBrain(), walker.getFitnessScore(), walker.getId());
 
         ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
         for (BasicModel basicModel : walker.getBasicModels()) {
@@ -552,8 +556,9 @@ public class EditorController {
     }
 
     /**
-     * This method converts the serializable walker to a normal walker that contains javaFX elements.
-     * 
+     * This method converts the serializable walker to a normal walker that
+     * contains javaFX elements.
+     *
      * @param serializedWalker The MyWalker that we want to convert
      * @return The converted walker
      */
@@ -584,7 +589,7 @@ public class EditorController {
 
     /**
      * This method displays the walker in the editorPane.
-     * 
+     *
      * @param walker The walker we want to display.
      */
     private void generateWalker(Walker walker) {
@@ -603,11 +608,12 @@ public class EditorController {
 
     /**
      * This method serializes MyWalker.
-     * 
-     * @param serializableWalker The serializable walker that we want to serialize.
+     *
+     * @param serializableWalker The serializable walker that we want to
+     * serialize.
      * @return The byte array version of the Walker.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     public byte[] serialize(MyWalker serializableWalker) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -619,12 +625,12 @@ public class EditorController {
 
     /**
      * This method deserializes the byte array into an object.
-     * 
+     *
      * @param b_Array The byte array containing a Walker.
      * @return The walker Object
-     * 
+     *
      * @throws IOException
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException
      */
     public static Object deSerializeObjectFromString(byte[] b_Array) throws IOException, ClassNotFoundException {
         ByteArrayInputStream b = new ByteArrayInputStream(b_Array);
@@ -651,11 +657,11 @@ public class EditorController {
 //            System.out.println(seriWalker);
 //        }
 //    }
-    
     /**
-     * This method gets the byte array of the walker that correspond the the name parameter. 
-     * It deserializes that byte array and loads it into the editorPane.
-     * 
+     * This method gets the byte array of the walker that correspond the the
+     * name parameter. It deserializes that byte array and loads it into the
+     * editorPane.
+     *
      * @param name The name of the Walker.
      */
     public void load(String name) {
@@ -681,8 +687,9 @@ public class EditorController {
     }
 
     /**
-     * This method makes sure that the user only selects the last created circle.
-     * 
+     * This method makes sure that the user only selects the last created
+     * circle.
+     *
      * @param event The MouseEvent
      * @return true if the user selected the last circle and false otherwise.
      */
@@ -702,8 +709,8 @@ public class EditorController {
 
     /**
      * This method changes the current scene to the simulation scene.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     private void switchToSimulation() throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Simulation_layout.fxml"));
@@ -724,8 +731,8 @@ public class EditorController {
 
     /**
      * This method changes the current scene to the model selector.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     private void loadModelSelector() throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/loadModelSelector_layout.fxml"));
@@ -744,8 +751,8 @@ public class EditorController {
 
     /**
      * This method changes the current scene to the Main Menu.
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     private void switchToMainMenu() throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
