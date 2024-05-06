@@ -93,7 +93,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 
 .slider .thumb {
-    -fx-background-color: white; /* Color of the thumb */
+    -fx-background-color: white; 
     -fx-background-radius: 10;
 }
 .slider .label {
@@ -101,8 +101,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 #redSlider .track{
 
-    -fx-background-color: red; /* Color of the thumb */
-    -fx-background-radius: 0; /* Make the thumb square (remove rounded corners) */
+    -fx-background-color: red; 
+    -fx-background-radius: 0; 
 
 }
 #greenSlider .track{
