@@ -18,7 +18,7 @@ public class MainAppController {
     File f = new File(cssEditorPath);
     static MediaPlayer defaultPlayer;
     static MediaPlayer naturePlayer;
-    
+    static MediaPlayer spacePlayer;
 
     Stage primaryStage;
 
@@ -40,9 +40,12 @@ public class MainAppController {
         if (defaultPlayer == null) {
             Media defaultMedia = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
             Media natureMedia = new Media(getClass().getResource("/music/natureMusic.mp3").toExternalForm());
+            Media spaceMedia = new Media(getClass().getResource("/music/spaceMusic.mp3").toExternalForm());
             defaultPlayer = new MediaPlayer(defaultMedia);
             naturePlayer = new MediaPlayer(natureMedia);
+            spacePlayer = new MediaPlayer(spaceMedia);
             naturePlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            spacePlayer.setCycleCount(MediaPlayer.INDEFINITE);
             defaultPlayer.setAutoPlay(true);
             defaultPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }

@@ -435,10 +435,13 @@ public class SimulationController {
 
     @FXML
     void backToEditorOnAction(ActionEvent event) throws IOException {
+        MainAppController.naturePlayer.stop();
+        MainAppController.spacePlayer.stop();
+        MainAppController.defaultPlayer.play();
+        
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
         mainAppLoader.setController(new EditorController(primaryStage));
         Pane root = mainAppLoader.load();
-
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
@@ -462,6 +465,8 @@ public class SimulationController {
             }
             case "Moon" -> {
                 this.simulationPane.setId("Moon");
+                MainAppController.spacePlayer.play();
+                MainAppController.defaultPlayer.stop();
                 this.belowGround.setFill(Color.LIGHTGRAY);
                 SimulationController.GRAVITY = 1.6;
             }
