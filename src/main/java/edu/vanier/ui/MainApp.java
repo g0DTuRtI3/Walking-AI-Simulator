@@ -77,7 +77,7 @@ public class MainApp extends Application {
 //            logger.error(ex.getMessage(), ex);
 //        }
 
-
+/*
         try {
             logger.info("Bootstrapping the application...");
             //-- 1) Load the scene graph from the specified FXML file and 
@@ -98,7 +98,7 @@ public class MainApp extends Application {
             primaryStage.setAlwaysOnTop(false);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
-        }
+        }*/
     }
 
     public static void main(String[] args) {
