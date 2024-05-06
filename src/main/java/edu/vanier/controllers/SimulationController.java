@@ -73,7 +73,7 @@ public class SimulationController {
     private Button btn_BackToEditor;
 
     @FXML
-    private LineChart<String, Number> chart_Network;
+    private LineChart<Number, Number> chart_Network;
 
     @FXML
     private LineChart<Number, Number> chart_Physics1;
@@ -105,9 +105,9 @@ public class SimulationController {
         this.xtranslate = xtranslate;
         this.ytranslate = ytranslate;
         this.environment = environment;
-        
+
         walkers = new Walker[nbModel];
-        
+
         initialXYPositions = new double[walker.getAllNodes().size()][2];
         ArrayList<NodeModel> allNodes = new ArrayList<>(walker.getAllNodes());
         for (int i = 0; i < allNodes.size(); i++) {
@@ -115,7 +115,7 @@ public class SimulationController {
             initialXYPositions[i][1] = allNodes.get(i).getCenterY();
 
         }
-        
+
         for (int i = 0; i < nbModel; i++) {
             Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers);
             walkerI.learningRate(learningRate);
@@ -136,17 +136,17 @@ public class SimulationController {
 
         }
     }
-    
+
     @FXML
     void initialize() {
         determineEnvironment();
-        
+
         ground.setStartX(-100000);
         ground.setEndX(100000);
         ground.setStartY(800);
         ground.setEndY(800);
         ground.setStrokeWidth(5);
-        
+
         belowGround.setX(ground.getStartX());
         belowGround.setY(ground.getStartY());
         belowGround.setHeight(10000000);
@@ -183,7 +183,7 @@ public class SimulationController {
 
             w.setOpacity(0.5);
         }
-        
+
         panGroup.getChildren().addAll(belowGround, ground);
         simulationPane.getChildren().add(panGroup);
         simulationPane.setOnKeyPressed((event) -> {
@@ -245,6 +245,18 @@ public class SimulationController {
             super.start();
         }
 
+        private Walker bestWalker = null;
+        private double lastXbestWalker = 0;
+        private double currentInterval = 0;
+        private final double nanoTOSecond = 1000000000.0;
+        private int i = 0;
+        private final double pxlToMeterConst = 1 / 100.0;
+        private Series<Number, Number> updateSpeed = new Series<>();
+        private Series<Number, Number> updatePos = new Series<>();
+        private Series<Number, Number> updateKE = new Series<>();
+        private Series<Number, Number> updateGeneration = new Series<>();
+        private double speedY = 0;
+
         @Override
         public void handle(long now) {
 
@@ -260,7 +272,6 @@ public class SimulationController {
                     if (node.intersects(ground.getBoundsInParent())) {
 
 //                        node.setSpeedY(1);
-
                     } else {
 //                        node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
 
@@ -317,7 +328,7 @@ public class SimulationController {
                 System.out.println("finished " + i++);
                 bestWalker.setFitnessScore(bestWalker.getFitnessScore() + (int) (100 * lastXbestWalker * pxlToMeterConst));
 
-                settingNextGeneration(updateGeneration);
+                settingNextGeneration();
                 startedTime = now;
                 updateSpeed.getData().clear();
                 updatePos.getData().clear();
@@ -327,11 +338,9 @@ public class SimulationController {
             previousTime = now;
         }
 
-        public void settingNextGeneration(Series<String, Number> updateGeneration) {
+        public void settingNextGeneration() {
             lastXbestWalker = 0;
             System.err.println("Generation " + txt_Generation.getText() + " finished");
-
-            updateGeneration.getData().add(new XYChart.Data<>(txt_Generation.getText(), bestWalker.getFitnessScore()));
 
             txt_Generation.setText(String.format("%d", Integer.parseInt(txt_Generation.getText()) + 1));
             for (Walker w : walkers) {
@@ -339,6 +348,7 @@ public class SimulationController {
                     bestWalker = w;
                 }
             }
+            updateGeneration.getData().add(new XYChart.Data<>(Integer.parseInt(txt_Generation.getText()), bestWalker.getFitnessScore()));
             for (Walker w : walkers) {
 
                 w.setFitnessScore(0);
@@ -366,7 +376,6 @@ public class SimulationController {
 
     };
 
-
     private void moveWalker(double dtime) {
 
         for (Walker w : walkers) {
@@ -377,7 +386,6 @@ public class SimulationController {
 
                 //put all force on every node in every []
 //                motionOnNodes[i] = nodes.get(i).getSpeedX();
-
             }
             //all forces that walker will apply on every Node
             double[] predictions = w.getBrain().predict(motionOnNodes);
@@ -424,27 +432,40 @@ public class SimulationController {
         });
 
     }
-    
+
     @FXML
     void backToEditorOnAction(ActionEvent event) throws IOException {
+        MainAppController.naturePlayer.stop();
+        MainAppController.spacePlayer.stop();
+        MainAppController.defaultPlayer.play();
         switchToEditor();
     }
 
     private void determineEnvironment() {
-        switch (environment) {
-            case "Earth":
-                this.simulationPane.setId("Earth");
-                System.out.println("Earth");
-                SimulationController.GRAVITY = 9.8;
-            case "Moon":
-                this.simulationPane.setId("Moon");
-                SimulationController.GRAVITY = 1.6;
-                System.out.println("Moon");
-            default:
-                this.simulationPane.setId("");
-                SimulationController.GRAVITY = 9.8;
-        }
+        switch (EditorController.environment) {
+            case "Earth" -> {
 
+                this.simulationPane.setId("Earth");
+                MainAppController.naturePlayer.play();
+                MainAppController.defaultPlayer.stop();
+
+                this.belowGround.setFill(Color.GREEN);
+
+                SimulationController.GRAVITY = 9.8;
+            }
+            case "Moon" -> {
+                this.simulationPane.setId("Moon");
+                MainAppController.spacePlayer.play();
+                MainAppController.defaultPlayer.stop();
+                this.belowGround.setFill(Color.LIGHTGRAY);
+                SimulationController.GRAVITY = 1.6;
+            }
+            default -> {
+                this.panGroup.setId("");
+                this.belowGround.setFill(Color.LIGHTGREEN);
+                SimulationController.GRAVITY = 9.8;
+            }
+        }
     }
 
     private void switchToEditor() throws IOException {

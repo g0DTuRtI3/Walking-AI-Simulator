@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -22,23 +21,23 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: orange;" stylesheets="@../styling/simulationStyling.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <Pane fx:id="simulationPane" focusTraversable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: greenyellow; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
+      <Pane fx:id="simulationPane" focusTraversable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: orange; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
          <children>
             <Text fx:id="txt_Countdown" layoutX="14.0" layoutY="119.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="211.59375">
                <font>
-                  <Font name="Dubai Light" size="93.0" />
+                  <Font name="Dubai Light" size="100.0" />
                </font>
                <fill>
                   <LinearGradient cycleMethod="REFLECT" endX="0.7440758293838863" endY="0.5308056872037914" startX="0.6303317535545023" startY="0.2843601895734597">
                      <stops>
                         <Stop>
                            <color>
-                              <Color green="0.8899999856948853" blue="0.8137142658233643" />
+                              <Color red="0.5196190476417542" blue="0.8799999952316284" />
                            </color>
                         </Stop>
                         <Stop offset="1.0">
                            <color>
-                              <Color red="0.9342105388641357" />
+                              <Color red="0.9300000071525574" />
                            </color>
                         </Stop>
                      </stops>
@@ -48,15 +47,17 @@
       </Pane>
    </center>
    <right>
-      <HBox fx:id="physicalGraphHBox" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="360.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="physicalGraphHBox" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="360.0" spacing="20.0" style="-fx-background-color: Gold;" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="855.0" prefWidth="360.0" spacing="10.0">
                <children>
                   <VBox alignment="TOP_CENTER" prefWidth="100.0">
                      <children>
-                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                        <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="13.40185546875">
                            <font>
-                              <Font name="Cooper Black" size="49.0" />
+
+                              <Font name="Eras Demi ITC" size="54.0" />
+
                            </font>
                            <fill>
                               <LinearGradient cycleMethod="REFLECT" endX="0.6208530805687205" endY="1.0">
@@ -78,46 +79,45 @@
                   </VBox>
                   <HBox alignment="TOP_CENTER" spacing="10.0">
                      <children>
-                        <Button fx:id="btn_BackToEditor" focusTraversable="false" mnemonicParsing="false" onAction="#backToEditorOnAction" text="Back To Editor">
+
+                        <Button fx:id="btn_BackToEditor" focusTraversable="false" mnemonicParsing="false" onAction="#backToEditorOnAction" prefHeight="38.0" prefWidth="126.0" style="-fx-background-color: indianred;" text="Back To Editor">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="Dubai Medium" size="15.0" />
                            </font></Button>
-                        <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="45.0" prefWidth="162.0" promptText="Time (s)">
-                           <font>
-                              <Font size="21.0" />
-                           </font></TextField>
+                        <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="41.0" prefWidth="116.0" promptText="Time (s)" />
+
                      </children>
                   </HBox>
-                  <TitledPane fx:id="physicGraphPane" focusTraversable="false" prefHeight="481.0" prefWidth="294.0" text="Physics Graphs">
+                  <TitledPane fx:id="physicGraphPane" focusTraversable="false" text="Physics Graphs">
                     <content>
-                      <AnchorPane>
+                      <AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefWidth="374.0" style="-fx-background-color: #FFA07A;">
                            <children>
-                              <ScrollPane focusTraversable="false" prefHeight="448.0" prefWidth="375.0">
+                              <ScrollPane focusTraversable="false" pannable="true" prefHeight="400.0" prefWidth="371.0">
                                  <content>
-                                    <VBox fx:id="physicalGraphVBox" alignment="TOP_CENTER" prefHeight="645.0" prefWidth="352.0">
+                                    <VBox fx:id="physicalGraphVBox" alignment="TOP_CENTER" prefHeight="645.0" prefWidth="352.0" style="-fx-background-color: yellow;">
                                        <children>
-                                          <LineChart fx:id="chart_Physics1" animated="false" axisSortingPolicy="NONE" createSymbols="false" legendVisible="false" title="Velocity According to Time">
+                                          <LineChart fx:id="chart_Physics1" animated="false" axisSortingPolicy="NONE" createSymbols="false" legendVisible="false" style="-fx-background-color: #FFA07A;" title="Velocity According to Time">
                                             <xAxis>
-                                              <NumberAxis label="time(s)" side="BOTTOM" />
+                                              <NumberAxis label="time(s)" side="BOTTOM" tickLabelFill="RED" />
                                             </xAxis>
                                             <yAxis>
-                                              <NumberAxis label="velocity(m/s)" side="LEFT" />
+                                              <NumberAxis label="velocity(m/s)" side="LEFT" tickLabelFill="RED" />
                                             </yAxis>
                                           </LineChart>
-                                          <LineChart fx:id="chart_Physics2" animated="false" axisSortingPolicy="NONE" createSymbols="false" legendVisible="false" title="Kinetic Energy According to Time">
+                                          <LineChart fx:id="chart_Physics2" animated="false" axisSortingPolicy="NONE" createSymbols="false" legendVisible="false" style="-fx-background-color: #FFA07A;" title="Kinetic Energy According to Time">
                                              <xAxis>
-                                                <NumberAxis label="time (s)" side="BOTTOM" />
+                                                <NumberAxis label="time (s)" side="BOTTOM" tickLabelFill="RED" />
                                              </xAxis>
                                              <yAxis>
-                                                <NumberAxis label="K_e(J)" side="LEFT" />
+                                                <NumberAxis label="K_e(J)" side="LEFT" tickLabelFill="RED" />
                                              </yAxis>
                                           </LineChart>
-                                          <LineChart fx:id="chart_Physics3" animated="false" axisSortingPolicy="NONE" legendVisible="false" title="Position vs Time">
+                                          <LineChart fx:id="chart_Physics3" animated="false" axisSortingPolicy="NONE" legendVisible="false" style="-fx-background-color: #FFA07A;" title="Position vs Time">
                                              <xAxis>
-                                                <NumberAxis label="time (s)" side="BOTTOM" />
+                                                <NumberAxis label="time (s)" side="BOTTOM" tickLabelFill="RED" />
                                              </xAxis>
                                              <yAxis>
-                                                <NumberAxis label="Position (m)" side="LEFT" />
+                                                <NumberAxis label="Position (m)" side="LEFT" tickLabelFill="RED" />
                                              </yAxis>
                                           </LineChart>
                                        </children>
@@ -126,26 +126,41 @@
                                        </cursor>
                                     </VBox>
                                  </content>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
                               </ScrollPane>
                            </children>
                         </AnchorPane>
                     </content>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                     <font>
+                        <Font name="Dubai Medium" size="12.0" />
+                     </font>
                   </TitledPane>
-                  <TitledPane fx:id="networkPane" animated="false" focusTraversable="false" text="Network Graph">
+                  <TitledPane fx:id="networkPane" focusTraversable="false" text="Network Graph">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: gold;">
                            <children>
-                              <LineChart fx:id="chart_Network" layoutX="7.0" layoutY="7.0" legendVisible="false" prefHeight="275.0" prefWidth="379.0" title="Best fitness Per Generation">
+                              <LineChart fx:id="chart_Network" layoutX="-2.0" layoutY="6.0" legendVisible="false" prefHeight="275.0" prefWidth="379.0" style="-fx-background-color: #FFA07A;" title="Best fitness Per Generation">
                                  <xAxis>
-                                    <CategoryAxis label="Generation" side="BOTTOM" />
+                                    <NumberAxis label="Generation" side="BOTTOM" tickLabelFill="#0000ff" />
                                  </xAxis>
                                  <yAxis>
-                                    <NumberAxis label="fitness Score" side="LEFT" />
+                                    <NumberAxis label="fitness Score" side="LEFT" tickLabelFill="#0000ff" />
                                  </yAxis>
+                                 <padding>
+                                    <Insets right="10.0" />
+                                 </padding>
                               </LineChart>
                            </children>
                         </AnchorPane>
                     </content>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
                   </TitledPane>
                </children>
             </VBox>

@@ -36,7 +36,7 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-    public static String environment;
+   
 
     private final static int CIRCLE_RADIUS = 20;
     private final static int CIRCLE_SOCIAL_DISTANCING = 10;
@@ -237,6 +237,9 @@ public class EditorController {
     void infoOnMouseClicked(MouseEvent event) {
         ta_Info.setVisible(false);
     }
+    public static String environment = "";
+
+    
 
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {

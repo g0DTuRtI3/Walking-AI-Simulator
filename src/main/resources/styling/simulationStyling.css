@@ -19,3 +19,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-size: 2000 1200;
     -fx-background-position: center center;
 }
+.root {
+    -fx-background-color: orange;
+}
+.titled-pane:focused > .title
+{
+    -fx-color: #808000;
+}
+.list-view .scroll-bar:vertical {
+    -fx-background-color: blue;
+}
