@@ -26,7 +26,6 @@ public class SettingsController {
 
     public SettingsController(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
     }
 
     @FXML
@@ -45,6 +44,7 @@ public class SettingsController {
 
     }
 
+    @FXML
     void backButtonOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
         mainAppLoader.setController(new MainAppController(primaryStage));
@@ -62,5 +62,4 @@ public class SettingsController {
 
         primaryStage.setAlwaysOnTop(false);
     }
-
 }

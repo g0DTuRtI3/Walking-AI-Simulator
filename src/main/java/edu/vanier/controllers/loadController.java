@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
@@ -76,7 +75,6 @@ public class loadController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Editor");
         primaryStage.show();
     }
@@ -98,7 +96,6 @@ public class loadController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Editor");
         primaryStage.show();
     }

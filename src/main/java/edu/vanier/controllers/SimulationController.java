@@ -54,7 +54,7 @@ public class SimulationController {
     private Series<Number, Number> updateKE = new Series<>();
     private Series<String, Number> updateGeneration = new Series<>();
     private final Stage primaryStage;
-    private Walker bestWalker = null;
+    private Walker bestWalker;
     private Walker[] walkers;
     private Line ground = new Line(0, 0, 0, 0);
     private Rectangle belowGround = new Rectangle(0, 0, 0, 0);
@@ -245,7 +245,7 @@ public class SimulationController {
             super.start();
         }
 
-        private Walker bestWalker = null;
+       
         private double lastXbestWalker = 0;
         private double currentInterval = 0;
         private final double nanoTOSecond = 1000000000.0;
@@ -259,7 +259,6 @@ public class SimulationController {
 
         @Override
         public void handle(long now) {
-
             countdownUpdate(now);
 
             double elapsedTime = (now - previousTime) / nanoTOSecond;
@@ -377,7 +376,6 @@ public class SimulationController {
     };
 
     private void moveWalker(double dtime) {
-
         for (Walker w : walkers) {
             ArrayList<NodeModel> nodes = new ArrayList<>(w.getAllNodes());
 

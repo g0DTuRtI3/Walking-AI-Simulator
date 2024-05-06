@@ -112,6 +112,8 @@ public class EditorController {
     public EditorController(Stage primaryStage, Walker walker) {
         this.primaryStage = primaryStage;
         this.walker = walker;
+        System.out.println("is walker null");
+        System.out.println(walker == null);
     }
 
     public EditorController(Stage primaryStage, String modelName) throws IOException {

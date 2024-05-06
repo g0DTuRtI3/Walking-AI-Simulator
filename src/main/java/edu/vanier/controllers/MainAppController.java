@@ -179,7 +179,6 @@ public class MainAppController {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("AboutUs");
@@ -196,7 +195,6 @@ public class MainAppController {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Settings");
@@ -216,7 +214,6 @@ public class MainAppController {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Model Editor");
