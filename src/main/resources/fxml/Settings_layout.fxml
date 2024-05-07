@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="463.0" prefWidth="875.0" style="-fx-background-color: #FFE4B5;" stylesheets="@../styling/settingsStyleSheet.css" vgap="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="463.0" prefWidth="875.0" style="-fx-background-color: lightblue;" stylesheets="@../styling/settingsStyleSheet.css" vgap="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -25,17 +25,17 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label alignment="CENTER" text="Credit" textAlignment="CENTER" textFill="#c316b1">
+      <Label alignment="CENTER" text="Credit" textAlignment="CENTER" textFill="RED">
          <font>
             <Font name="Bernard MT Condensed" size="74.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" text="Volume" textAlignment="CENTER" textFill="#c316b1" GridPane.columnIndex="1">
+      <Label alignment="CENTER" text="Volume" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="1">
          <font>
             <Font name="Bernard MT Condensed" size="74.0" />
          </font>
       </Label>
-      <ListView fx:id="musicListView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: PaleTurquoise;" GridPane.rowIndex="1" />
+      <ListView fx:id="musicListView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ff4b4b;" GridPane.rowIndex="1" />
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <Slider fx:id="volumeSlider" blockIncrement="1.0" majorTickUnit="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="100.0" HBox.hgrow="ALWAYS">
@@ -47,31 +47,37 @@
       </HBox>
       <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <Button fx:id="backButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#backButtonOnAction" style="-fx-background-color: Plum;" text="Back" HBox.hgrow="ALWAYS">
+            <Button fx:id="backButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#backButtonOnAction" style="-fx-background-color: #ec4140;" text="Back" HBox.hgrow="ALWAYS">
                <font>
-                  <Font size="96.0" />
+                  <Font name="Bodoni MT Condensed Bold" size="96.0" />
                </font>
                <textFill>
-                  <RadialGradient centerX="0.47790055248618785" centerY="0.5" radius="0.9482758620689655">
+                  <LinearGradient endX="0.9004739336492891" endY="0.8672985781990521" startX="0.8056872037914691" startY="0.4834123222748815">
                      <stops>
                         <Stop>
                            <color>
-                              <Color green="0.5833333134651184" blue="1.0" />
+                              <Color green="0.8571428656578064" blue="1.0" />
                            </color>
                         </Stop>
                         <Stop offset="1.0">
                            <color>
-                              <Color green="1.0" blue="0.21666666865348816" />
+                              <Color red="1.0" />
                            </color>
                         </Stop>
                      </stops>
-                  </RadialGradient>
+                  </LinearGradient>
                </textFill>
                <padding>
                   <Insets right="10.0" />
                </padding>
+               <opaqueInsets>
+                  <Insets right="10.0" />
+               </opaqueInsets>
             </Button>
          </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
       </HBox>
    </children>
 </GridPane>

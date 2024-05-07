@@ -51,7 +51,10 @@
          <children>
             <VBox prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Model Name" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Model Name">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="27.0" />
+                     </font></Text>
                   <TextField fx:id="tf_ModelName" focusTraversable="false" promptText="Name of the Model">
                      <font>
                         <Font size="5.0" />
@@ -59,40 +62,58 @@
                   </TextField>
                </children>
             </VBox>
-            <VBox prefWidth="100.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:" />
-                  <HBox alignment="TOP_CENTER">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:">
+                     <font>
+                        <Font name="Microsoft PhagsPa Bold" size="14.0" />
+                     </font></Text>
+                  <HBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                        <Slider fx:id="slider_NbModel" focusTraversable="false" majorTickUnit="10.0" max="40.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="label_NbModel" prefHeight="17.0" prefWidth="35.0" text="Label" />
+                        <Slider fx:id="slider_NbModel" focusTraversable="false" majorTickUnit="10.0" max="40.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Label fx:id="label_NbModel" prefHeight="17.0" prefWidth="35.0" text="Label" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></Label>
                      </children>
                   </HBox>
                </children>
             </VBox>
             <VBox prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interval Between Generation:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Interval Between Generation:">
+                     <font>
+                        <Font name="Microsoft PhagsPa Bold" size="14.0" />
+                     </font></Text>
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_Interval" focusTraversable="false" max="60.0" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="label_Interval" prefWidth="35.0" text="Label" />
+                        <Slider fx:id="slider_Interval" focusTraversable="false" max="60.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" min="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Label fx:id="label_Interval" prefWidth="35.0" text="Label" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></Label>
                      </children>
                   </HBox>
                </children>
             </VBox>
             <VBox prefWidth="100.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Learning Rate:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Learning Rate:">
+                     <font>
+                        <Font name="Microsoft PhagsPa Bold" size="14.0" />
+                     </font></Text>
                   <HBox alignment="TOP_CENTER">
                      <children>
-                        <Slider fx:id="slider_LearningRate" focusTraversable="false" majorTickUnit="0.25" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="label_LearningRate" prefHeight="17.0" prefWidth="35.0" text="Label" />
+                        <Slider fx:id="slider_LearningRate" focusTraversable="false" majorTickUnit="0.25" max="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+                        <Label fx:id="label_LearningRate" prefHeight="17.0" prefWidth="35.0" text="Label" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font></Label>
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <ComboBox fx:id="environmentComboBox" onAction="#environmentSelected" prefWidth="150.0" promptText="Environment" />
+            <ComboBox fx:id="environmentComboBox" onAction="#environmentSelected" prefWidth="150.0" promptText="Environment" style="-fx-background-color: black;" />
          </children>
       </VBox>
    </left>
@@ -108,7 +129,7 @@
                         <VBox alignment="TOP_CENTER" layoutX="18.0" layoutY="121.0" spacing="5.0">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Circle Color Picker" />
-                              <ColorPicker fx:id="circleColorPicker" focusTraversable="false" onAction="#circleColorPickerOnAction" promptText="Color Picker">
+                              <ColorPicker fx:id="circleColorPicker" focusTraversable="false" onAction="#circleColorPickerOnAction" promptText="Color Picker" style="-fx-background-color: gold;">
                                  <value>
                                     <Color green="1.0" blue="0.16862745583057404" />
                                  </value>
@@ -118,7 +139,7 @@
                         <VBox alignment="TOP_CENTER" layoutX="17.0" layoutY="232.0" spacing="5.0">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Link Color Picker" />
-                              <ColorPicker fx:id="linkColorPicker" focusTraversable="false" onAction="#linkColorPickerOnAction" promptText="Color Picker">
+                              <ColorPicker fx:id="linkColorPicker" focusTraversable="false" onAction="#linkColorPickerOnAction" promptText="Color Picker" style="-fx-background-color: silver;">
                                  <value>
                                     <Color red="1.0" blue="0.6666666865348816" />
                                  </value>
