@@ -115,9 +115,17 @@ public class SimulationController {
             initialXYPositions[i][1] = allNodes.get(i).getCenterY();
 
         }
-
+        boolean brainFlag = walker.getBrain() != null;
         for (int i = 0; i < nbModel; i++) {
             Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers);
+            if (brainFlag) {
+                if (i == 0) {
+                    walkerI.setBrain(walker.getBrain());
+                } else {
+                    walkerI.setBrain(walker.getBrain().clone());
+                    walkerI.getBrain().mutate();
+                }
+            }
             walkerI.learningRate(learningRate);
             walkers[i] = walkerI;
 
@@ -151,7 +159,6 @@ public class SimulationController {
         belowGround.setY(ground.getStartY());
         belowGround.setHeight(10000000);
         belowGround.setWidth(ground.getEndX() - ground.getStartX());
-        belowGround.setFill(Color.GREEN);
 
         double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
         double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
@@ -245,7 +252,6 @@ public class SimulationController {
             super.start();
         }
 
-       
         private double lastXbestWalker = 0;
         private double currentInterval = 0;
         private final double nanoTOSecond = 1000000000.0;
@@ -341,13 +347,12 @@ public class SimulationController {
             lastXbestWalker = 0;
             System.err.println("Generation " + txt_Generation.getText() + " finished");
 
-            txt_Generation.setText(String.format("%d", Integer.parseInt(txt_Generation.getText()) + 1));
             for (Walker w : walkers) {
                 if (bestWalker.getFitnessScore() < w.getFitnessScore()) {
                     bestWalker = w;
                 }
             }
-            updateGeneration.getData().add(new XYChart.Data<>(Integer.parseInt(txt_Generation.getText()), bestWalker.getFitnessScore()));
+            updateGeneration.getData().add(new XYChart.Data<>(Integer.valueOf(txt_Generation.getText()), bestWalker.getFitnessScore()));
             for (Walker w : walkers) {
 
                 w.setFitnessScore(0);
@@ -358,6 +363,7 @@ public class SimulationController {
                 w.setBrain(bestWalker.getBrain().clone());
 
                 w.getBrain().mutate();
+                txt_Generation.setText(String.format("%d", i + 1));
 
             }
         }
@@ -433,7 +439,7 @@ public class SimulationController {
 
     @FXML
     void backToEditorOnAction(ActionEvent event) throws IOException {
-       
+
         MainAppController.naturePlayer.stop();
         MainAppController.spacePlayer.stop();
         MainAppController.defaultPlayer.play();

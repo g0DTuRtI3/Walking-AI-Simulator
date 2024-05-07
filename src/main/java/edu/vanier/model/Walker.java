@@ -144,7 +144,7 @@ public class Walker implements Serializable {
         this.fitnessScore = score;
     }
 
-    public void learningRate(float learningRate) {
+    public static void learningRate(float learningRate) {
         Walker.learningRate = learningRate;
     }
 

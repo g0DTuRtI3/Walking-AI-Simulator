@@ -6,6 +6,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class MainApp extends Application {
             primaryStage.setTitle("Walking AI Simulator");
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
+            primaryStage.getIcons().add(new Image(getClass().getResource("/styling/images/logo.png").toExternalForm()));
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }
