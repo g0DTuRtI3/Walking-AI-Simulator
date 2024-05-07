@@ -441,7 +441,7 @@ public class SimulationController {
     }
 
     private void determineEnvironment() {
-        switch (EditorController.environment) {
+        switch (EditorController.getEnvironment()) {
             case "Earth" -> {
 
                 this.simulationPane.setId("Earth");

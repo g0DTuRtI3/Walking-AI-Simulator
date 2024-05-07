@@ -49,7 +49,7 @@ public class EditorController {
     private boolean isDelMode = false;
     private byte[] b_Array;
 
-    public static String environment = "";
+    private static String environment = "";
     private Circle circle1 = null, circle2 = null;
     private Color circleColor, linkColor, ogColor;
     private NodeModel prevNode, nextNode;
@@ -150,7 +150,7 @@ public class EditorController {
         });
 
         //Print all saved models
-        database.printAllModel();
+//        database.printAllModel();
 
         // Loads the models if it called
         if (modelName != null) {
@@ -165,8 +165,9 @@ public class EditorController {
     }
 
     /**
-     *
-     * @param event
+     * This open a Alert that contains the about us.
+     * 
+     * @param event The ActionEvent from the GUI
      */
     @FXML
     void aboutOnAction(ActionEvent event) {
@@ -176,11 +177,21 @@ public class EditorController {
         alert.show();
     }
 
+    /**
+     * This method brings the user back to the main menu.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void backButtonOnAction(ActionEvent event) throws IOException {
         switchToMainMenu();
     }
 
+    /**
+     * When the user selects the circle in the editor, change the color of the circle enables the editing of the editorPane.
+     * 
+     * @param event The MouseEvent from the GUI
+     */
     @FXML
     void circleOnMouseClicked(MouseEvent event) {
         if (!isCircleMode) {
@@ -194,22 +205,42 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method gets the color that the user chose on the colorPicker under the circle in the model editor.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void circleColorPickerOnAction(ActionEvent event) {
         circleColor = circleColorPicker.getValue();
     }
 
+    /**
+     * This method clears the editorPane.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void clearOnAction(ActionEvent event) {
         clearPane();
     }
 
+    /**
+     * This method enables the delete mode. The user can then click on the circles to delete them and their links.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void delModeOnAction(ActionEvent event) {
         isDelMode = cb_DelMode.isSelected();
         selected();
     }
 
+    /**
+     * This method allows the user to start linking the circles together.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void linkOnMouseClicked(MouseEvent event) {
         if (!isLinkMode) {
@@ -223,11 +254,21 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method gets the environment that the user has selected.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void environmentSelected(ActionEvent event) {
         environment = this.environmentComboBox.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * This open a Alert that contains the How To Use.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void howToUseOnAction(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -236,16 +277,31 @@ public class EditorController {
         alert.show();
     }
 
+    /**
+     * This open the load model selector. There you can chose a model to load or to delete.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
         loadModelSelector();
     }
 
+    /**
+     * This method gets the color that the user chose on the colorPicker under the rectangle in the model editor.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void linkColorPickerOnAction(ActionEvent event) {
         linkColor = linkColorPicker.getValue();
     }
 
+    /**
+     * This method can either add a circle, remove the circle or add a link between the circles in the editorPane.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void paneOnMouseClicked(MouseEvent event) {
         if (isDelMode && isLinkConnected(event)) {
@@ -262,6 +318,11 @@ public class EditorController {
         }
     }
 
+    /**
+     * This method saves the model that the user has created
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void saveOnAction(ActionEvent event) throws IOException {
         seriWalker = saveModel();
@@ -303,7 +364,11 @@ public class EditorController {
         }
     }
 
-    // Switches to the simulation scene
+    /**
+     * This method switches the scene to the simulation GUI
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void startOnAction(ActionEvent event) throws IOException {
         if (checkEnvironmemt()) {
@@ -457,7 +522,6 @@ public class EditorController {
             if (!isCreated) {
                 walker.addBasicModel(basicModel);
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
-                System.out.println("link has been created");
             } else {
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             }
@@ -492,7 +556,6 @@ public class EditorController {
             for (BasicModel basicModel : walker.getBasicModels()) {
                 if (basicModel.getNextNode().getCenterX() == circle.getCenterX()) {
                     delModel = basicModel;
-                    System.out.println("removed cicle & walker");
                 }
             }
             editorPaneDeletion(delModel);
@@ -601,7 +664,6 @@ public class EditorController {
             Circle nextCircle = new Circle(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), CIRCLE_RADIUS, Color.web(basicModel.getNextNode().getHexColor()));
             editorPane.getChildren().addAll(loadModel.getLink(), prevCircle, nextCircle);
         }
-        System.out.println("generation complete");
     }
 
     /**
@@ -637,24 +699,7 @@ public class EditorController {
         ois.close();
         return o;
     }
-
-//    public void load() {
-//        SqliteDB db = new SqliteDB();
-//        System.out.println(modelName);
-//        b_Array = db.readModel(modelName);
-//
-//        try {
-//            seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        try {
-//            walker = loadModel(seriWalker);
-//        } catch (Exception e) {
-//            System.out.println("Walker Null: " + e);
-//            System.out.println(seriWalker);
-//        }
-//    }
+    
     /**
      * This method gets the byte array of the walker that correspond the the
      * name parameter. It deserializes that byte array and loads it into the
@@ -664,10 +709,6 @@ public class EditorController {
      */
     public void load(String name) {
         SqliteDB db = new SqliteDB();
-
-        if (modelName != null) {
-            System.out.println(modelName);
-        }
 
         b_Array = db.readModel(name);
 
@@ -712,28 +753,33 @@ public class EditorController {
         for (BasicModel basicModel : walker.getBasicModels()) {
             boolean flagNext = false;
             boolean flagPrev = false;
-
-            if (!circle_list.isEmpty()) {
-                for (Circle circle : circle_list) {
-                    if (circle.getCenterX() != basicModel.getNextNode().getCenterX() && circle.getCenterY() != basicModel.getNextNode().getCenterY()) {
-                        flagNext = true;
-                        break;
-                    }
-
-                    if (circle.getCenterX() != basicModel.getPrevNode().getCenterX() && circle.getCenterY() != basicModel.getPrevNode().getCenterY()) {
-                        flagPrev = true;
-                        break;
-                    }
+            for (Circle circle : circle_list) {
+                if (circle.getCenterX() != basicModel.getNextNode().getCenterX() && circle.getCenterY() != basicModel.getNextNode().getCenterY()) {
+                    flagNext = true;
+                    break;
                 }
 
-                if (flagNext) {
-                    Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getNextNode().getColor());
-                    circle_list.add(circle);
+                if (circle.getCenterX() != basicModel.getPrevNode().getCenterX() && circle.getCenterY() != basicModel.getPrevNode().getCenterY()) {
+                    flagPrev = true;
+                    break;
                 }
-                if (flagPrev) {
-                    Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getPrevNode().getColor());
-                    circle_list.add(circle);
-                }
+            }
+            
+            if (circle_list.isEmpty()) {
+                Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getNextNode().getColor());
+                circle_list.add(circle);
+                
+                circle = new Circle(CIRCLE_RADIUS, basicModel.getPrevNode().getColor());
+                circle_list.add(circle);
+            }
+
+            if (flagNext) {
+                Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getNextNode().getColor());
+                circle_list.add(circle);
+            }
+            if (flagPrev) {
+                Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getPrevNode().getColor());
+                circle_list.add(circle);
             }
         }
     }
@@ -801,4 +847,7 @@ public class EditorController {
         primaryStage.show();
     }
 
+    public static String getEnvironment() {
+        return environment;
+    }
 }

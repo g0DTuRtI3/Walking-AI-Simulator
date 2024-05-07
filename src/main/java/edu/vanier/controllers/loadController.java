@@ -48,6 +48,11 @@ public class loadController {
         cb_model.getItems().addAll(database.readModelName());
     }
     
+    /**
+     * This deletes the selected model from the database.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void deleteOnAction(ActionEvent event) {
         if (cb_model.getValue() != null) {
@@ -66,6 +71,12 @@ public class loadController {
         }
     }
     
+    /**
+     * This method switches the scene back to the editor.
+     * 
+     * @param event The ActionEvent from the GUI
+     * @throws IOException 
+     */
     @FXML
     void returnOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
