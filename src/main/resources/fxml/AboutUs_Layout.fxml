@@ -6,24 +6,24 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="814.0" prefWidth="1102.0" style="-fx-background-color: darkred;" stylesheets="@../styling/aboutUsStyleSheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="814.0" prefWidth="1102.0" style="-fx-background-color: red;" stylesheets="@../styling/aboutUsStyleSheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" style="-fx-text-fill: cyan; -fx-background-color: blue; -fx-control-inner-background: black;" text="This application was made by Youssef Ben Mouny, Zeyu Huang and Gabriel Sabrian. This project features basic forces such as gravity and artificial intelligence behavior to physical basic environments. &#10;" wrapText="true" BorderPane.alignment="CENTER">
+      <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" style="-fx-text-fill: red; -fx-control-inner-background: darkblue;" text="This application was made by Youssef Ben Mouny, Zeyu Huang and Gabriel Sabrian. This project features basic forces such as gravity and artificial intelligence behavior to physical basic environments. &#10;" wrapText="true" BorderPane.alignment="CENTER">
          <font>
             <Font name="Autumn Regular" size="40.0" />
          </font></TextArea>
    </center>
    <right>
-      <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonOnAction" style="-fx-background-color: red;" text="Back" textFill="#7e0ecc" BorderPane.alignment="CENTER">
+      <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonOnAction" style="-fx-background-color: red; -fx-border-color: indianred;" text="Back" textFill="#002bff" BorderPane.alignment="CENTER">
          <font>
             <Font name="Corbel Bold" size="35.0" />
          </font>
       </Button>
    </right>
    <bottom>
-      <Hyperlink fx:id="githubLink" onAction="#linkOnClick" text="Github Project Repository" BorderPane.alignment="CENTER">
+      <Hyperlink fx:id="githubLink" onAction="#linkOnClick" text="Github Project Repository" textFill="#2607d3" BorderPane.alignment="CENTER">
          <font>
-            <Font size="32.0" />
+            <Font name="Berlin Sans FB" size="32.0" />
          </font>
       </Hyperlink>
    </bottom>
