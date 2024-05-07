@@ -56,6 +56,9 @@ public class loadController {
             
             modelList.getItems().clear();
             modelList.getItems().addAll(database.readModelName());
+            
+            cb_model.getItems().addAll(database.readModelName());
+            cb_model.setValue(null);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please chose a medel to delete");
@@ -96,6 +99,7 @@ public class loadController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(false);
         primaryStage.setTitle("Editor");
         primaryStage.show();
     }

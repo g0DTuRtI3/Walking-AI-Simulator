@@ -82,8 +82,6 @@ public class MainAppController {
             }
         }
     };
-
-
     public MainAppController(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
@@ -180,7 +178,7 @@ public class MainAppController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setAlwaysOnTop(false);
         primaryStage.setTitle("AboutUs");
         primaryStage.show();
     }
@@ -196,7 +194,7 @@ public class MainAppController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setAlwaysOnTop(false);
         primaryStage.setTitle("Settings");
         primaryStage.show();
     }
@@ -215,7 +213,7 @@ public class MainAppController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setAlwaysOnTop(false);
         primaryStage.setTitle("Model Editor");
         primaryStage.show();
     }

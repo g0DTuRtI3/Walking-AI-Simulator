@@ -25,7 +25,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -36,16 +35,13 @@ import javafx.stage.Stage;
 
 public class EditorController {
 
-   
-
     private final static int CIRCLE_RADIUS = 20;
     private final static int CIRCLE_SOCIAL_DISTANCING = 10;
-    private final static String HOW_TO_USE_TEXT = "Insert the text for how to use";
-    private final static String ABOUT_TEXT = "Insert the text for about";
+    private final static String HOW_TO_USE_TEXT = "Create a model by using the Model Editor. Once you have one Model, Click on the start button. Enjoy!";
+    private final static String ABOUT_TEXT = "Created by Gabriel Saberian, Zeyu Huang and Youssef Ben Mouny";
     private final Stage primaryStage;
     private final ArrayList<Circle> circle_list = new ArrayList<>();
     private final SqliteDB database = new SqliteDB();
-
     private int nbModel = 10;
     private int interval = 10;
     private float learningRate = 0.3f;
@@ -53,6 +49,7 @@ public class EditorController {
     private boolean isDelMode = false;
     private byte[] b_Array;
 
+    public static String environment = "";
     private Circle circle1 = null, circle2 = null;
     private Color circleColor, linkColor, ogColor;
     private NodeModel prevNode, nextNode;
@@ -100,9 +97,6 @@ public class EditorController {
     private Slider slider_NbModel;
 
     @FXML
-    private TextArea ta_Info;
-
-    @FXML
     private TextField tf_ModelName;
 
     public EditorController(Stage primaryStage) {
@@ -112,8 +106,6 @@ public class EditorController {
     public EditorController(Stage primaryStage, Walker walker) {
         this.primaryStage = primaryStage;
         this.walker = walker;
-        System.out.println("is walker null");
-        System.out.println(walker == null);
     }
 
     public EditorController(Stage primaryStage, String modelName) throws IOException {
@@ -168,13 +160,20 @@ public class EditorController {
 
         if (!walker.getBasicModels().isEmpty()) {
             generateWalker(walker);
+            generateCircle();
         }
     }
 
+    /**
+     *
+     * @param event
+     */
     @FXML
     void aboutOnAction(ActionEvent event) {
-        ta_Info.setText(ABOUT_TEXT);
-        ta_Info.setVisible(true);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About Us");
+        alert.setContentText(ABOUT_TEXT);
+        alert.show();
     }
 
     @FXML
@@ -231,17 +230,11 @@ public class EditorController {
 
     @FXML
     void howToUseOnAction(ActionEvent event) {
-        ta_Info.setText(HOW_TO_USE_TEXT);
-        ta_Info.setVisible(true);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("How To Use");
+        alert.setContentText(HOW_TO_USE_TEXT);
+        alert.show();
     }
-
-    @FXML
-    void infoOnMouseClicked(MouseEvent event) {
-        ta_Info.setVisible(false);
-    }
-    public static String environment = "";
-
-    
 
     @FXML
     void loadOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
@@ -713,6 +706,39 @@ public class EditorController {
     }
 
     /**
+     * This method adds the node model's circle to the circle_List
+     */
+    private void generateCircle() {
+        for (BasicModel basicModel : walker.getBasicModels()) {
+            boolean flagNext = false;
+            boolean flagPrev = false;
+
+            if (!circle_list.isEmpty()) {
+                for (Circle circle : circle_list) {
+                    if (circle.getCenterX() != basicModel.getNextNode().getCenterX() && circle.getCenterY() != basicModel.getNextNode().getCenterY()) {
+                        flagNext = true;
+                        break;
+                    }
+
+                    if (circle.getCenterX() != basicModel.getPrevNode().getCenterX() && circle.getCenterY() != basicModel.getPrevNode().getCenterY()) {
+                        flagPrev = true;
+                        break;
+                    }
+                }
+
+                if (flagNext) {
+                    Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getNextNode().getColor());
+                    circle_list.add(circle);
+                }
+                if (flagPrev) {
+                    Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getPrevNode().getColor());
+                    circle_list.add(circle);
+                }
+            }
+        }
+    }
+
+    /**
      * This method changes the current scene to the simulation scene.
      *
      * @throws IOException
@@ -770,8 +796,9 @@ public class EditorController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setAlwaysOnTop(false);
         primaryStage.setTitle("Walking AI Simulator");
         primaryStage.show();
     }
+
 }
