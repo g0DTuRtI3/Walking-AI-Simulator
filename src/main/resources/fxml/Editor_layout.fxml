@@ -11,7 +11,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -161,23 +160,13 @@
       </VBox>
    </right>
    <center>
-      <Pane fx:id="editorPane" onMouseClicked="#paneOnMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: Wheat;" BorderPane.alignment="CENTER">
+      <Pane fx:id="editorPane" onMouseClicked="#paneOnMouseClicked" style="-fx-background-color: Wheat;" BorderPane.alignment="CENTER">
          <cursor>
             <Cursor fx:constant="DEFAULT" />
          </cursor>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
-         <children>
-            <TextArea fx:id="ta_Info" editable="false" focusTraversable="false" layoutX="-3.0" layoutY="-3.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#infoOnMouseClicked" prefHeight="655.0" prefWidth="845.0" visible="false" wrapText="true">
-               <cursor>
-                  <Cursor fx:constant="CROSSHAIR" />
-               </cursor>
-               <font>
-                  <Font size="64.0" />
-               </font>
-            </TextArea>
-         </children>
       </Pane>
    </center>
    <bottom>

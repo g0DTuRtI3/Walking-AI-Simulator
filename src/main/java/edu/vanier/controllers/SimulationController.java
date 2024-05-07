@@ -447,7 +447,7 @@ public class SimulationController {
     }
 
     private void determineEnvironment() {
-        switch (EditorController.environment) {
+        switch (EditorController.getEnvironment()) {
             case "Earth" -> {
 
                 this.simulationPane.setId("Earth");
@@ -484,7 +484,7 @@ public class SimulationController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
-        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setAlwaysOnTop(false);
         primaryStage.setTitle("Walking AI Simulator");
         primaryStage.show();
     }

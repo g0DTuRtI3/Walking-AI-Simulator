@@ -48,6 +48,11 @@ public class loadController {
         cb_model.getItems().addAll(database.readModelName());
     }
     
+    /**
+     * This deletes the selected model from the database.
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void deleteOnAction(ActionEvent event) {
         if (cb_model.getValue() != null) {
@@ -56,6 +61,9 @@ public class loadController {
             
             modelList.getItems().clear();
             modelList.getItems().addAll(database.readModelName());
+            
+            cb_model.getItems().addAll(database.readModelName());
+            cb_model.setValue(null);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please chose a medel to delete");
@@ -63,6 +71,12 @@ public class loadController {
         }
     }
     
+    /**
+     * This method switches the scene back to the editor.
+     * 
+     * @param event The ActionEvent from the GUI
+     * @throws IOException 
+     */
     @FXML
     void returnOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
@@ -96,6 +110,7 @@ public class loadController {
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
         // We just need to bring the main window to front.
+        primaryStage.setAlwaysOnTop(false);
         primaryStage.setTitle("Editor");
         primaryStage.show();
     }
