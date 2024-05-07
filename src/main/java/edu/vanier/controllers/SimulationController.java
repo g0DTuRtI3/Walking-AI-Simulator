@@ -433,6 +433,7 @@ public class SimulationController {
 
     @FXML
     void backToEditorOnAction(ActionEvent event) throws IOException {
+       
         MainAppController.naturePlayer.stop();
         MainAppController.spacePlayer.stop();
         MainAppController.defaultPlayer.play();
@@ -467,6 +468,7 @@ public class SimulationController {
     }
 
     private void switchToEditor() throws IOException {
+        timer.stop();
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
         mainAppLoader.setController(new EditorController(primaryStage, bestWalker));
         Pane root = mainAppLoader.load();
