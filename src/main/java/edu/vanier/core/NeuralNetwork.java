@@ -1,12 +1,10 @@
 package edu.vanier.core;
 
-
-
 import java.util.Arrays;
 
 /**
  *
- * This class consists of the design of the neuralNetwork used for our project.
+ * This class consists of the design of the NeuralNetwork used for our project.
  */
 public class NeuralNetwork {
 
@@ -49,18 +47,19 @@ public class NeuralNetwork {
             neuralNetwork.hiddenLayers[i] = this.hiddenLayers[i].clone();
         }
 
-
-
         return neuralNetwork;
     }
 
     /**
+     * Method Description: This method predicts the correct force magnitude
+     * using its hiddenLayer and activation array, this is where the brain
+     * interacts with the environment.
      *
-     * @param input
-     * @return
+     * @param input is the motion and forces applied to the NodeModels
+     * @return double[] which is the force on every NodeModel
      */
     public double[] predict(double[] input) {
-        
+
         activations[0] = input;
         for (int i = 0; i < hiddenLayers.length; i++) {
             activations[i + 1] = hiddenLayers[i].activate(activations[i]);
@@ -69,7 +68,7 @@ public class NeuralNetwork {
     }
 
     /**
-     *
+     * Method Description: This method mutates the hiddenLayers using the learning rate contained in NeuralNetwork
      */
     public void mutate() {
         for (HiddenLayer layer : this.hiddenLayers) {
@@ -78,8 +77,8 @@ public class NeuralNetwork {
     }
 
     /**
-     *
-     * @return
+     * 
+     * @return double[][] which are the activations of the NeuralNetwork
      */
     public double[][] getActivations() {
         return activations;
@@ -103,7 +102,7 @@ public class NeuralNetwork {
 
     /**
      *
-     * @return
+     * @return 
      */
     public String toString() {
         String ret = "learning rate : " + this.learningRate + "\n";

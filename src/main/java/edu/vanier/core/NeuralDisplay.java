@@ -9,10 +9,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
+import javafx.scene.control.Alert;
 
 /**
  *
- * This class consists of the visible neural display accesible in Simulation
+ * This class consists of the visible neural display accessible in Simulation
  */
 public class NeuralDisplay extends Pane {
 
@@ -22,14 +23,10 @@ public class NeuralDisplay extends Pane {
     private static final int HEIGHT = 400;
     //to be set according to UI
     private static final int PANE_PADDING = 20;
-     //to be set according to UI
+    //to be set according to UI
     private static double xLayout = 1000;
     //to be set according to UI
     private static double yLayout = 0;
-
-    
-    
-    
 
     private Walker displayedWalker;
     private NeuralNetwork neuralNetwork;
@@ -41,12 +38,10 @@ public class NeuralDisplay extends Pane {
     private ArrayList<Line> lineWeights = new ArrayList();
     private ArrayList<ArrayList<Circle>> neuronList = new ArrayList();
     private static double neuronRadius = 20;
-    
-   
-    
+
     /**
      *
-     * @param car
+     * @param walker
      */
     public NeuralDisplay(Walker walker) {
 
@@ -63,7 +58,6 @@ public class NeuralDisplay extends Pane {
         this.setLayoutX(xLayout);
         this.setLayoutY(yLayout);
 
-        
     }
 
     public static void setxLayout(double xLayout) {
@@ -73,14 +67,20 @@ public class NeuralDisplay extends Pane {
     public static void setyLayout(double yLayout) {
         NeuralDisplay.yLayout = yLayout;
     }
-    
-    public static double getWIDTH(){
-    return NeuralDisplay.WIDTH;
+
+    public static double getWIDTH() {
+        return NeuralDisplay.WIDTH;
     }
+
     public static double getHEIGHT() {
         return NeuralDisplay.HEIGHT;
     }
 
+    /**
+     * Method Description: This method creates the neurons of the network, which
+     * are the activations of NeuralNetwork.
+     *
+     */
     private void generateNeurons() {
         int numberOfLayers = activations.length;
         int disposableWidth = WIDTH - 2 * PANE_PADDING;
@@ -115,9 +115,14 @@ public class NeuralDisplay extends Pane {
 
     }
 
+    /**
+     * Method Description: this method generates the weights by creating a line
+     * to every neuron(activations) that is in the NeuralNetwork.
+     *
+     * The line represents the weight between two neurons.
+     */
     private void generateWeight() {
 
-     
         for (int layer = 0; layer < layers.length; layer++) {
 
             for (int currNeuron = 0; currNeuron < layers[layer].getWeights().length; currNeuron++) {
@@ -137,11 +142,7 @@ public class NeuralDisplay extends Pane {
 
                     line.opacityProperty().bind((value.divide(2)).add(0.5));
                     line.strokeWidthProperty().bind(((value.divide(1.5)).add(0.5)).multiply(3));
-                    
 
-                    line.setOnMouseClicked((e) -> {
-                        System.out.println(value.get());
-                    });
                     this.getChildren().add(line);
                     line.toBack();
 
@@ -158,7 +159,5 @@ public class NeuralDisplay extends Pane {
     public Walker getDisplayedWalker() {
         return this.displayedWalker;
     }
-    
-   
-    
+
 }

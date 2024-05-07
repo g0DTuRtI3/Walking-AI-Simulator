@@ -8,7 +8,7 @@ public final class ActivationFunctions {
     /**
      * This method is one of the activation methods
      *
-     * @param x
+     * @param x is the value that is contained in the activations
      * 
      * @return it returns the result used to activate the model with the help of sigmoid activation method
      */
@@ -19,7 +19,7 @@ public final class ActivationFunctions {
     /**
      * This method is one of the activation methods
      *
-     * @param x
+     * @param x is the value that is contained in the activations
      * 
      * @return it returns the result used to activate the model with the help of the relu activation method
      */
@@ -30,7 +30,7 @@ public final class ActivationFunctions {
     /**
      * This method is one of the activation methods
      *
-     * @param x
+     * @param x is the value that is contained in the activations
      * 
      * @return it returns the result used to activate the model with the help of tanh. THIS IS THE CHOSEN ACTIVATION METHOD FOR THE ENTIRE PROJECT.
      */

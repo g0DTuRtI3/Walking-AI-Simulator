@@ -1,6 +1,4 @@
 package edu.vanier.core;
-
-
 import edu.vanier.model.Walker;
 import java.util.Arrays;
 import java.util.Random;
@@ -19,8 +17,11 @@ public class HiddenLayer {
 
     /**
      *
+     *
+     *
      * @param currentLayerSize
      * @param previousLayerSize
+     *
      */
     public HiddenLayer(int currentLayerSize, int previousLayerSize) {
         this.currentLayerSize = currentLayerSize;
@@ -30,8 +31,12 @@ public class HiddenLayer {
     }
 
     /**
+     * Method Description: This method copy the value of every HiddenLayer by
+     * using a double for  loop.
      *
-     * @return
+     * @return HiddenLayer This new hiddenLayer has the same propreties (weights) as the
+     * hiddenLayer that is clone to.
+     *
      */
     @Override
     public HiddenLayer clone() {
@@ -46,7 +51,8 @@ public class HiddenLayer {
     }
 
     /**
-     *
+     * Method Description:
+     * This method is used to mutate the weights of the HiddenLayer according to the NeuralNetwork's learning rate using a randomness.
      * @param learningRate
      */
     public void mutate(float learningRate) {
@@ -59,7 +65,12 @@ public class HiddenLayer {
             }
         }
     }
-
+    
+    /**
+     * Method Description:
+     * This method is used when creating the hiddenLayers the first time it initializes a value between -1 and 1 for the activation.
+     * @param learningRate
+     */
     private void initRandom() {
         for (int i = 0; i < weights.length; i++) {
             for (int j = 0; j < weights[0].length; j++) {
@@ -69,14 +80,15 @@ public class HiddenLayer {
     }
 
     /**
-     *
+     * Method Description: 
+     * This method is used to activate the weights using hyperbolic tangent function, a commonly used function in Machine learning algorithms.
      * @param input
-     * @return
+     * @return a double[], which is an array that is passed on the next set of activations in NeuralNetwork. 
      */
     public double[] activate(double[] input) {
         double[] output = new double[weights.length];
         for (int i = 0; i < weights.length; i++) {
-           output[i] = ActivationFunctions.tanh(Walker.multiplyVectors(input, weights[i])); 
+            output[i] = ActivationFunctions.tanh(Walker.multiplyVectors(input, weights[i]));
         }
 
         return output;
@@ -84,7 +96,7 @@ public class HiddenLayer {
 
     /**
      *
-     * @return
+     * @return all the parameters of the HiddenLayer object
      */
     @Override
     public String toString() {
@@ -102,7 +114,7 @@ public class HiddenLayer {
 
     /**
      *
-     * @return
+     * @return the weights of the HiddenLayer
      */
     public double[][] getWeights() {
         return weights;
