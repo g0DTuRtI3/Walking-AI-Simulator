@@ -28,12 +28,18 @@ import javafx.util.Duration;
 public class MainAppController {
 
     private final String cssEditorPath = "editorStyleSheet.css";
-    File f = new File(cssEditorPath);
+
+    
+    private static MediaPlayer player;
+
+    
     static MediaPlayer defaultPlayer;
     static MediaPlayer naturePlayer;
     static MediaPlayer spacePlayer;
 
-    Stage primaryStage;
+
+    
+    private Stage primaryStage;
 
     @FXML
     private Button btn_AboutUs;
@@ -46,6 +52,13 @@ public class MainAppController {
 
     @FXML
     private Button btn_Simulation;
+
+
+    /**
+     * Called from Main app.
+     * 
+     * @param primaryStage 
+     */
 
     @FXML
     private ImageView title;
@@ -70,6 +83,7 @@ public class MainAppController {
         }
     };
 
+
     public MainAppController(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
@@ -77,6 +91,14 @@ public class MainAppController {
 
     @FXML
     void initialize() {
+
+//        if (player == null) {
+//            Media media = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
+//            player = new MediaPlayer(media);
+//            player.setAutoPlay(true);
+//            player.setCycleCount(MediaPlayer.INDEFINITE);
+//        }
+
         for (int i = 0; i < 5; i++) {
 
             int randomNum = (int) (Math.random() * 7) + 2;
@@ -144,6 +166,7 @@ public class MainAppController {
             defaultPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
 
+
     }
 
     @FXML
@@ -156,7 +179,6 @@ public class MainAppController {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("AboutUs");
@@ -173,7 +195,6 @@ public class MainAppController {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Settings");
@@ -193,7 +214,6 @@ public class MainAppController {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Model Editor");

@@ -1,10 +1,6 @@
-package edu.vanier.map;
+package edu.vanier.model;
 
 import edu.vanier.core.NeuralNetwork;
-import edu.vanier.serialization.MyBasicModel;
-import edu.vanier.serialization.MyLine;
-import edu.vanier.serialization.MyNodeModel;
-import edu.vanier.serialization.MyWalker;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,33 +24,8 @@ public class Walker implements Serializable {
     private NeuralNetwork brain;
     private static float learningRate = 0.3f;
     private int fitnessScore;
+    private int id;
     private double trainedTime = 0;
-
-//    public void serialize(Object walker, String file) throws IOException{
-//        MyWalker serializeWalker = new MyWalker();
-//        serializeWalker.setBrain(brain);
-//        serializeWalker.setFitnessScore(fitnessScore);
-//        
-//        ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
-//        for (BasicModel basicModel : basicModels) {
-//            MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(2, 8));
-//            MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), basicModel.getNextNode().getFill().toString().substring(2, 8));
-//            MyLine serializeLine = new MyLine(basicModel.getLink().getStrokeWidth(), basicModel.getLink().getStartX(), basicModel.getLink().getStartY(), basicModel.getLink().getEndX(), basicModel.getLink().getEndY());
-//            MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, serializeLine, basicModel.getColor().toString().substring(2, 8));
-//            
-//            serializeBasicModels.add(serializeModel);
-//        }
-//        
-//        serializeWalker.setBasicModels(serializeBasicModels);
-//    }
-    public Object deserialize(String file) throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        Object obj = ois.readObject();
-        ois.close();
-        return obj;
-    }
-    private double elapsedTime = 0;
 
     public Walker() {
 
@@ -122,19 +93,19 @@ public class Walker implements Serializable {
 
     public void movePrevious(BasicModel basicModel, double force, double time) {
         //basicModel.getPrevNode().setForce(basicModel, force, time, basicModel.getNextNode());
-        basicModel.updatePreviousNode(basicModel, force, time);
+        basicModel.updatePreviousNode(force);
     }
 
     public void moveNext(BasicModel basicModel, double force, double time) {
         //basicModel.getNextNode().setForce(basicModel, force, time, basicModel.getPrevNode());
-        basicModel.updateNextNode(basicModel, force, time);
+        basicModel.updateNextNode(force);
     }
 
     public void updateWalker() {
 
         for (BasicModel basicModel : basicModels) {
-            basicModel.updateNextNode(basicModel, basicModel.getNextForce(), elapsedTime);
-            basicModel.updatePreviousNode(basicModel, basicModel.getPreviousForce(), elapsedTime);
+            basicModel.updateNextNode(basicModel.getNextForce());
+            basicModel.updatePreviousNode(basicModel.getPreviousForce());
             basicModel.updateLink();
         }
     }
@@ -237,12 +208,11 @@ public class Walker implements Serializable {
 
     }
 
-    public double getElapsedTime() {
-        return elapsedTime;
+    public int getId() {
+        return id;
     }
 
-    public void setElapsedTime(double elapsedTime) {
-        this.elapsedTime = elapsedTime;
+    public void setId(int id) {
+        this.id = id;
     }
-
 }

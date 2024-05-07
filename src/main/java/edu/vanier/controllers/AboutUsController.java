@@ -1,7 +1,8 @@
 package edu.vanier.controllers;
 
-import edu.vanier.controllers.MainAppController;
+
 import java.awt.Desktop;
+
 import java.io.IOException;
 import java.net.URI;
 import javafx.event.ActionEvent;
@@ -42,13 +43,12 @@ public class AboutUsController {
         //-- 2) Create and set the scene to the stage.
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
-        primaryStage.setResizable(true);
         // We just need to bring the main window to front.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Walking AI Simulator");
         primaryStage.show();
-        primaryStage.setAlwaysOnTop(false);
 
     }
 

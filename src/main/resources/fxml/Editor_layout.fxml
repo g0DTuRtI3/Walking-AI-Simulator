@@ -3,14 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -26,20 +28,20 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../styling/editorStyleSheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem fx:id="menuItem_Save" mnemonicParsing="false" onAction="#saveOnAction" text="Save" />
-                  <MenuItem fx:id="menuItem_Load" mnemonicParsing="false" onAction="#loadOnAction" text="Load" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem fx:id="menuItem_About" mnemonicParsing="false" text="About" />
-                  <MenuItem fx:id="menuItem_HowToUse" mnemonicParsing="false" text="How To Use" />
-            </items>
-          </Menu>
-        </menus>
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#saveOnAction" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadOnAction" text="Load/Delete" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#aboutOnAction" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#howToUseOnAction" text="How To Use" />
+               </items>
+            </Menu>
+         </menus>
       </MenuBar>
    </top>
    <left>
@@ -48,6 +50,16 @@
             <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Model Name" />
+                  <TextField fx:id="tf_ModelName" focusTraversable="false" promptText="Name of the Model">
+                     <font>
+                        <Font size="5.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </VBox>
             <VBox prefWidth="100.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Model:" />
@@ -89,8 +101,8 @@
       <VBox alignment="TOP_CENTER" prefHeight="706.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
             <TitledPane animated="false" focusTraversable="false" prefHeight="326.0" prefWidth="189.0" text="Model Editor">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="158.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="158.0">
                      <children>
                         <Rectangle fx:id="link" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="26.0" layoutY="191.0" onMouseClicked="#linkOnMouseClicked" stroke="BLACK" strokeType="INSIDE" width="110.0" />
                         <Circle fx:id="editorCircle" fill="DODGERBLUE" layoutX="80.0" layoutY="63.0" onMouseClicked="#circleOnMouseClicked" radius="49.0" stroke="BLACK" strokeType="INSIDE" />
@@ -116,10 +128,10 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-              </content>
+               </content>
             </TitledPane>
-            <RadioButton fx:id="rb_DelMode" disable="true" mnemonicParsing="false" onAction="#delModeOnAction" prefHeight="39.0" prefWidth="106.0" text="Delete Mode" />
-            <Button fx:id="btn_Clear" focusTraversable="false" mnemonicParsing="false" onAction="#clearOnAction" prefHeight="70.0" prefWidth="110.0" text="Clear Editor" />
+            <CheckBox fx:id="cb_DelMode" focusTraversable="false" mnemonicParsing="false" onAction="#delModeOnAction" text="Delete Mode" />
+            <Button focusTraversable="false" mnemonicParsing="false" onAction="#clearOnAction" prefHeight="70.0" prefWidth="110.0" text="Clear Editor" />
             <Button mnemonicParsing="false" onAction="#backButtonOnAction" prefHeight="70.0" prefWidth="110.0" text="Back" />
          </children>
          <padding>
@@ -134,13 +146,25 @@
          </cursor>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </BorderPane.margin></Pane>
+         </BorderPane.margin>
+         <children>
+            <TextArea fx:id="ta_Info" editable="false" focusTraversable="false" layoutX="-3.0" layoutY="-3.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#infoOnMouseClicked" prefHeight="655.0" prefWidth="845.0" visible="false" wrapText="true">
+               <cursor>
+                  <Cursor fx:constant="CROSSHAIR" />
+               </cursor>
+               <font>
+                  <Font size="64.0" />
+               </font>
+            </TextArea>
+         </children>
+      </Pane>
    </center>
    <bottom>
-      <Button fx:id="btn_Start" focusTraversable="false" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="225.0" text="Start" BorderPane.alignment="CENTER">
+      <Button focusTraversable="false" mnemonicParsing="false" onAction="#startOnAction" prefHeight="52.0" prefWidth="225.0" text="Start" BorderPane.alignment="CENTER">
          <font>
             <Font size="17.0" />
-         </font></Button>
+         </font>
+      </Button>
    </bottom>
    <padding>
       <Insets bottom="20.0" />

@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../styling/simulationStyling.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: orange;" stylesheets="@../styling/simulationStyling.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <Pane fx:id="simulationPane" focusTraversable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: orange; -fx-opacity: 0.5;" BorderPane.alignment="CENTER">
          <children>
@@ -55,7 +55,9 @@
                      <children>
                         <Text fx:id="txt_Generation" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="13.40185546875">
                            <font>
+
                               <Font name="Eras Demi ITC" size="54.0" />
+
                            </font>
                            <fill>
                               <LinearGradient cycleMethod="REFLECT" endX="0.6208530805687205" endY="1.0">
@@ -77,11 +79,13 @@
                   </VBox>
                   <HBox alignment="TOP_CENTER" spacing="10.0">
                      <children>
+
                         <Button fx:id="btn_BackToEditor" focusTraversable="false" mnemonicParsing="false" onAction="#backToEditorOnAction" prefHeight="38.0" prefWidth="126.0" style="-fx-background-color: indianred;" text="Back To Editor">
                            <font>
                               <Font name="Dubai Medium" size="15.0" />
                            </font></Button>
                         <TextField fx:id="tf_Time" editable="false" focusTraversable="false" prefHeight="41.0" prefWidth="116.0" promptText="Time (s)" />
+
                      </children>
                   </HBox>
                   <TitledPane fx:id="physicGraphPane" focusTraversable="false" text="Physics Graphs">

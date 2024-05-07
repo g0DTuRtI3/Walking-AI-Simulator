@@ -1,6 +1,6 @@
 package edu.vanier.core;
 
-import edu.vanier.map.Walker;
+import edu.vanier.model.Walker;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Label;
