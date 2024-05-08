@@ -105,6 +105,67 @@ public class SimulationController {
         this.xtranslate = xtranslate;
         this.ytranslate = ytranslate;
         this.environment = environment;
+        // setting the environment for the nodeModels
+        
+        int isNotGrounded = 0;
+        int numNodes = 0;
+        
+        
+        for (BasicModel basicModel : walker.getBasicModels()) {
+            for (NodeModel nodeModel : basicModel.getNodes()) {
+                numNodes++;
+                nodeModel.setGround(ground);
+                if (environment.equals("Earth")) {
+                    nodeModel.setGravity(0.1);
+                    if (!nodeModel.isGrounded()) {
+                        isNotGrounded ++;
+                    }
+                }else {
+                    nodeModel.setGravity(0.01);
+                    if (!nodeModel.isGrounded()) {
+                        isNotGrounded ++;
+                    }
+                }
+                
+            }
+        }
+        
+        // Linear Gravity
+        
+        while (isNotGrounded == numNodes) {
+            
+            
+            for (BasicModel basicModel : walker.getBasicModels()) {
+                for (NodeModel nodeModel : basicModel.getNodes()) {
+                   nodeModel.setCenterY(nodeModel.getCenterY()-nodeModel.getGravity());
+
+                }
+            }
+            
+            isNotGrounded = 0;
+            numNodes = 0;
+
+            for (BasicModel basicModel : walker.getBasicModels()) {
+                for (NodeModel nodeModel : basicModel.getNodes()) {
+                    numNodes++;
+                    if (environment.equals("Earth")) {
+                        nodeModel.setGravity(0.1);
+                            if (!nodeModel.isGrounded()) {
+                                isNotGrounded ++;
+                            }
+                    }else {
+                        nodeModel.setGravity(0.01);
+                        if (!nodeModel.isGrounded()) {
+                            isNotGrounded ++;
+                        }
+                    }
+
+                }
+            }
+
+        }
+        
+        walker.setGround(ground);
         
         walkers = new Walker[nbModel];
         
@@ -460,5 +521,13 @@ public class SimulationController {
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setTitle("Model Editor");
         primaryStage.show();
+    }
+    
+    public String getEnvironment() {
+        return environment;
+    }
+
+    public Line getGround() {
+        return ground;
     }
 }

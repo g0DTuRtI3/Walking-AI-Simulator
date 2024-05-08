@@ -1,15 +1,11 @@
 package edu.vanier.model;
 
 import edu.vanier.core.NeuralNetwork;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import javafx.scene.shape.Line;
@@ -26,6 +22,7 @@ public class Walker implements Serializable {
     private int fitnessScore;
     private int id;
     private double trainedTime = 0;
+    private Line ground = new Line();
 
     public Walker() {
 
@@ -102,10 +99,74 @@ public class Walker implements Serializable {
     }
 
     public void updateWalker() {
+        
+        int count = 0;
+        
+        // Count grounded models
+        
+        for (BasicModel basicModel : basicModels) {
+            for (NodeModel nodeModel : basicModel.getNodes()) {
+                if (Math.round(Math.round(nodeModel.getCenterY() + nodeModel.getRadius())) == 400) {
+                    count ++;
+                    nodeModel.setGrounded(true);
+                }
+            }
+        }
+        
+        // Remove pairs
+        
+        for (int i = 0; i < basicModels.size() - 1; i++) {
+            for (int j = i + 1; j < basicModels.size(); j++) {
+                for (NodeModel nodeModel1 : basicModels.get(i).getNodes()) {
+                    for (NodeModel nodeModel2 : basicModels.get(j).getNodes()) {
+                        // Check for matches between nodes of different BasicModels
+                        if (nodeModel1 == nodeModel2) {
+                            count--;
+                        }
+                    }
+                }
+            }
+            for (int j = i - 1; j >= 0; j--) {
+                for (NodeModel nodeModel1 : basicModels.get(i).getNodes()) {
+                    for (NodeModel nodeModel2 : basicModels.get(j).getNodes()) {
+                        // Check for matches between nodes of different BasicModels
+                        if (nodeModel1 == nodeModel2) {
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
 
         for (BasicModel basicModel : basicModels) {
-            basicModel.updateNextNode(basicModel.getNextForce());
-            basicModel.updatePreviousNode(basicModel.getPreviousForce());
+            
+            if (basicModel.getNextNodeForce() == 0) {
+                basicModel.updateNextNode(basicModel.getNextNodeForce());
+            }
+            else if (count > 1 && basicModel.getNextNodeForce() != 0) {
+                basicModel.updateNextNode(basicModel.getNextNodeForce());
+                count -= 1 ;
+                basicModel.getNextNode().setGrounded(false);
+            }
+            else if (count == 1 && !basicModel.getNextNode().isGrounded() && basicModel.getNextNodeForce() != 0) {
+                basicModel.updateNextNode(basicModel.getNextNodeForce());
+                count -= 1;
+                basicModel.getNextNode().setGrounded(false);
+            }
+            
+            if (basicModel.getPrevNodeForce() == 0) {
+                basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
+            }
+            else if (count > 1 && basicModel.getPrevNodeForce() != 0) {
+                basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
+                count -= 1 ;
+                basicModel.getPrevNode().setGrounded(false);
+            }
+            else if (count == 1 && !basicModel.getPrevNode().isGrounded() && basicModel.getPrevNodeForce() != 0) {
+                basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
+                count -= 1;
+                basicModel.getPrevNode().setGrounded(false);
+            }
             basicModel.updateLink();
         }
     }
@@ -215,4 +276,9 @@ public class Walker implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setGround(Line ground) {
+        this.ground = ground;
+    }
+    
 }
