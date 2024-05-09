@@ -37,7 +37,7 @@ public class EditorController {
 
     private final static int CIRCLE_RADIUS = 20;
     private final static int CIRCLE_SOCIAL_DISTANCING = 10;
-    private final static String HOW_TO_USE_TEXT = "Create a model by using the Model Editor. Once you have one Model, Click on the start button. Enjoy!";
+    private final static String HOW_TO_USE_TEXT = "Create a model by using the Model Editor. Once you have one Model, Click on the start button. You will be able to pan the camera by clicking on left, right, up, down. Enjoy!";
     private final static String ABOUT_TEXT = "Created by Gabriel Saberian, Zeyu Huang and Youssef Ben Mouny";
     private final Stage primaryStage;
     private final ArrayList<Circle> circle_list = new ArrayList<>();
