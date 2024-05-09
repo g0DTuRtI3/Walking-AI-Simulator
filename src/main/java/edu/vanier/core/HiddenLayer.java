@@ -1,5 +1,6 @@
 package edu.vanier.core;
 import edu.vanier.model.Walker;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -7,7 +8,7 @@ import java.util.Random;
  *
  * Class which consists of the hidden layer used in the machine learning model.
  */
-public class HiddenLayer {
+public class HiddenLayer implements Serializable{
 
     private double[][] weights;
     private int currentLayerSize;

@@ -132,38 +132,38 @@ public class SimulationController {
         
         // Linear Gravity
         
-        while (isNotGrounded == numNodes) {
-            
-            
-            for (BasicModel basicModel : walker.getBasicModels()) {
-                for (NodeModel nodeModel : basicModel.getNodes()) {
-                   nodeModel.setCenterY(nodeModel.getCenterY()-nodeModel.getGravity());
-
-                }
-            }
-            
-            isNotGrounded = 0;
-            numNodes = 0;
-
-            for (BasicModel basicModel : walker.getBasicModels()) {
-                for (NodeModel nodeModel : basicModel.getNodes()) {
-                    numNodes++;
-                    if (environment.equals("Earth")) {
-                        nodeModel.setGravity(0.1);
-                            if (!nodeModel.isGrounded()) {
-                                isNotGrounded ++;
-                            }
-                    }else {
-                        nodeModel.setGravity(0.01);
-                        if (!nodeModel.isGrounded()) {
-                            isNotGrounded ++;
-                        }
-                    }
-
-                }
-            }
-
-        }
+//        while (isNotGrounded == numNodes) {
+//            
+//            
+//            for (BasicModel basicModel : walker.getBasicModels()) {
+//                for (NodeModel nodeModel : basicModel.getNodes()) {
+//                   nodeModel.setCenterY(nodeModel.getCenterY()-nodeModel.getGravity());
+//
+//                }
+//            }
+//            
+//            isNotGrounded = 0;
+//            numNodes = 0;
+//
+//            for (BasicModel basicModel : walker.getBasicModels()) {
+//                for (NodeModel nodeModel : basicModel.getNodes()) {
+//                    numNodes++;
+//                    if (environment.equals("Earth")) {
+//                        nodeModel.setGravity(0.1);
+//                            if (!nodeModel.isGrounded()) {
+//                                isNotGrounded ++;
+//                            }
+//                    }else {
+//                        nodeModel.setGravity(0.01);
+//                        if (!nodeModel.isGrounded()) {
+//                            isNotGrounded ++;
+//                        }
+//                    }
+//
+//                }
+//            }
+//
+//        }
         
         walker.setGround(ground);*/
         

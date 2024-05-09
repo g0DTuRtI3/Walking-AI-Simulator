@@ -102,7 +102,6 @@ public class MainAppController {
             int randomNum = (int) (Math.random() * 7) + 2;
             int currentNumOfCircles = circles.size();
 
-            System.out.println();
             for (int j = 0; j < randomNum; j++) {
                 Circle c = new Circle(Math.random() * root.getPrefWidth() * 2, Math.random() * root.getPrefHeight() * 2, 25);
                 c.setFill(Color.RED);
@@ -145,8 +144,7 @@ public class MainAppController {
         titleTransition.play();
 
         root.getChildren().addAll(0, circles);
-        System.out.println(circles.size());
-        System.out.println(links.size());
+        
         root.getChildren().addAll(0, links);
         circleAnimation.start();
 
@@ -207,7 +205,6 @@ public class MainAppController {
         Pane root = mainAppLoader.load();
 
         Scene scene = new Scene(root);
-        System.out.println(getClass());
 
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
