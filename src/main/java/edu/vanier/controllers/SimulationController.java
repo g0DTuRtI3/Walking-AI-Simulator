@@ -176,7 +176,7 @@ public class SimulationController {
         }
         boolean brainFlag = walker.getBrain() != null;
         for (int i = 0; i < nbModel; i++) {
-            Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers);
+            Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers, learningRate);
             if (brainFlag) {
                 if (i == 0) {
                     walkerI.setBrain(walker.getBrain());
@@ -186,7 +186,7 @@ public class SimulationController {
                 }
                 walkerI.setTrainedTime(walker.getTrainedTime());
             }
-            walkerI.learningRate(learningRate);
+          
             walkers[i] = walkerI;
 
             for (BasicModel b : walkers[i].getBasicModels()) {

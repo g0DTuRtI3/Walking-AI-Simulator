@@ -50,11 +50,13 @@ public class Walker implements Serializable {
         addBasicModel(basicModel);
     }
 
+  
+
     public void setBrain(NeuralNetwork brain) {
         this.brain = brain;
     }
 
-    public Walker(ArrayList<BasicModel> linksOfWalker, int[] layers) {
+    public Walker(ArrayList<BasicModel> linksOfWalker, int[] layers, float learningRate) {
         this.basicModels.addAll(linksOfWalker);
         Deque<Integer> allLayersList = new ArrayDeque<>();
 
@@ -99,22 +101,20 @@ public class Walker implements Serializable {
     }
 
     public void updateWalker() {
-        
+
         int count = 0;
-        
+
         // Count grounded models
-        
         for (BasicModel basicModel : basicModels) {
             for (NodeModel nodeModel : basicModel.getNodes()) {
                 if (Math.round(Math.round(nodeModel.getCenterY() + nodeModel.getRadius())) == ground.getStartX()) {
-                    count ++;
+                    count++;
                     nodeModel.setGrounded(true);
                 }
             }
         }
-        
+
         // Remove pairs
-        
         for (int i = 0; i < basicModels.size() - 1; i++) {
             for (int j = i + 1; j < basicModels.size(); j++) {
                 for (NodeModel nodeModel1 : basicModels.get(i).getNodes()) {
@@ -139,30 +139,26 @@ public class Walker implements Serializable {
         }
 
         for (BasicModel basicModel : basicModels) {
-            
+
             if (basicModel.getNextNodeForce() == 0) {
                 basicModel.updateNextNode(basicModel.getNextNodeForce());
-            }
-            else if (count > 1 && basicModel.getNextNodeForce() != 0) {
+            } else if (count > 1 && basicModel.getNextNodeForce() != 0) {
                 basicModel.updateNextNode(basicModel.getNextNodeForce());
-                count -= 1 ;
+                count -= 1;
                 basicModel.getNextNode().setGrounded(false);
-            }
-            else if (count == 1 && !basicModel.getNextNode().isGrounded() && basicModel.getNextNodeForce() != 0) {
+            } else if (count == 1 && !basicModel.getNextNode().isGrounded() && basicModel.getNextNodeForce() != 0) {
                 basicModel.updateNextNode(basicModel.getNextNodeForce());
                 count -= 1;
                 basicModel.getNextNode().setGrounded(false);
             }
-            
+
             if (basicModel.getPrevNodeForce() == 0) {
                 basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
-            }
-            else if (count > 1 && basicModel.getPrevNodeForce() != 0) {
+            } else if (count > 1 && basicModel.getPrevNodeForce() != 0) {
                 basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
-                count -= 1 ;
+                count -= 1;
                 basicModel.getPrevNode().setGrounded(false);
-            }
-            else if (count == 1 && !basicModel.getPrevNode().isGrounded() && basicModel.getPrevNodeForce() != 0) {
+            } else if (count == 1 && !basicModel.getPrevNode().isGrounded() && basicModel.getPrevNodeForce() != 0) {
                 basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
                 count -= 1;
                 basicModel.getPrevNode().setGrounded(false);
@@ -280,5 +276,5 @@ public class Walker implements Serializable {
     public void setGround(Line ground) {
         this.ground = ground;
     }
-    
+
 }
