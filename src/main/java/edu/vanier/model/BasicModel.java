@@ -1,5 +1,6 @@
 package edu.vanier.model;
 
+import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -15,8 +16,9 @@ public class BasicModel {
     private final NodeModel nextNode;
     private final Line link = new Line();
     private Color color;
-    private double prevForce = 0;
-    private double nextForce = 0;
+    private double prevNodeForce = 0;
+    private double nextNodeForce = 0;
+    private ArrayList<NodeModel> nodes = new ArrayList<>();
 
     public BasicModel(NodeModel prevNode, NodeModel nextNode, Color colorOfLine) {
         this.link.setStartX(prevNode.getCenterX());
@@ -33,6 +35,9 @@ public class BasicModel {
             nextNode.setCorrectionAngle(180);
         }
         this.color = colorOfLine;
+        
+        nodes.add(prevNode);
+        nodes.add(nextNode);
     }
 
     public NodeModel getPrevNode() {
@@ -65,58 +70,27 @@ public class BasicModel {
         this.link.setEndX(nextNode.getCenterX());
         this.link.setEndY(nextNode.getCenterY());
     }
-
-    public double getRadAngle() {
-
-        
-        double adjacent = nextNode.getCenterX()- prevNode.getCenterX();
-
-        double opposite = nextNode.getCenterY() - nextNode.getCenterY();
-        double angleRad;
-        try {
-            angleRad = Math.atan(Math.abs(opposite / adjacent));
-        } catch (Exception e) {
-            angleRad = Math.PI / 2;
-        }
-
-        if (adjacent < 0 || opposite < 0) {
-            return angleRad + Math.PI;
-        } else if (adjacent < 0) {
-            return Math.PI - angleRad;
-        } else if (opposite < 0) {
-            return (2 * Math.PI) - angleRad;
-        }
-
-        return angleRad;
-    }
     
     public void updateNextNode(double force) {
-        
+          
         if (force != 0) {
             nextNode.setForce(force, this);
-            nextForce = 0;
+            nextNodeForce = 0;
             nextNode.setCurrentTime(System.nanoTime());
             nextNode.setCurrentTime2(System.nanoTime());
-//            System.out.println("nextNodeMoved");
-//            System.out.println(nextNode);
         }else {
-            if (nextNode.getAlpha() > 0) {
-                nextNode.updateNode(this);
-            }
+            nextNode.updateNode(this);
+            nextNode.setCurrentTime2(System.nanoTime());
         }
     }
-
-
     
     public void updatePreviousNode(double force) {
         
         if (force != 0) {
             prevNode.setForce(force, this);
-            prevForce = 0;
+            prevNodeForce = 0;
             prevNode.setCurrentTime(System.nanoTime());
             prevNode.setCurrentTime2(System.nanoTime());
-//            System.out.println("prevNodeMoved");
-//            System.out.println(prevNode);
         }else {
             prevNode.updateNode(this);
             prevNode.setCurrentTime2(System.nanoTime());
@@ -124,23 +98,23 @@ public class BasicModel {
     }
     
     public void setPreviousForce(double previousForce) {
-        this.prevForce = previousForce;
+        this.prevNodeForce = previousForce;
     }
 
     public void setNextForce(double nextForce) {
-        this.nextForce = nextForce;
+        this.nextNodeForce = nextForce;
     }
 
     public double getLinkMagnitude() {
         return Math.sqrt(Math.pow((link.getStartX() - link.getEndX()), 2) + Math.pow((link.getStartY() - link.getEndY()), 2));
     }
     
-    public double getPreviousForce() {
-        return prevForce;
+    public double getPrevNodeForce() {
+        return prevNodeForce;
     }
 
-    public double getNextForce() {
-        return nextForce;
+    public double getNextNodeForce() {
+        return nextNodeForce;
     }
     
     public NodeModel getOtherNode(NodeModel nodeModel) {
@@ -151,13 +125,17 @@ public class BasicModel {
         return nextNode;
     }
     
-    public NodeModel getNode(NodeModel nodeModel) {
+    public NodeModel getCurrentNode(NodeModel nodeModel) {
 
         if (nodeModel == nextNode) {
             return nextNode;
         }
 
         return prevNode;
+    }
+    
+    public ArrayList<NodeModel> getNodes() {
+        return nodes;
     }
     
     public double getDeltaTime(double currentTime) {

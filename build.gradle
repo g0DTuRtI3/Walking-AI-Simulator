@@ -41,7 +41,7 @@ dependencies {
     implementation "ch.qos.logback:logback-core:$logbackVersion"
 }
 
-application {       
+application {
    // TODO: Specify the fully-qualified name of the class 
    //       that contains the main method to be executed.
    mainClass = 'edu.vanier.ui.MainApp'

@@ -1,6 +1,7 @@
 package edu.vanier.model;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 /**
  *
@@ -8,10 +9,8 @@ import javafx.scene.paint.Color;
  */
 public class NodeModel extends javafx.scene.shape.Circle {
 
-    
-    private static double radius = 25;
-    private static double mass = 5; //Might become non-static in the future
-    //this was added since getColor is somehow not present in the Circle Class of Java...
+    private static double radius = 20;
+    private final static double MASS = 5;
     private Color color;
     private double deltaTime = 0;
     private double w = 0;
@@ -25,6 +24,9 @@ public class NodeModel extends javafx.scene.shape.Circle {
     private double currentTime2 = 0;
     private double currentAlpha = 0;
     private double lastForce = 0;
+    private boolean grounded = false;
+    private double gravity = 0;
+    private Line ground = new Line();
 
     public NodeModel(double centerX, double centerY, Color color) {
         super(centerX, centerY, radius, color);
@@ -38,53 +40,122 @@ public class NodeModel extends javafx.scene.shape.Circle {
     
     public void updateNode(BasicModel basicModel) {
         
+        NodeModel otherNode = basicModel.getOtherNode(this);
+        double linkLength = basicModel.getLinkMagnitude();
+        
+        // Deceleration
+        
         if (lastForce > 0) {
             
             if (alpha > 0) {
-                NodeModel otherNode = basicModel.getOtherNode(this);
-                double linkLength = basicModel.getLinkMagnitude();
 
                 deltaTime = getDeltaTime(currentTime2);
                 alpha -= Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
                 newAlpha += Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
                 angle = w + newAlpha;
-                prevW = Math.abs(currentAlpha * (deltaTime/1e9) - prevW); //prevW gets equal to current w so next alpha is 0
-
-                this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
-                this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
+                
+                double newPosY = otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle));
+                
+                if ((newPosY + radius) < 400) {
+                    prevW = Math.abs(currentAlpha * (deltaTime/1e9) - prevW);
+                    this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
+                    this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
+                }else {
+                    alpha += Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
+                    newAlpha -= Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
+                    angle = w + newAlpha;
+                }
             }else {
                 w += newAlpha;
                 newAlpha = 0;
                 alpha = 0;              
                 angle = w;
+                
+                this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
+                this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
 
             }
         }else if (lastForce < 0) {
             
             if (alpha < 0) {
-                NodeModel otherNode = basicModel.getOtherNode(this);
-                double linkLength = basicModel.getLinkMagnitude();
                 deltaTime = getDeltaTime(currentTime2);
 
                 alpha += Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
                 newAlpha -= Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
                 angle = w + newAlpha;
-                prevW = Math.abs(currentAlpha * (deltaTime/1e9) - prevW);
-
+                
+                double newPosY = otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle));
+                
+                if ((newPosY + radius) < 400) {
+                    prevW = Math.abs(currentAlpha * (deltaTime/1e9) - prevW);
+                    this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
+                    this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
+                    
+                }else {
+                    alpha -= Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
+                    newAlpha += Math.abs((Math.abs(currentAlpha * (deltaTime/1e9) - prevW) - prevW) / (3.5 * deltaTime/1e9));
+                    angle = w + newAlpha;
+                }
+            }else {
+                w += newAlpha;
+                newAlpha = 0;
+                alpha = 0;
+                angle = w;
+                
                 this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
                 this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
-            }else {
-                w -= newAlpha;
-                newAlpha = 0;
-                alpha = 0;      
-                angle = w;
             }
-            
         }
         
-        // Gravity here
+        // Angular Gravity
         
-        
+        if (gravity == 0.1) {
+            
+            double formattedAngle = (Math.round((angle % 360) * 10))/10.0;
+
+            // Quadrants 1 and 4
+            if (formattedAngle > -90 && formattedAngle < 0 || formattedAngle > -360 && formattedAngle < -270  || formattedAngle > 0 && formattedAngle < 90 || formattedAngle > 270 && formattedAngle < 360) {
+                w = (Math.round(w * 10))/10.0;
+                if (this == basicModel.getNextNode()) {
+                    w += gravity;
+                }else {
+                    w -= gravity;
+                }
+
+            }
+            // Quadrants 2 and 3
+            else if (formattedAngle > -180 && formattedAngle < -90 || formattedAngle < -180 && formattedAngle > -270 || formattedAngle > 90 && formattedAngle < 180  || formattedAngle > 180 && formattedAngle < 270) {
+                w = (Math.round(w * 10))/10.0;
+                if (this == basicModel.getNextNode()) {
+                    w -= gravity;
+                }else {
+                    w += gravity;
+                }
+            }
+            
+        }else {
+
+            double formattedAngle = (Math.round((angle % 360) * 100))/100.0;
+
+            // Quadrants 1 and 4
+            if (formattedAngle > -90 && formattedAngle < 0 || formattedAngle > -360 && formattedAngle < -270  || formattedAngle > 0 && formattedAngle < 90 || formattedAngle > 270 && formattedAngle < 360) {
+                w = (Math.round(w * 100))/100.0;
+                if (this == basicModel.getNextNode()) {
+                    w += gravity;
+                }else {
+                    w -= gravity;
+                }
+            }
+            // Quadrants 2 and 3
+            else if (formattedAngle > -180 && formattedAngle < -90 || formattedAngle < -180 && formattedAngle > -270 || formattedAngle > 90 && formattedAngle < 180  || formattedAngle > 180 && formattedAngle < 270) {
+                w = (Math.round(w * 100))/100.0;
+                if (this == basicModel.getNextNode()) {
+                    w -= gravity;
+                }else {
+                    w += gravity;
+                }
+            }
+        }  
     }
     
     public void setForce(double force, BasicModel basicModel) {
@@ -105,7 +176,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
             }
         }
         
-        double a = force / mass; // F = ma
+        double a = force / MASS; // F = ma
         double v = Math.sqrt(Math.abs(a*linkLength)); // a = v^2/r
 
         if (force > 0) {
@@ -119,15 +190,27 @@ public class NodeModel extends javafx.scene.shape.Circle {
             alpha -= currentAlpha;
         }
         
-        newAlpha = alpha;
-        prevW = v/linkLength;
         angle = w + alpha;
-        
-        this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
-        this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
 
-        nodeMoved = true;
+        double newPosY = otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle));
         
+        if ((newPosY + radius) < 400) {
+            prevW = v/linkLength;
+            newAlpha = alpha;
+            this.setCenterX(otherNode.getCenterX() + linkLength * Math.cos(Math.toRadians(angle + correctionAngle))); // x = rcos(wt)
+            this.setCenterY(otherNode.getCenterY() + linkLength * Math.sin(Math.toRadians(angle + correctionAngle))); // y = rsin(wt)
+        }else {
+            if (force > 0) {
+                w -= v/linkLength;
+                alpha -= currentAlpha;
+            }else {
+                w += v/linkLength;
+                alpha += currentAlpha;
+            }
+            currentAlpha = 0;
+            angle = w  + alpha;
+        }
+        nodeMoved = true;
     }
     
     public double getDeltaTime(double currentTime) {
@@ -139,7 +222,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
     }
     
     public static double getMass() {
-        return mass;
+        return MASS;
     }
 
     public void setAngle(double angle) {
@@ -170,10 +253,28 @@ public class NodeModel extends javafx.scene.shape.Circle {
         return color.toString().substring(2,8);
     }
 
+    public void setGrounded(boolean grounded) {
+        this.grounded = grounded;
+    }
+
+    public boolean isGrounded() {
+        return grounded;
+    }
+
+    public void setGravity(double gravity) {
+        this.gravity = gravity;
+    }
+
+    public double getGravity() {
+        return gravity;
+    }
+
+    public void setGround(Line ground) {
+        this.ground = ground;
+    }
+
     @Override
     public String toString() {
         return "NodeModel{" + " w=" + w + ", prevW=" + prevW + ", alpha=" + alpha + ", newAlpha=" + newAlpha + ", angle=" + angle + ", correctionAngle=" + correctionAngle + ", nodeMoved=" + nodeMoved + ", currentAlpha=" + currentAlpha + ", lastForce=" + lastForce + '}';
     }
-    
-    
 }

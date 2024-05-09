@@ -1,6 +1,5 @@
 package edu.vanier.ui;
 
-import edu.vanier.controllers.EditorController;
 import edu.vanier.controllers.MainAppController;
 import java.io.IOException;
 import javafx.application.Application;
