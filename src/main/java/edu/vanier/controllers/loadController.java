@@ -56,13 +56,12 @@ public class loadController {
     @FXML
     void deleteOnAction(ActionEvent event) {
         if (cb_model.getValue() != null) {
-            System.out.println("Deleting: " + cb_model.getValue());
+            cb_model.getItems().remove(cb_model.getValue());
             database.deleteModel(cb_model.getValue());
             
             modelList.getItems().clear();
             modelList.getItems().addAll(database.readModelName());
-            
-            cb_model.getItems().addAll(database.readModelName());
+
             cb_model.setValue(null);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -352,12 +352,15 @@ public class EditorController {
                         Optional<ButtonType> result = alert.showAndWait();
                         if (result.get() == ButtonType.OK) {
                             database.editModel(b_Array, string);
+                            return;
                         } else {
                             return;
                         }
 
                     } else {
                         database.addModel(b_Array, tf_ModelName.getText());
+                        System.out.println("model added here ");
+                        return;
                     }
                 }
             }
