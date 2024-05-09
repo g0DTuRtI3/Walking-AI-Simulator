@@ -106,6 +106,7 @@ public class EditorController {
     public EditorController(Stage primaryStage, Walker walker) {
         this.primaryStage = primaryStage;
         this.walker = walker;
+        
     }
 
     public EditorController(Stage primaryStage, String modelName) throws IOException {

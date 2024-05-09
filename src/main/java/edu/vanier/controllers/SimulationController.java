@@ -47,7 +47,7 @@ public class SimulationController {
     private int[] layers = {4, 8, 2};
     private double[][] initialXYPositions;
 
-    private final String environment;
+    private String environment;
     private NeuralDisplay neuralDisplay;
     private Series<Number, Number> updateSpeed = new Series<>();
     private Series<Number, Number> updatePos = new Series<>();
@@ -106,11 +106,10 @@ public class SimulationController {
         this.ytranslate = ytranslate;
         this.environment = environment;
         // setting the environment for the nodeModels
-        
+
         int isNotGrounded = 0;
         int numNodes = 0;
-        
-        
+
         /*for (BasicModel basicModel : walker.getBasicModels()) {
             for (NodeModel nodeModel : basicModel.getNodes()) {
                 numNodes++;
@@ -166,7 +165,6 @@ public class SimulationController {
 //        }
         
         walker.setGround(ground);*/
-        
         walkers = new Walker[nbModel];
 
         initialXYPositions = new double[walker.getAllNodes().size()][2];
@@ -186,6 +184,7 @@ public class SimulationController {
                     walkerI.setBrain(walker.getBrain().clone());
                     walkerI.getBrain().mutate();
                 }
+                walkerI.setTrainedTime(walker.getTrainedTime());
             }
             walkerI.learningRate(learningRate);
             walkers[i] = walkerI;
@@ -512,7 +511,7 @@ public class SimulationController {
             case "Earth" -> {
 
                 this.simulationPane.setId("Earth");
-                
+
                 MainAppController.naturePlayer.play();
                 MainAppController.defaultPlayer.stop();
 
@@ -537,6 +536,7 @@ public class SimulationController {
 
     private void switchToEditor() throws IOException {
         timer.stop();
+        this.environment = "";
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
         mainAppLoader.setController(new EditorController(primaryStage, bestWalker));
         Pane root = mainAppLoader.load();
@@ -550,7 +550,7 @@ public class SimulationController {
         primaryStage.setTitle("Walking AI Simulator");
         primaryStage.show();
     }
-    
+
     public String getEnvironment() {
         return environment;
     }
