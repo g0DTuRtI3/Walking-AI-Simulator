@@ -1,14 +1,13 @@
 package edu.vanier.core;
 
-
-
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  *
  * This class consists of the design of the neuralNetwork used for our project.
  */
-public class NeuralNetwork {
+public class NeuralNetwork implements Serializable{
 
     private HiddenLayer[] hiddenLayers;
     private double[][] activations;

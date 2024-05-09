@@ -51,7 +51,6 @@ public class SqliteDB extends DBConnectionProvider {
             while (rs.next()) {
                 name_List.add(rs.getString("Name"));
             }
-            System.out.println("read model name");
             return name_List;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -115,7 +114,7 @@ public class SqliteDB extends DBConnectionProvider {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("model added");
+        System.out.println("model added: " + modelName);
     }
     
     /**
