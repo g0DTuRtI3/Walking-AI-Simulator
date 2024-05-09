@@ -154,7 +154,7 @@ public class NeuralDisplay extends Pane {
 
     /**
      *
-     * @return
+     * @return the displayed walker Artificial Network graph's pane
      */
     public Walker getDisplayedWalker() {
         return this.displayedWalker;
