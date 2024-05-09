@@ -111,7 +111,7 @@ public class SimulationController {
         int numNodes = 0;
         
         
-        for (BasicModel basicModel : walker.getBasicModels()) {
+        /*for (BasicModel basicModel : walker.getBasicModels()) {
             for (NodeModel nodeModel : basicModel.getNodes()) {
                 numNodes++;
                 nodeModel.setGround(ground);
@@ -165,7 +165,7 @@ public class SimulationController {
 
         }
         
-        walker.setGround(ground);
+        walker.setGround(ground);*/
         
         walkers = new Walker[nbModel];
 
@@ -346,7 +346,7 @@ public class SimulationController {
 //                    node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
 
                 }
-                moveWalker(elapsedTime);
+                //moveWalker(elapsedTime);
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
 
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
@@ -512,6 +512,7 @@ public class SimulationController {
             case "Earth" -> {
 
                 this.simulationPane.setId("Earth");
+                
                 MainAppController.naturePlayer.play();
                 MainAppController.defaultPlayer.stop();
 
