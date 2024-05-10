@@ -265,8 +265,6 @@ public class SimulationController {
                 
                 ArrayList<NodeModel> nodeModels = new ArrayList<>(walk.getAllNodes());
                 int groundedNodes = walk.getNumGrounded();
-                
-                //System.out.println(groundedNodes);
         
                 // Linear Gravity
                 
@@ -274,7 +272,6 @@ public class SimulationController {
 
                     for (NodeModel nm : nodeModels) {
                         nm.setCenterY(nm.getCenterY()+1);
-                        System.out.println(nm.getCenterY());
                     }
 
                     groundedNodes = walk.getNumGrounded();
@@ -381,7 +378,6 @@ public class SimulationController {
             }
             //all forces that walker will apply on every Node
             double[] predictions = w.getBrain().predict(motionOnNodes);
-            System.out.println(predictions[0]);
 
             // make walker move here e.g. w.update(predictions); 
             for (int i = 0; i < w.getBasicModels().size(); i++) {

@@ -4,8 +4,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**
- *
- * @author YOUSSEF
+ * This class contains the physics for the Nodes in the basicModels
+ * @author Gabriel
  */
 public class NodeModel extends javafx.scene.shape.Circle {
 
@@ -37,6 +37,11 @@ public class NodeModel extends javafx.scene.shape.Circle {
     public Color getColor(){
         return this.color;
     }
+    
+    /**
+     * Updates a node by decelerating any acceleration and applying angular gravity
+     * @param basicModel the basicModel that holds nodes
+     */
     
     public void updateNode(BasicModel basicModel) {
         
@@ -158,6 +163,11 @@ public class NodeModel extends javafx.scene.shape.Circle {
         }
     }
     
+    /**
+     * Sets a force on a node
+     * @param force The force applied to the node
+     * @param basicModel the basicModel that holds nodes
+     */
     public void setForce(double force, BasicModel basicModel) {
         
         NodeModel otherNode = basicModel.getOtherNode(this);

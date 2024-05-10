@@ -146,10 +146,6 @@ public class Walker implements Serializable {
         // Remove pairs
         
         groundedNodes -= totalPairNodes;
-        
-//        System.out.println(totalPairNodes);
-//        System.out.println(pairNodesForces);
-//        System.out.println(pairNodesMap);
 
         for (BasicModel basicModel : basicModels) {
 
@@ -219,15 +215,7 @@ public class Walker implements Serializable {
             for (BasicModel bm : basicModels) {
                 bm.updateLink();
             }
-            //basicModel.updateLink();
         }
-        
-//        if (basicModels.size() == 2) {
-//            System.out.println("1: " + basicModels.get(0).getNextNode());
-//            System.out.println("2: " + basicModels.get(1).getPrevNode());
-//        }
-        
-//        tempPairNodesMap = pairNodesMap;
         for (NodeModel key : pairNodesForces.keySet()) {
             pairNodesForces.put(key, 0.0);
         }
@@ -246,11 +234,6 @@ public class Walker implements Serializable {
 
         return result;
     }
-
-    /**
-     *
-     * @param velocity
-     */
     /**
      *
      * @param learningRate

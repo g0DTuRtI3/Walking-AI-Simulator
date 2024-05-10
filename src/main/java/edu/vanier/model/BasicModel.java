@@ -5,13 +5,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**
- *
- * @author YOUSSEF
+ * This class constitute the simplest walker : 2 nodes connected by a link
+ * @author Gabriel
  */
 public class BasicModel {
 
     private static final double STROKEWIDTH = 10;
-
     private final NodeModel prevNode;
     private final NodeModel nextNode;
     private final Line link = new Line();
@@ -39,43 +38,21 @@ public class BasicModel {
         nodes.add(prevNode);
         nodes.add(nextNode);
     }
-
-    public NodeModel getPrevNode() {
-        return prevNode;
-    }
-
-    public NodeModel getNextNode() {
-        return nextNode;
-    }
-
-    public Line getLink() {
-        return link;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public void setColor(String hexColor) {
-        color = Color.web(hexColor);
-    }
-
+    
+    /**
+     * Relinks the nodes after displacement
+     */
     public void updateLink() {
         this.link.setStartX(prevNode.getCenterX());
         this.link.setStartY(prevNode.getCenterY());
         this.link.setEndX(nextNode.getCenterX());
         this.link.setEndY(nextNode.getCenterY());
-//        System.out.println(prevNode.getCenterX());
-//        System.out.println(prevNode.getCenterY());
-//        System.out.println(nextNode.getCenterX());
-//        System.out.println(nextNode.getCenterY());
-//        System.out.println("");
     }
     
+    /**
+     * Method to update the next node of a basicModel
+     * @param force the force being applied on the node
+     */
     public void updateNextNode(double force) {
           
         if (force != 0) {
@@ -89,6 +66,10 @@ public class BasicModel {
         }
     }
     
+    /**
+     * Method to update the next node of a previousModel
+     * @param force the force being applied on the node
+     */
     public void updatePreviousNode(double force) {
         
         if (force != 0) {
@@ -145,6 +126,30 @@ public class BasicModel {
     
     public double getDeltaTime(double currentTime) {
         return System.nanoTime() - currentTime;
+    }
+    
+    public NodeModel getPrevNode() {
+        return prevNode;
+    }
+
+    public NodeModel getNextNode() {
+        return nextNode;
+    }
+
+    public Line getLink() {
+        return link;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setColor(String hexColor) {
+        color = Color.web(hexColor);
     }
     
 }
