@@ -13,14 +13,14 @@ import java.util.ArrayList;
  *
  * REF:https://github.com/frostybee/fx-gallery
  */
-public class SqliteDB extends DBConnectionProvider {
+public class SqliteDB {
 
     public SqliteDB() {
     }
 
     /**
      * This method opens a connection to the database.
-     * 
+     *
      * @return The connection
      */
     private Connection connect() {
@@ -37,7 +37,7 @@ public class SqliteDB extends DBConnectionProvider {
 
     /**
      * This method gets the name of every walker in the database.
-     * 
+     *
      * @return An ArrayList if the names.
      */
     public ArrayList<String> readModelName() {
@@ -55,17 +55,16 @@ public class SqliteDB extends DBConnectionProvider {
         }
         return null;
     }
-    
+
     /**
      * This method gets the byte array of the walker base on its name.
-     * 
+     *
      * @param modelName The name of the walker
      * @return The byte array of the walker.
      */
     public byte[] readModel(String modelName) {
         String sql = "SELECT Walker FROM data WHERE Name = ?";
-        try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, modelName);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -97,8 +96,9 @@ public class SqliteDB extends DBConnectionProvider {
     }
 
     /**
-     * This methods adds the byte array of the walker and its name into the database.
-     * 
+     * This methods adds the byte array of the walker and its name into the
+     * database.
+     *
      * @param b_Array The byte array of the walker.
      * @param modelName The name of the walker
      */
@@ -114,10 +114,10 @@ public class SqliteDB extends DBConnectionProvider {
         }
         System.out.println("model added: " + modelName);
     }
-    
+
     /**
      * This method deletes a model from the database.
-     * 
+     *
      * @param modelName The name of the walker model.
      */
     public void deleteModel(String modelName) {
@@ -134,7 +134,7 @@ public class SqliteDB extends DBConnectionProvider {
 
     /**
      * This method updates the walker of the chosen model
-     * 
+     *
      * @param b_Array The new byte array of the walker
      * @param modelName The name of the walker
      */
@@ -142,7 +142,7 @@ public class SqliteDB extends DBConnectionProvider {
         String query = "UPDATE data SET Walker = ? WHERE Name = ?";
         try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setBytes(1, b_Array);
-            pstmt.setString(2, modelName);            
+            pstmt.setString(2, modelName);
             pstmt.executeUpdate();
             System.out.println("The selected item has been modified");
         } catch (SQLException e) {
