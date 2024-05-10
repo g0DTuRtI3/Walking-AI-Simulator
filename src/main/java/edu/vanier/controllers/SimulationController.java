@@ -105,66 +105,7 @@ public class SimulationController {
         this.xtranslate = xtranslate;
         this.ytranslate = ytranslate;
         this.environment = environment;
-        // setting the environment for the nodeModels
-
-        int isNotGrounded = 0;
-        int numNodes = 0;
-
-        /*for (BasicModel basicModel : walker.getBasicModels()) {
-            for (NodeModel nodeModel : basicModel.getNodes()) {
-                numNodes++;
-                nodeModel.setGround(ground);
-                if (environment.equals("Earth")) {
-                    nodeModel.setGravity(0.1);
-                    if (!nodeModel.isGrounded()) {
-                        isNotGrounded ++;
-                    }
-                }else {
-                    nodeModel.setGravity(0.01);
-                    if (!nodeModel.isGrounded()) {
-                        isNotGrounded ++;
-                    }
-                }
-                
-            }
-        }
         
-        // Linear Gravity - Put this in the timer
-        
-//        while (isNotGrounded == numNodes) {
-//            
-//            
-//            for (BasicModel basicModel : walker.getBasicModels()) {
-//                for (NodeModel nodeModel : basicModel.getNodes()) {
-//                   nodeModel.setCenterY(nodeModel.getCenterY()-nodeModel.getGravity());
-//
-//                }
-//            }
-//            
-//            isNotGrounded = 0;
-//            numNodes = 0;
-//
-//            for (BasicModel basicModel : walker.getBasicModels()) {
-//                for (NodeModel nodeModel : basicModel.getNodes()) {
-//                    numNodes++;
-//                    if (environment.equals("Earth")) {
-//                        nodeModel.setGravity(0.1);
-//                            if (!nodeModel.isGrounded()) {
-//                                isNotGrounded ++;
-//                            }
-//                    }else {
-//                        nodeModel.setGravity(0.01);
-//                        if (!nodeModel.isGrounded()) {
-//                            isNotGrounded ++;
-//                        }
-//                    }
-//
-//                }
-//            }
-//
-//        }
-        
-        walker.setGround(ground);*/
         walkers = new Walker[nbModel];
 
         initialXYPositions = new double[walker.getAllNodes().size()][2];
@@ -177,6 +118,7 @@ public class SimulationController {
         boolean brainFlag = walker.getBrain() != null;
         for (int i = 0; i < nbModel; i++) {
             Walker walkerI = new Walker(walker.getBasicModelsONLYATTRIBUTES(), layers, learningRate);
+            walkerI.setGround(ground);
             if (brainFlag) {
                 if (i == 0) {
                     walkerI.setBrain(walker.getBrain());
@@ -190,6 +132,9 @@ public class SimulationController {
             walkers[i] = walkerI;
 
             for (BasicModel b : walkers[i].getBasicModels()) {
+                
+                b.getNextNode().setGravity(GRAVITY);
+                b.getPrevNode().setGravity(GRAVITY);
 
                 b.getLink().setOnMouseClicked(mouseE -> {
                     showNeuralDisplay(walkerI);
@@ -321,7 +266,6 @@ public class SimulationController {
         private Series<Number, Number> updatePos = new Series<>();
         private Series<Number, Number> updateKE = new Series<>();
         private Series<Number, Number> updateGeneration = new Series<>();
-        private double speedY = 0;
 
         @Override
         public void handle(long now) {
@@ -331,21 +275,28 @@ public class SimulationController {
             currentInterval = (now - startedTime) / nanoTOSecond;
 
             double bestDistance = 0;
+            
+            
             for (Walker walk : walkers) {
-                for (NodeModel node : walk.getAllNodes()) {
-                    //if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
-                    if (node.intersects(ground.getBoundsInParent())) {
+                
+                ArrayList<NodeModel> nodeModels = new ArrayList<>(walk.getAllNodes());
+                int groundedNodes = walk.getNumGrounded();
+                
+                //System.out.println(groundedNodes);
+        
+                // Linear Gravity
 
-//                        node.setSpeedY(1);
-                    } else {
-//                        node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
+                if (groundedNodes == 0) {
 
-                    }
-//                    node.setCenterY(node.getCenterY() + (node.getSpeedY()) * elapsedTime);
-//                    node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
+                    for (NodeModel nm : nodeModels) {
+                        nm.setCenterY(nm.getCenterY()+1);
+                        System.out.println(nm.getCenterY());
+                    }   
 
+                    groundedNodes = walk.getNumGrounded();
                 }
-                //moveWalker(elapsedTime);
+                
+                
                 walk.setTrainedTime(walk.getTrainedTime() + elapsedTime);
 
                 tf_Time.setText(String.format("%.2f", walk.getTrainedTime()));
@@ -375,6 +326,7 @@ public class SimulationController {
 //                }
                 walk.updateWalker();
             }
+            moveWalker(elapsedTime);
             if (bestWalker != null) {
 
                 double instantSpeed = ((bestWalker.getPosition() - lastXbestWalker)) * pxlToMeterConst / elapsedTime;
@@ -449,29 +401,20 @@ public class SimulationController {
             for (int i = 0; i < nodes.size(); i++) {
 
                 //put all force on every node in every []
-//                motionOnNodes[i] = nodes.get(i).getSpeedX();
+                motionOnNodes[i] = nodes.get(i).getAngle();
             }
             //all forces that walker will apply on every Node
             double[] predictions = w.getBrain().predict(motionOnNodes);
+            System.out.println(predictions[0]);
 
             // make walker move here e.g. w.update(predictions); 
             for (int i = 0; i < w.getBasicModels().size(); i++) {
-
-                //put all force on every node in every []
                 for (int j = 0; j < w.getBasicModels().size(); j++) {
-//                    w.getBasicModels().get(j).updateNextNode(w.getBasicModels().get(i), predictions[j], dtime);
-//                    w.getBasicModels().get(j).updatePreviousNode(w.getBasicModels().get(i), predictions[j], dtime);
+                    w.getBasicModels().get(i).updateNextNode(predictions[j]);
+                    w.getBasicModels().get(i).updatePreviousNode(predictions[j]);
                 }
-
             }
         }
-    }
-
-    private static void WorldToScreen() {
-
-    }
-
-    private static void ScreenToWorld() {
     }
 
     private void showNeuralDisplay(Walker walker) {
@@ -517,19 +460,19 @@ public class SimulationController {
 
                 this.belowGround.setFill(Color.GREEN);
 
-                SimulationController.GRAVITY = 9.8;
+                SimulationController.GRAVITY = 0.1;
             }
             case "Moon" -> {
                 this.simulationPane.setId("Moon");
                 MainAppController.spacePlayer.play();
                 MainAppController.defaultPlayer.stop();
                 this.belowGround.setFill(Color.LIGHTGRAY);
-                SimulationController.GRAVITY = 1.6;
+                SimulationController.GRAVITY = 0.01;
             }
             default -> {
                 this.panGroup.setId("");
                 this.belowGround.setFill(Color.LIGHTGREEN);
-                SimulationController.GRAVITY = 9.8;
+                SimulationController.GRAVITY = 0.1;
             }
         }
     }

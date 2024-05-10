@@ -139,18 +139,10 @@ public class Walker implements Serializable {
     }
 
     public void updateWalker() {
-        int groundedNodes = 0;
-        
         // Count grounded models
-        for (BasicModel basicModel : basicModels) {
-            for (NodeModel nodeModel : basicModel.getNodes()) {
-                if (Math.round(Math.round(nodeModel.getCenterY() + nodeModel.getRadius())) == ground.getStartY()) {
-                    groundedNodes ++;
-                    nodeModel.setGrounded(true);
-                }
-            }
-        }
-
+        
+        int groundedNodes = getNumGrounded();
+        
         // Remove pairs
         
         groundedNodes -= totalPairNodes;
@@ -349,6 +341,36 @@ public class Walker implements Serializable {
 
     public void setGround(Line ground) {
         this.ground = ground;
+    }
+    
+    public int getNumGrounded() {
+        int groundedNodes = 0;
+                
+        for (BasicModel basicModel : basicModels) {
+            for (NodeModel nodeModel : basicModel.getNodes()) {
+                if (Math.round(Math.round(nodeModel.getCenterY() + nodeModel.getRadius())) == ground.getStartY()) {
+                    groundedNodes ++;
+                    nodeModel.setGrounded(true);
+                }
+            }
+        }
+        
+        return groundedNodes;
+    }
+    
+    public int getNumNotGrounded() {
+        int notGroundedNodes = 0;
+                
+        for (BasicModel basicModel : basicModels) {
+            for (NodeModel nodeModel : basicModel.getNodes()) {
+                if (Math.round(Math.round(nodeModel.getCenterY() + nodeModel.getRadius())) != ground.getStartY()) {
+                    notGroundedNodes ++;
+                    nodeModel.setGrounded(false);
+                }
+            }
+        }
+        
+        return notGroundedNodes;
     }
 
 }
