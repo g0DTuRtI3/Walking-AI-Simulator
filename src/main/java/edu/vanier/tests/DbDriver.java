@@ -1,6 +1,5 @@
 package edu.vanier.tests;
 
-import edu.vanier.database.DBConnectionProvider;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,7 +11,7 @@ import java.sql.Statement;
  *
  * @author 2253883
  */
-public class DbDriver extends DBConnectionProvider {
+public class DbDriver{
 
     private final String TABLE = "data";
     private final String COL_NAME = "Name";
