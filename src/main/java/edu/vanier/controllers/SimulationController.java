@@ -99,6 +99,17 @@ public class SimulationController {
 
     private VBox physicalGraphVBox;
 
+    /**
+     *
+     * @param primaryStage
+     * @param walker
+     * @param nbModel
+     * @param interval
+     * @param learningRate
+     * @param xtranslate
+     * @param ytranslate
+     * @param environment
+     */
     public SimulationController(Stage primaryStage, Walker walker, int nbModel, int interval, float learningRate, double xtranslate, double ytranslate, String environment) {
         this.interval = interval;
         this.primaryStage = primaryStage;
@@ -205,6 +216,9 @@ public class SimulationController {
         }
     }
 
+    /**
+     * Description of Method: This method initializes the ground and the
+     */
     @FXML
     void initialize() {
         determineEnvironment();
@@ -220,30 +234,9 @@ public class SimulationController {
         belowGround.setHeight(10000000);
         belowGround.setWidth(ground.getEndX() - ground.getStartX());
 
-        double realXTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterX() - xtranslate;
-        double realYTransition = walkers[0].getBasicModels().get(0).getPrevNode().getCenterY() - ytranslate;
-
         for (Walker w : walkers) {
 
             tf_Time.setText(String.format("%.2f", w.getTrainedTime()));
-            /*for (BasicModel b : w.getBasicModels()) {
-
-                if (!simulationPane.getChildren().contains(b.getNextNode())) {
-                    simulationPane.getChildren().addAll(b.getLink(), b.getNextNode(), b.getPrevNode());
-                    b.getNextNode().setTranslateX(-realXTransition);
-                    b.getNextNode().setTranslateY(-realYTransition);
-                    b.getPrevNode().setTranslateX(-realXTransition);
-                    b.getPrevNode().setTranslateY(-realYTransition);
-
-                } else if (!simulationPane.getChildren().contains(b.getPrevNode())) {
-                    simulationPane.getChildren().addAll(b.getLink(), b.getPrevNode());
-
-                    b.getPrevNode().setTranslateX(-realXTransition);
-                    b.getPrevNode().setTranslateY(-realYTransition);
-                } else if (!simulationPane.getChildren().contains(b.getLink())) {
-                    simulationPane.getChildren().addAll(b.getLink());
-                }
-            }*/
 
             panGroup.getChildren().addAll(w.getAllLinks());
             panGroup.getChildren().addAll(w.getAllNodes());
@@ -274,21 +267,6 @@ public class SimulationController {
 
         timer.start();
     }
-//        @Override
-//        public void handle(long now) {
-//
-//        }
-//
-//        @Override
-//        public void start() {
-//            super.start();
-//        }
-//
-//        @Override
-//        public void stop() {
-//            super.stop();
-//        }
-//    };
 
     AnimationTimer timer = new AnimationTimer() {
         float startedTime = -1;
@@ -323,9 +301,15 @@ public class SimulationController {
         private Series<Number, Number> updateGeneration = new Series<>();
         private double speedY = 0;
 
+        /**
+         * Description of method: This handle function updates multiple things
+         * such as the Artificial Intelligence, some labels like the countdown
+         * and the trained time.
+         *
+         */
         @Override
         public void handle(long now) {
-            countdownUpdate(now);
+            countdownUpdate();
 
             double elapsedTime = (now - previousTime) / nanoTOSecond;
             currentInterval = (now - startedTime) / nanoTOSecond;
@@ -336,13 +320,9 @@ public class SimulationController {
                     //if (Shape.intersect(node, ground).getBoundsInParent().getWidth() != -1) {
                     if (node.intersects(ground.getBoundsInParent())) {
 
-//                        node.setSpeedY(1);
                     } else {
-//                        node.setSpeedY(node.getSpeedY() + GRAVITY * (1 / pxlToMeterConst) * elapsedTime);
 
                     }
-//                    node.setCenterY(node.getCenterY() + (node.getSpeedY()) * elapsedTime);
-//                    node.setCenterX(node.getCenterX() + (node.getSpeedX() * (1 / pxlToMeterConst)) * elapsedTime);
 
                 }
                 //moveWalker(elapsedTime);
@@ -359,20 +339,6 @@ public class SimulationController {
                     walk.setOpacity(1);
                 }
 
-//                for (BasicModel model : walk.getBasicModels()) {
-//                    if (model.getPrevNode().getCenterX() >= model.getPrevNode().getCenterX()) {
-//                        if (model.getPrevNode().getCenterX() >= bestDistance) {
-//                            bestWalker = walk;
-//                            bestDistance = model.getPrevNode().getCenterX();
-//                            
-//                        }
-//                    } else {
-//                        if (model.getNextNode().getCenterX() >= bestDistance) {
-//                            bestWalker = walk;
-//                            bestDistance = model.getPrevNode().getCenterX();
-//                        }
-//                    }
-//                }
                 walk.updateWalker();
             }
             if (bestWalker != null) {
@@ -434,13 +400,19 @@ public class SimulationController {
             super.stop();
         }
 
-        private void countdownUpdate(long now) {
+        /**
+         * Description of method: this method updates the countdown label.
+         */
+        private void countdownUpdate() {
 
             txt_Countdown.setText(String.format("%.0f", interval - currentInterval));
         }
 
     };
 
+    /**
+     * Description of method: this method updates the countdown label.
+     */
     private void moveWalker(double dtime) {
         for (Walker w : walkers) {
             ArrayList<NodeModel> nodes = new ArrayList<>(w.getAllNodes());
@@ -474,6 +446,10 @@ public class SimulationController {
     private static void ScreenToWorld() {
     }
 
+    /**
+     * Description of method: this method displays the neuralnetwork of a
+     * walker.
+     */
     private void showNeuralDisplay(Walker walker) {
         if (simulationPane.getChildren().contains(neuralDisplay)) {
             simulationPane.getChildren().remove(neuralDisplay);
@@ -497,6 +473,10 @@ public class SimulationController {
 
     }
 
+    /**
+     * Description of method: This method makes the user be able to come back to
+     * the main menu.
+     */
     @FXML
     void backToEditorOnAction(ActionEvent event) throws IOException {
 
@@ -506,6 +486,10 @@ public class SimulationController {
         switchToEditor();
     }
 
+    /**
+     * Description of method: This method uses the editor enviroment input and
+     * applies it in the simulation by setting the gravity and the background.
+     */
     private void determineEnvironment() {
         switch (EditorController.getEnvironment()) {
             case "Earth" -> {
@@ -534,6 +518,10 @@ public class SimulationController {
         }
     }
 
+    /**
+     * Description of method: This method is used in the backtoeditor method to
+     * stop the timer, load back the editor.
+     */
     private void switchToEditor() throws IOException {
         timer.stop();
         this.environment = "";

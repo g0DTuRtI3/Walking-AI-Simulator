@@ -129,6 +129,7 @@ public class NeuralDisplay extends Pane {
         }
     }
 
+
     public static void setxLayout(double xLayout) {
         NeuralDisplay.xLayout = xLayout;
     }
@@ -145,6 +146,12 @@ public class NeuralDisplay extends Pane {
         return NeuralDisplay.HEIGHT;
     }
     
+
+    /**
+     *
+     * @return the displayed walker Artificial Network graph's pane
+     */
+
     public Walker getDisplayedWalker() {
         return this.displayedWalker;
     }
