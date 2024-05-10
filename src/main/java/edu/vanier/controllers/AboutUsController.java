@@ -26,14 +26,16 @@ public class AboutUsController {
 
     private static String gitHubLink = "https://github.com/g0DTuRtI3/Walking-AI-Simulator";
 
-    /**
-     *
-     * @param primaryStage
-     */
     public AboutUsController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    /**
+     * This method brings the user back to the Main Menu
+     * 
+     * @param event The ActionEvent from the GUI
+     * @throws IOException 
+     */
     @FXML
     void backButtonOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
@@ -52,6 +54,11 @@ public class AboutUsController {
 
     }
 
+    /**
+     * This method opens the github of this project
+     * 
+     * @param event The ActionEvent from the GUI
+     */
     @FXML
     void linkOnClick(ActionEvent event) {
         try {

@@ -14,11 +14,6 @@ public class NeuralNetwork implements Serializable{
     private float learningRate; // Mutation Rate
     private int[] layers;
 
-    /**
-     *
-     * @param learningRate
-     * @param layers
-     */
     public NeuralNetwork(float learningRate, int[] layers) {
 
         this.learningRate = learningRate;
@@ -34,21 +29,6 @@ public class NeuralNetwork implements Serializable{
             hiddenLayers[i - 1] = new HiddenLayer(layers[i], layers[i - 1]);
         }
 
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public NeuralNetwork clone() {
-
-        NeuralNetwork neuralNetwork = new NeuralNetwork(this.learningRate, this.layers);
-        for (int i = 0; i < this.hiddenLayers.length; i++) {
-            neuralNetwork.hiddenLayers[i] = this.hiddenLayers[i].clone();
-        }
-
-        return neuralNetwork;
     }
 
     /**
@@ -78,6 +58,39 @@ public class NeuralNetwork implements Serializable{
     }
 
     /**
+     *
+     * @return 
+     */
+    public String toString() {
+        String ret = "learning rate : " + this.learningRate + "\n";
+        ret += "Hidden Layers : " + Arrays.toString(this.hiddenLayers) + "\n";
+
+        for (int i = 0; i < this.layers.length; i++) {
+
+            ret += "Hidden layer " + i + Arrays.toString(this.activations[i]) + "\n";
+
+        }
+
+        ret += "Output layer: " + Arrays.toString(this.activations[this.activations.length - 1]) + "\n";
+        return ret;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public NeuralNetwork clone() {
+
+        NeuralNetwork neuralNetwork = new NeuralNetwork(this.learningRate, this.layers);
+        for (int i = 0; i < this.hiddenLayers.length; i++) {
+            neuralNetwork.hiddenLayers[i] = this.hiddenLayers[i].clone();
+        }
+
+        return neuralNetwork;
+    }
+
+    /**
      * 
      * @return double[][] which are the activations of the NeuralNetwork
      */
@@ -100,23 +113,4 @@ public class NeuralNetwork implements Serializable{
     public int[] getLayers() {
         return this.layers;
     }
-
-    /**
-     *
-     * @return 
-     */
-    public String toString() {
-        String ret = "learning rate : " + this.learningRate + "\n";
-        ret += "Hidden Layers : " + Arrays.toString(this.hiddenLayers) + "\n";
-
-        for (int i = 0; i < this.layers.length; i++) {
-
-            ret += "Hidden layer " + i + Arrays.toString(this.activations[i]) + "\n";
-
-        }
-
-        ret += "Output layer: " + Arrays.toString(this.activations[this.activations.length - 1]) + "\n";
-        return ret;
-    }
-
 }

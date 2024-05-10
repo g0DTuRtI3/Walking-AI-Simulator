@@ -44,6 +44,12 @@ public class SettingsController {
 
     }
 
+    /**
+     * This method brings the use back to the main menu.
+     * 
+     * @param event The ActionEvent of the GUI.
+     * @throws IOException 
+     */
     @FXML
     void backButtonOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));

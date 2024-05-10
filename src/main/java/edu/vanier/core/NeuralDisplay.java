@@ -9,7 +9,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
-import javafx.scene.control.Alert;
 
 /**
  *
@@ -28,23 +27,17 @@ public class NeuralDisplay extends Pane {
     //to be set according to UI
     private static double yLayout = 0;
 
+    private static double neuronRadius = 20;
+    private int[] nbLayers;
+    private double[][] activations;
+    
     private Walker displayedWalker;
     private NeuralNetwork neuralNetwork;
-    private double[][] activations;
     private HiddenLayer[] layers;
-
-    private int[] nbLayers;
-
     private ArrayList<Line> lineWeights = new ArrayList();
     private ArrayList<ArrayList<Circle>> neuronList = new ArrayList();
-    private static double neuronRadius = 20;
 
-    /**
-     *
-     * @param walker
-     */
     public NeuralDisplay(Walker walker) {
-
         this.setPrefSize(WIDTH, HEIGHT);
         this.displayedWalker = walker;
         this.activations = displayedWalker.getBrain().getActivations();
@@ -58,22 +51,6 @@ public class NeuralDisplay extends Pane {
         this.setLayoutX(xLayout);
         this.setLayoutY(yLayout);
 
-    }
-
-    public static void setxLayout(double xLayout) {
-        NeuralDisplay.xLayout = xLayout;
-    }
-
-    public static void setyLayout(double yLayout) {
-        NeuralDisplay.yLayout = yLayout;
-    }
-
-    public static double getWIDTH() {
-        return NeuralDisplay.WIDTH;
-    }
-
-    public static double getHEIGHT() {
-        return NeuralDisplay.HEIGHT;
     }
 
     /**
@@ -152,10 +129,22 @@ public class NeuralDisplay extends Pane {
         }
     }
 
-    /**
-     *
-     * @return
-     */
+    public static void setxLayout(double xLayout) {
+        NeuralDisplay.xLayout = xLayout;
+    }
+
+    public static void setyLayout(double yLayout) {
+        NeuralDisplay.yLayout = yLayout;
+    }
+
+    public static double getWIDTH() {
+        return NeuralDisplay.WIDTH;
+    }
+
+    public static double getHEIGHT() {
+        return NeuralDisplay.HEIGHT;
+    }
+    
     public Walker getDisplayedWalker() {
         return this.displayedWalker;
     }

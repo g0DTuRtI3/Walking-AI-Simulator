@@ -15,8 +15,6 @@ import java.util.ArrayList;
  */
 public class SqliteDB extends DBConnectionProvider {
 
-    private final String TABLE = "data";
-
     public SqliteDB() {
     }
 
@@ -123,7 +121,7 @@ public class SqliteDB extends DBConnectionProvider {
      * @param modelName The name of the walker model.
      */
     public void deleteModel(String modelName) {
-        String query = String.format("DELETE FROM %s WHERE Name = ? ", TABLE);
+        String query = String.format("DELETE FROM data WHERE Name = ? ");
         try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             // set parameters
             pstmt.setString(1, modelName);

@@ -28,19 +28,15 @@ import javafx.util.Duration;
 public class MainAppController {
 
     private final String cssEditorPath = "editorStyleSheet.css";
-
-    
     private static MediaPlayer player;
-
-    
-    static MediaPlayer defaultPlayer;
-    static MediaPlayer naturePlayer;
-    static MediaPlayer spacePlayer;
-
-
-    
     private Stage primaryStage;
+    private ArrayList<Line> links = new ArrayList<>();
+    private ArrayList<Circle> circles = new ArrayList<>();
 
+    public static MediaPlayer defaultPlayer;
+    public static MediaPlayer naturePlayer;
+    public static MediaPlayer spacePlayer;
+    
     @FXML
     private Button btn_AboutUs;
 
@@ -53,35 +49,9 @@ public class MainAppController {
     @FXML
     private Button btn_Simulation;
 
-
-    /**
-     * Called from Main app.
-     * 
-     * @param primaryStage 
-     */
-
     @FXML
     private ImageView title;
 
-    private ArrayList<Circle> circles = new ArrayList<>();
-
-    private ArrayList<Line> links = new ArrayList<>();
-
-    private AnimationTimer circleAnimation = new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-            for (Circle c : circles) {
-                c.setCenterX(c.getCenterX() + (-1 + 2 * Math.random()));
-                c.setCenterY(c.getCenterY() + (-1 + 2 * Math.random()));
-            }
-            for (int j = 1; j <= links.size() - 1; j++) {
-                links.get(j).setStartX(circles.get(j - 1).getCenterX());
-                links.get(j).setStartY(circles.get(j - 1).getCenterY());
-                links.get(j).setEndX(circles.get(j).getCenterX());
-                links.get(j).setEndY(circles.get(j).getCenterY());
-            }
-        }
-    };
     public MainAppController(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
@@ -89,14 +59,6 @@ public class MainAppController {
 
     @FXML
     void initialize() {
-
-//        if (player == null) {
-//            Media media = new Media(getClass().getResource("/music/defaultMusic.mp3").toExternalForm());
-//            player = new MediaPlayer(media);
-//            player.setAutoPlay(true);
-//            player.setCycleCount(MediaPlayer.INDEFINITE);
-//        }
-
         for (int i = 0; i < 5; i++) {
 
             int randomNum = (int) (Math.random() * 7) + 2;
@@ -117,7 +79,6 @@ public class MainAppController {
 
                 links.add(l);
             }
-
         }
         ScaleTransition titleScaleTransition = new ScaleTransition(Duration.millis(900), title);
         titleScaleTransition.setByX(0.2);
@@ -135,9 +96,6 @@ public class MainAppController {
         PathTransition titlePathTransition = new PathTransition(Duration.millis(900), new Line(title.getX() + 350, title.getY() + 250, title.getX() + 420, title.getY() + 300), title);
         titlePathTransition.setCycleCount((int) (Duration.INDEFINITE).toSeconds());
         titlePathTransition.setAutoReverse(true);
-
-        
-        
 
         ParallelTransition titleTransition = new ParallelTransition(title, titleRotateTransition, titleScaleTransition, titlePathTransition);
         titleTransition.setAutoReverse(true);
@@ -161,10 +119,14 @@ public class MainAppController {
             defaultPlayer.setAutoPlay(true);
             defaultPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
-
-
     }
 
+    /**
+     * This method brings the user to the About Us menu
+     * 
+     * @param event The ActionEvent of the GUI
+     * @throws IOException 
+     */
     @FXML
     void aboutUsOnAction(ActionEvent event) throws IOException {
         FXMLLoader aboutUsLoader = new FXMLLoader(getClass().getResource("/fxml/AboutUs_Layout.fxml"));
@@ -181,6 +143,12 @@ public class MainAppController {
         primaryStage.show();
     }
 
+    /**
+     * This method brings the user to the settings menu.
+     * 
+     * @param event The ActionEvent of the GUI
+     * @throws IOException 
+     */
     @FXML
     void settingOnAction(ActionEvent event) throws IOException {
         FXMLLoader SettingsLoader = new FXMLLoader(getClass().getResource("/fxml/Settings_layout.fxml"));
@@ -197,7 +165,12 @@ public class MainAppController {
         primaryStage.show();
     }
 
-    // Loads the Editor scene
+    /**
+     * This method loads the editor menu.
+     * 
+     * @param event The ActionEvent of the GUI
+     * @throws IOException 
+     */
     @FXML
     void startButtonOnAction(ActionEvent event) throws IOException {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/Editor_layout.fxml"));
@@ -214,6 +187,25 @@ public class MainAppController {
         primaryStage.setTitle("Model Editor");
         primaryStage.show();
     }
+    
+    /**
+     * This method makes the circles move in the main menu.
+     */
+    private AnimationTimer circleAnimation = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            for (Circle c : circles) {
+                c.setCenterX(c.getCenterX() + (-1 + 2 * Math.random()));
+                c.setCenterY(c.getCenterY() + (-1 + 2 * Math.random()));
+            }
+            for (int j = 1; j <= links.size() - 1; j++) {
+                links.get(j).setStartX(circles.get(j - 1).getCenterX());
+                links.get(j).setStartY(circles.get(j - 1).getCenterY());
+                links.get(j).setEndX(circles.get(j).getCenterX());
+                links.get(j).setEndY(circles.get(j).getCenterY());
+            }
+        }
+    };
 
     static public MediaPlayer getDefaultPlayer() {
         return defaultPlayer;
