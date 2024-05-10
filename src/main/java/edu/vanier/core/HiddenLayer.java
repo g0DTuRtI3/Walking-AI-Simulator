@@ -2,7 +2,6 @@ package edu.vanier.core;
 
 import edu.vanier.model.Walker;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Random;
 
 /**

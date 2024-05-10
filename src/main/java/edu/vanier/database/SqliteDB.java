@@ -9,8 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * @author Zeyu Huang
- *
  * REF:https://github.com/frostybee/fx-gallery
  */
 public class SqliteDB {

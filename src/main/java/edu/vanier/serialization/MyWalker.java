@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
+ * This class is used to store the important information from the walker. This makes the walker class serializable.
+ * 
  * @author Zeyu Huang
  */
 public class MyWalker implements Serializable{

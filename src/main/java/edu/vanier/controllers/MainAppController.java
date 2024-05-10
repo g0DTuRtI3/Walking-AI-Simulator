@@ -1,6 +1,5 @@
 package edu.vanier.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
@@ -8,7 +7,6 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

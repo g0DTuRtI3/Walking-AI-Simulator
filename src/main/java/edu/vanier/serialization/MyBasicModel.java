@@ -3,7 +3,7 @@ package edu.vanier.serialization;
 import java.io.Serializable;
 
 /**
- *
+ * 
  * @author Zeyu Huang
  */
 public class MyBasicModel implements Serializable{
