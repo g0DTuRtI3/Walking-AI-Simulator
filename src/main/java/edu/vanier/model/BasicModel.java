@@ -69,6 +69,11 @@ public class BasicModel {
         this.link.setStartY(prevNode.getCenterY());
         this.link.setEndX(nextNode.getCenterX());
         this.link.setEndY(nextNode.getCenterY());
+        System.out.println(prevNode.getCenterX());
+        System.out.println(prevNode.getCenterY());
+        System.out.println(nextNode.getCenterX());
+        System.out.println(nextNode.getCenterY());
+        System.out.println("");
     }
     
     public void updateNextNode(double force) {

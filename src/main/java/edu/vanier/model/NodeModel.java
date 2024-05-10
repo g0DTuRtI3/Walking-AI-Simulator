@@ -25,7 +25,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
     private double currentAlpha = 0;
     private double lastForce = 0;
     private boolean grounded = false;
-    private double gravity = 0;
+    private double gravity = 0.1;
     private Line ground = new Line();
 
     public NodeModel(double centerX, double centerY, Color color) {
@@ -155,7 +155,7 @@ public class NodeModel extends javafx.scene.shape.Circle {
                     w += gravity;
                 }
             }
-        }  
+        }
     }
     
     public void setForce(double force, BasicModel basicModel) {

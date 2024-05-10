@@ -22,7 +22,11 @@ public class Walker implements Serializable {
     private int fitnessScore;
     private int id;
     private double trainedTime = 0;
-    private Line ground = new Line();
+    private HashMap<NodeModel, Double> pairNodesMap = new HashMap<>();
+    private HashMap<NodeModel, Double> tempPairNodesMap = new HashMap<>();
+    private HashMap<NodeModel, Double> pairNodesForces = new HashMap<>();
+    private int totalPairNodes = 0;
+    private Line ground = new Line(0,400,500,400);
 
     public Walker() {
 
@@ -48,6 +52,7 @@ public class Walker implements Serializable {
 
     public Walker(BasicModel basicModel) {
         addBasicModel(basicModel);
+        initializePairs();
     }
 
     public void setBrain(NeuralNetwork brain) {
@@ -68,7 +73,10 @@ public class Walker implements Serializable {
         int[] allLayersArray = allLayersList.stream().mapToInt(Integer::intValue).toArray();
 
         this.brain = new NeuralNetwork(learningRate, allLayersList.stream().mapToInt(Integer::intValue).toArray());
-
+        
+        initializePairs();
+        
+        
     }
 
     public void setInitialXY(double[][] xyPositionsPerNode) {
@@ -83,9 +91,39 @@ public class Walker implements Serializable {
         }
 
     }
+    
+    public void initializePairs() {
+        for (int i = 0; i < basicModels.size() - 1; i++) {
+            for (int j = i + 1; j < basicModels.size(); j++) {
+                for (NodeModel nodeModel1 : basicModels.get(i).getNodes()) {
+                    for (NodeModel nodeModel2 : basicModels.get(j).getNodes()) {
+                        // Check for matches between nodes of different BasicModels
+                        if (nodeModel1 == nodeModel2) {
+                            totalPairNodes++;
+                            pairNodesForces.put(nodeModel1, 0.0);
+                            pairNodesMap.compute(nodeModel1, (key, value) -> (value == null) ? 1 : value + 1);
+                        }
+                    }
+                }
+            }
+            for (int j = i - 1; j >= 0; j--) {
+                for (NodeModel nodeModel1 : basicModels.get(i).getNodes()) {
+                    for (NodeModel nodeModel2 : basicModels.get(j).getNodes()) {
+                        // Check for matches between nodes of different BasicModels
+                        if (nodeModel1 == nodeModel2) {
+                            totalPairNodes++;
+                            pairNodesMap.compute(nodeModel1, (key, value) -> (value == null) ? 1 : value + 1);
+                        }
+                    }
+                }
+            }
+        }
+        tempPairNodesMap = pairNodesMap;
+    }
 
     public void addBasicModel(BasicModel basicModel) {
         basicModels.add(basicModel);
+        initializePairs();
     }
 
     public void movePrevious(BasicModel basicModel, double force, double time) {
@@ -100,14 +138,14 @@ public class Walker implements Serializable {
 
     public void updateWalker() {
         
-        int count = 0;
+        int groundedNodes = 0;
         
         // Count grounded models
         
         for (BasicModel basicModel : basicModels) {
             for (NodeModel nodeModel : basicModel.getNodes()) {
-                if (Math.round(Math.round(nodeModel.getCenterY() + nodeModel.getRadius())) == ground.getStartX()) {
-                    count ++;
+                if (Math.round(Math.round(nodeModel.getCenterY() + nodeModel.getRadius())) == ground.getStartY()) {
+                    groundedNodes ++;
                     nodeModel.setGrounded(true);
                 }
             }
@@ -115,59 +153,91 @@ public class Walker implements Serializable {
         
         // Remove pairs
         
-        for (int i = 0; i < basicModels.size() - 1; i++) {
-            for (int j = i + 1; j < basicModels.size(); j++) {
-                for (NodeModel nodeModel1 : basicModels.get(i).getNodes()) {
-                    for (NodeModel nodeModel2 : basicModels.get(j).getNodes()) {
-                        // Check for matches between nodes of different BasicModels
-                        if (nodeModel1 == nodeModel2) {
-                            count--;
-                        }
-                    }
-                }
-            }
-            for (int j = i - 1; j >= 0; j--) {
-                for (NodeModel nodeModel1 : basicModels.get(i).getNodes()) {
-                    for (NodeModel nodeModel2 : basicModels.get(j).getNodes()) {
-                        // Check for matches between nodes of different BasicModels
-                        if (nodeModel1 == nodeModel2) {
-                            count++;
-                        }
-                    }
-                }
-            }
-        }
+        groundedNodes -= totalPairNodes;
+        
+//        System.out.println(totalPairNodes);
+//        System.out.println(pairNodesForces);
+//        System.out.println(pairNodesMap);
 
         for (BasicModel basicModel : basicModels) {
             
             if (basicModel.getNextNodeForce() == 0) {
                 basicModel.updateNextNode(basicModel.getNextNodeForce());
             }
-            else if (count > 1 && basicModel.getNextNodeForce() != 0) {
-                basicModel.updateNextNode(basicModel.getNextNodeForce());
-                count -= 1 ;
+            else if (groundedNodes > 1 && pairNodesForces.getOrDefault(basicModel.getNextNode(), 0.0) != 0) {
+                basicModel.updateNextNode(pairNodesForces.get(basicModel.getNextNode()));
+                groundedNodes -= 1 ;
                 basicModel.getNextNode().setGrounded(false);
             }
-            else if (count == 1 && !basicModel.getNextNode().isGrounded() && basicModel.getNextNodeForce() != 0) {
+            else if (groundedNodes > 1 && basicModel.getNextNodeForce() != 0) {
                 basicModel.updateNextNode(basicModel.getNextNodeForce());
-                count -= 1;
+                groundedNodes -= 1 ;
                 basicModel.getNextNode().setGrounded(false);
+                if (pairNodesForces.containsKey(basicModel.getNextNode())) {
+                    pairNodesForces.put(basicModel.getNextNode(), basicModel.getNextNodeForce());
+                    //tempPairNodesMap.compute(basicModel.getNextNode(), (key, value) -> value - 1);
+                }
+            }
+            else if (groundedNodes == 1 && !basicModel.getNextNode().isGrounded() && pairNodesForces.getOrDefault(basicModel.getNextNode(), 0.0) != 0) {
+                basicModel.updateNextNode(pairNodesForces.get(basicModel.getNextNode()));
+                groundedNodes -= 1 ;
+                basicModel.getNextNode().setGrounded(false);
+            }
+            else if (groundedNodes == 1 && !basicModel.getNextNode().isGrounded() && basicModel.getNextNodeForce() != 0) {
+                basicModel.updateNextNode(basicModel.getNextNodeForce());
+                groundedNodes -= 1;
+                basicModel.getNextNode().setGrounded(false);
+                if (pairNodesForces.containsKey(basicModel.getNextNode())) {
+                    pairNodesForces.put(basicModel.getNextNode(), basicModel.getNextNodeForce());
+                    //tempPairNodesMap.compute(basicModel.getNextNode(), (key, value) -> value - 1);
+                }
             }
             
-            if (basicModel.getPrevNodeForce() == 0) {
+            if (basicModel.getPrevNodeForce()== 0) {
                 basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
             }
-            else if (count > 1 && basicModel.getPrevNodeForce() != 0) {
-                basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
-                count -= 1 ;
+            else if (groundedNodes > 1 && pairNodesForces.getOrDefault(basicModel.getPrevNode(), 0.0) != 0) {
+                basicModel.updatePreviousNode(pairNodesForces.get(basicModel.getPrevNode()));
+                groundedNodes -= 1 ;
                 basicModel.getPrevNode().setGrounded(false);
             }
-            else if (count == 1 && !basicModel.getPrevNode().isGrounded() && basicModel.getPrevNodeForce() != 0) {
+            else if (groundedNodes > 1 && basicModel.getPrevNodeForce()!= 0) {
                 basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
-                count -= 1;
+                groundedNodes -= 1 ;
+                basicModel.getPrevNode().setGrounded(false);
+                if (pairNodesForces.containsKey(basicModel.getPrevNode())) {
+                    pairNodesForces.put(basicModel.getPrevNode(), basicModel.getPrevNodeForce());
+                    //tempPairNodesMap.compute(basicModel.getPrevNode(), (key, value) -> value - 1);
+                }
+            }
+            else if (groundedNodes == 1 && !basicModel.getPrevNode().isGrounded() && pairNodesForces.getOrDefault(basicModel.getPrevNode(), 0.0) != 0) {
+                basicModel.updatePreviousNode(pairNodesForces.get(basicModel.getPrevNode()));
+                groundedNodes -= 1 ;
                 basicModel.getPrevNode().setGrounded(false);
             }
-            basicModel.updateLink();
+            else if (groundedNodes == 1 && !basicModel.getPrevNode().isGrounded() && basicModel.getPrevNodeForce()!= 0) {
+                basicModel.updatePreviousNode(basicModel.getPrevNodeForce());
+                groundedNodes -= 1;
+                basicModel.getPrevNode().setGrounded(false);
+                if (pairNodesForces.containsKey(basicModel.getPrevNode())) {
+                    pairNodesForces.put(basicModel.getPrevNode(), basicModel.getPrevNodeForce());
+                    //tempPairNodesMap.compute(basicModel.getPrevNode(), (key, value) -> value - 1);
+               }
+            }
+            for (BasicModel bm : basicModels) {
+                bm.updateLink();
+            }
+            //basicModel.updateLink();
+        }
+        
+//        if (basicModels.size() == 2) {
+//            System.out.println("1: " + basicModels.get(0).getNextNode());
+//            System.out.println("2: " + basicModels.get(1).getPrevNode());
+//        }
+        
+//        tempPairNodesMap = pairNodesMap;
+        for (NodeModel key : pairNodesForces.keySet()) {
+            pairNodesForces.put(key, 0.0);
         }
     }
 

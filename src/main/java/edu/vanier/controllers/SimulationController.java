@@ -130,7 +130,7 @@ public class SimulationController {
             }
         }
         
-        // Linear Gravity
+        // Linear Gravity - Put this in the timer
         
         while (isNotGrounded == numNodes) {
             
