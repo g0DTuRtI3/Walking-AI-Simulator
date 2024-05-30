@@ -34,7 +34,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class EditorController {
-
+    
     private final static int CIRCLE_RADIUS = 20;
     private final static int CIRCLE_SOCIAL_DISTANCING = 10;
     private final static String HOW_TO_USE_TEXT = "Create a model by using the Model Editor. Once you have one Model, Click on the start button. You will be able to pan the camera by clicking on left, right, up, down. Enjoy!";
@@ -48,7 +48,7 @@ public class EditorController {
     private boolean isCircleMode, isLinkMode;
     private boolean isDelMode = false;
     private byte[] b_Array;
-
+    
     private static String environment = "";
     private Circle circle1 = null, circle2 = null;
     private Color circleColor, linkColor, ogColor;
@@ -56,59 +56,59 @@ public class EditorController {
     private String modelName;
     private Walker walker = new Walker();
     private MyWalker seriWalker;
-
+    
     @FXML
     private CheckBox cb_DelMode;
-
+    
     @FXML
     private ColorPicker circleColorPicker;
-
+    
     @FXML
     private Circle editorCircle;
-
+    
     @FXML
     private Pane editorPane;
-
+    
     @FXML
     private ComboBox<String> environmentComboBox;
-
+    
     @FXML
     private Label label_Interval;
-
+    
     @FXML
     private Label label_LearningRate;
-
+    
     @FXML
     private Label label_NbModel;
-
+    
     @FXML
     private Rectangle link;
-
+    
     @FXML
     private ColorPicker linkColorPicker;
-
+    
     @FXML
     private Slider slider_Interval;
-
+    
     @FXML
     private Slider slider_LearningRate;
-
+    
     @FXML
     private Slider slider_NbModel;
-
+    
     @FXML
     private TextField tf_ModelName;
-
+    
     public EditorController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
-
+    
     public EditorController(Stage primaryStage, Walker walker) {
         this.primaryStage = primaryStage;
         this.walker = walker;
         
     }
-
+    
     public EditorController(Stage primaryStage, String modelName) throws IOException {
         this.primaryStage = primaryStage;
         this.modelName = modelName;
@@ -152,13 +152,12 @@ public class EditorController {
 
         //Print all saved models
 //        database.printAllModel();
-
         // Loads the models if it called
         if (modelName != null) {
             load(modelName);
             tf_ModelName.setText(modelName);
         }
-
+        
         if (!walker.getBasicModels().isEmpty()) {
             generateWalker(walker);
             generateCircle();
@@ -167,7 +166,7 @@ public class EditorController {
 
     /**
      * This open a Alert that contains the about us.
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -180,7 +179,7 @@ public class EditorController {
 
     /**
      * This method brings the user back to the main menu.
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -189,8 +188,9 @@ public class EditorController {
     }
 
     /**
-     * When the user selects the circle in the editor, change the color of the circle enables the editing of the editorPane.
-     * 
+     * When the user selects the circle in the editor, change the color of the
+     * circle enables the editing of the editorPane.
+     *
      * @param event The MouseEvent from the GUI
      */
     @FXML
@@ -207,8 +207,9 @@ public class EditorController {
     }
 
     /**
-     * This method gets the color that the user chose on the colorPicker under the circle in the model editor.
-     * 
+     * This method gets the color that the user chose on the colorPicker under
+     * the circle in the model editor.
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -218,7 +219,7 @@ public class EditorController {
 
     /**
      * This method clears the editorPane.
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -227,8 +228,9 @@ public class EditorController {
     }
 
     /**
-     * This method enables the delete mode. The user can then click on the circles to delete them and their links.
-     * 
+     * This method enables the delete mode. The user can then click on the
+     * circles to delete them and their links.
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -239,7 +241,7 @@ public class EditorController {
 
     /**
      * This method allows the user to start linking the circles together.
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -257,7 +259,7 @@ public class EditorController {
 
     /**
      * This method gets the environment that the user has selected.
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -267,7 +269,7 @@ public class EditorController {
 
     /**
      * This open a Alert that contains the How To Use.
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -279,8 +281,9 @@ public class EditorController {
     }
 
     /**
-     * This open the load model selector. There you can chose a model to load or to delete.
-     * 
+     * This open the load model selector. There you can chose a model to load or
+     * to delete.
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -289,8 +292,9 @@ public class EditorController {
     }
 
     /**
-     * This method gets the color that the user chose on the colorPicker under the rectangle in the model editor.
-     * 
+     * This method gets the color that the user chose on the colorPicker under
+     * the rectangle in the model editor.
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -299,8 +303,9 @@ public class EditorController {
     }
 
     /**
-     * This method can either add a circle, remove the circle or add a link between the circles in the editorPane.
-     * 
+     * This method can either add a circle, remove the circle or add a link
+     * between the circles in the editorPane.
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -321,7 +326,7 @@ public class EditorController {
 
     /**
      * This method saves the model that the user has created
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -334,22 +339,22 @@ public class EditorController {
             return;
         }
         b_Array = serialize(seriWalker);
-
+        
         if (tf_ModelName.getText().isBlank()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please Enter a Model Name");
             alert.show();
         } else {
-
+            
             if (database.readModelName().isEmpty()) {
                 database.addModel(b_Array, tf_ModelName.getText());
             } else {
                 for (String string : database.readModelName()) {
-
+                    
                     if (string.equals(tf_ModelName.getText())) {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setContentText("This name already exist. Overwrite it?");
-
+                        
                         Optional<ButtonType> result = alert.showAndWait();
                         if (result.get() == ButtonType.OK) {
                             database.editModel(b_Array, string);
@@ -357,7 +362,7 @@ public class EditorController {
                         } else {
                             return;
                         }
-
+                        
                     } else {
                         database.addModel(b_Array, tf_ModelName.getText());
                         System.out.println("model added here ");
@@ -370,7 +375,7 @@ public class EditorController {
 
     /**
      * This method switches the scene to the simulation GUI
-     * 
+     *
      * @param event The ActionEvent from the GUI
      */
     @FXML
@@ -393,7 +398,7 @@ public class EditorController {
             alert.show();
             return false;
         }
-
+        
         if (walker.getBasicModels().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please make a model");
@@ -412,7 +417,7 @@ public class EditorController {
             link.setFill(Color.GREY);
             return;
         }
-
+        
         if (isCircleMode) {
             editorCircle.setFill(Color.PURPLE);
             link.setFill(Color.DODGERBLUE);
@@ -434,10 +439,10 @@ public class EditorController {
      */
     private void addCircle(MouseEvent event) {
         boolean isTouching = false;
-
+        
         if (event.getX() > CIRCLE_RADIUS && event.getY() > CIRCLE_RADIUS && event.getX() < (editorPane.getWidth() - CIRCLE_RADIUS) && event.getY() < (editorPane.getHeight() - CIRCLE_RADIUS)) {
             Circle circle = new Circle(event.getX(), event.getY(), CIRCLE_RADIUS, circleColor);
-
+            
             if (circle_list.isEmpty()) {
                 circle_list.add(circle);
                 editorPane.getChildren().add(circle);
@@ -448,7 +453,7 @@ public class EditorController {
                         break;
                     }
                 }
-
+                
                 if (!isTouching) {
                     circle_list.add(circle);
                     editorPane.getChildren().add(circle);
@@ -487,7 +492,7 @@ public class EditorController {
      */
     private void addLink(MouseEvent event) {
         boolean isCreated = false;
-
+        
         if (circle1 == null) {
             try {
                 circle1 = (Circle) event.getTarget();
@@ -496,7 +501,7 @@ public class EditorController {
             } catch (Exception e) {
                 circle1 = null;
             }
-
+            
         } else {
             try {
                 circle2 = (Circle) event.getTarget();
@@ -504,16 +509,16 @@ public class EditorController {
                 System.out.println("clicked on other things");
                 return;
             }
-
+            
             prevNode = new NodeModel(circle1.getCenterX(), circle1.getCenterY(), ogColor);
             nextNode = new NodeModel(circle2.getCenterX(), circle2.getCenterY(), ogColor);
-
+            
             BasicModel basicModel = new BasicModel(prevNode, nextNode, linkColor);
-
+            
             for (BasicModel model : walker.getBasicModels()) {
                 if (model.getPrevNode().equals(prevNode) && model.getNextNode().equals(nextNode) || model.getPrevNode().equals(nextNode) && model.getNextNode().equals(prevNode)) {
                     isCreated = true;
-
+                    
                     if (!model.getColor().equals(linkColor)) {
                         editorPane.getChildren().remove(model.getLink());
                         editorPane.getChildren().addAll(basicModel.getLink());
@@ -522,7 +527,7 @@ public class EditorController {
                     break;
                 }
             }
-
+            
             if (!isCreated) {
                 walker.addBasicModel(basicModel);
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
@@ -530,7 +535,7 @@ public class EditorController {
                 editorPane.getChildren().addAll(basicModel.getLink(), basicModel.getPrevNode(), basicModel.getNextNode());
             }
             circle1.setFill(ogColor);
-
+            
             circle1 = null;
             circle2 = null;
         }
@@ -555,7 +560,7 @@ public class EditorController {
         try {
             Circle circle = (Circle) event.getTarget();
             editorPane.getChildren().remove(circle);
-
+            
             BasicModel delModel = null;
             for (BasicModel basicModel : walker.getBasicModels()) {
                 if (basicModel.getNextNode().getCenterX() == circle.getCenterX()) {
@@ -589,7 +594,7 @@ public class EditorController {
                 System.out.println("not circle");
             }
         }
-
+        
         if (delNode != null) {
             editorPane.getChildren().remove(delNode);
             editorPaneDeletion(delModel);
@@ -604,19 +609,19 @@ public class EditorController {
      */
     private MyWalker saveModel() {
         MyWalker serializeWalker = new MyWalker(walker.getBrain(), walker.getFitnessScore(), walker.getId());
-
+        MyWalker.setLearningRate(Walker.getLearningRate());
         ArrayList<MyBasicModel> serializeBasicModels = new ArrayList<>();
         for (BasicModel basicModel : walker.getBasicModels()) {
             MyNodeModel serializePrevNode = new MyNodeModel(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), basicModel.getPrevNode().getFill().toString().substring(2, 8));
             MyNodeModel serializeNextNode = new MyNodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), basicModel.getNextNode().getFill().toString().substring(2, 8));
             MyLine serializeLine = new MyLine(basicModel.getLink().getStrokeWidth(), basicModel.getLink().getStartX(), basicModel.getLink().getStartY(), basicModel.getLink().getEndX(), basicModel.getLink().getEndY());
             MyBasicModel serializeModel = new MyBasicModel(serializePrevNode, serializeNextNode, serializeLine, basicModel.getColor().toString().substring(2, 8));
-
+            
             serializeBasicModels.add(serializeModel);
         }
-
+        
         serializeWalker.setBasicModels(serializeBasicModels);
-
+        
         return serializeWalker;
     }
 
@@ -629,26 +634,26 @@ public class EditorController {
      */
     private Walker loadModel(MyWalker serializedWalker) {
         clearPane();
-
+        
         Walker load = new Walker();
-
+        
         load.setBrain(serializedWalker.getBrain());
         load.setFitnessScore(serializedWalker.getFitnessScore());
         load.setId(serializedWalker.getId());
-
+        
         for (MyBasicModel myBasicModel : serializedWalker.getBasicModels()) {
             NodeModel prevNode = new NodeModel(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), Color.web(myBasicModel.getPrevNode().getHexColor()));
             NodeModel nextNode = new NodeModel(myBasicModel.getNextNode().getCenterX(), myBasicModel.getNextNode().getCenterY(), Color.web(myBasicModel.getNextNode().getHexColor()));
             Color color = Color.web(myBasicModel.getColor());
             BasicModel loadModel = new BasicModel(prevNode, nextNode, color);
-
+            
             Circle prevCircle = new Circle(myBasicModel.getPrevNode().getCenterX(), myBasicModel.getPrevNode().getCenterY(), CIRCLE_RADIUS, Color.web(myBasicModel.getPrevNode().getHexColor()));
             Circle nextCircle = new Circle(myBasicModel.getNextNode().getCenterX(), myBasicModel.getNextNode().getCenterY(), CIRCLE_RADIUS, Color.web(myBasicModel.getNextNode().getHexColor()));
             editorPane.getChildren().addAll(loadModel.getLink(), prevCircle, nextCircle);
-
+            
             load.getBasicModels().add(loadModel);
         }
-
+        
         return load;
     }
 
@@ -663,7 +668,7 @@ public class EditorController {
             NodeModel nextNode = new NodeModel(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), Color.web(basicModel.getNextNode().getHexColor()));
             Color color = basicModel.getColor();
             BasicModel loadModel = new BasicModel(prevNode, nextNode, color);
-
+            
             Circle prevCircle = new Circle(basicModel.getPrevNode().getCenterX(), basicModel.getPrevNode().getCenterY(), CIRCLE_RADIUS, Color.web(basicModel.getPrevNode().getHexColor()));
             Circle nextCircle = new Circle(basicModel.getNextNode().getCenterX(), basicModel.getNextNode().getCenterY(), CIRCLE_RADIUS, Color.web(basicModel.getNextNode().getHexColor()));
             editorPane.getChildren().addAll(loadModel.getLink(), prevCircle, nextCircle);
@@ -703,7 +708,7 @@ public class EditorController {
         ois.close();
         return o;
     }
-    
+
     /**
      * This method gets the byte array of the walker that correspond the the
      * name parameter. It deserializes that byte array and loads it into the
@@ -713,9 +718,9 @@ public class EditorController {
      */
     public void load(String name) {
         SqliteDB db = new SqliteDB();
-
+        
         b_Array = db.readModel(name);
-
+        
         try {
             seriWalker = (MyWalker) deSerializeObjectFromString(b_Array);
         } catch (IOException | ClassNotFoundException e) {
@@ -741,7 +746,7 @@ public class EditorController {
             if (walker.getBasicModels().isEmpty() || circle1 != null) {
                 return (walker.getBasicModels().isEmpty()) || circle1 != null;
             } else {
-
+                
                 return (((Circle) event.getTarget()).getCenterX() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterX()
                         && ((Circle) event.getTarget()).getCenterY() == walker.getBasicModels().get(walker.getBasicModels().size() - 1).getNextNode().getCenterY());
             }
@@ -762,7 +767,7 @@ public class EditorController {
                     flagNext = true;
                     break;
                 }
-
+                
                 if (circle.getCenterX() != basicModel.getPrevNode().getCenterX() && circle.getCenterY() != basicModel.getPrevNode().getCenterY()) {
                     flagPrev = true;
                     break;
@@ -776,7 +781,7 @@ public class EditorController {
                 circle = new Circle(CIRCLE_RADIUS, basicModel.getPrevNode().getColor());
                 circle_list.add(circle);
             }
-
+            
             if (flagNext) {
                 Circle circle = new Circle(CIRCLE_RADIUS, basicModel.getNextNode().getColor());
                 circle_list.add(circle);
@@ -799,7 +804,7 @@ public class EditorController {
         double ytranslate = walker.getBasicModels().get(0).getPrevNode().getCenterY();
         mainAppLoader.setController(new SimulationController(primaryStage, walker, nbModel, interval, learningRate, xtranslate, ytranslate, environment));
         Pane root = mainAppLoader.load();
-
+        
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
@@ -819,7 +824,7 @@ public class EditorController {
         FXMLLoader mainAppLoader = new FXMLLoader(getClass().getResource("/fxml/loadModelSelector_layout.fxml"));
         mainAppLoader.setController(new loadController(primaryStage));
         Pane root = mainAppLoader.load();
-
+        
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
@@ -850,7 +855,7 @@ public class EditorController {
         primaryStage.setTitle("Walking AI Simulator");
         primaryStage.show();
     }
-
+    
     public static String getEnvironment() {
         return environment;
     }

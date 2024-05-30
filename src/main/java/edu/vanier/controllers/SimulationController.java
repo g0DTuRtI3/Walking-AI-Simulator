@@ -118,7 +118,7 @@ public class SimulationController {
         this.environment = environment;
         
         walkers = new Walker[nbModel];
-
+        Walker.setLearningRate(learningRate);
         initialXYPositions = new double[walker.getAllNodes().size()][2];
         ArrayList<NodeModel> allNodes = new ArrayList<>(walker.getAllNodes());
         for (int i = 0; i < allNodes.size(); i++) {
